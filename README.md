@@ -56,6 +56,10 @@ Para hacer correr este proyecto se necesita tener instalado:
     \c bddknowix
     ```
 
+7. Posteriormente se debe copiar todo el contenido del archivo .../bdd/bdd.sql y pegarlo en la terminal.
+
+8. De esta forma se creará la base de datos con sus respectivas tablas y datos.
+
 ## Ejecución
 
 Para compilar el proyecto se debe correr el siguiente comando:
