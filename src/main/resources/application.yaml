@@ -18,16 +18,15 @@ spring:
   #Keycloak Config
   security:
     oauth2:
-      resourceserver:
+      resource-server:
         jwt:
           issuer-uri: http://localhost:8080/realms/Knowix
           jwk-set-uri: http://localhost:8080/realms/Knowix/protocol/openid-connect/certs
 
-jwt:
-  auth:
-    converter:
-      principle-attribute: preferred_username
-      resource-id: knowix_frontend
+token:
+  converter:
+    principal-attribute: preferred_username
+    resource-id: knowix_frontend
 
 logging:
   level:
@@ -37,3 +36,25 @@ logging:
 # Configuración para la API de Exercisedb
 exercisedb:
   api-key: a64c039307msh0dfa7564941492dp1a0237jsn0fe875c24192
+
+security-constraints:
+  constraints:
+    - auth-roles:
+        - educator
+        - student
+      security-collections:
+      - name : TestStudent-Educator
+        patterns:
+          - /api/v1/test/test-student
+        methods:
+          - GET
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: TestEducator
+          patterns:
+            - /api/v1/test/test-educator
+          methods:
+            - GET
+
