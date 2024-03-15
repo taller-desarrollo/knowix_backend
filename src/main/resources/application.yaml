@@ -1,4 +1,5 @@
-
+server:
+  port: 8081
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5434/bddknowix
@@ -14,6 +15,24 @@ spring:
         ddl-auto: none
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
+  #Keycloak Config
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/Knowix
+          jwk-set-uri: http://localhost:8080/realms/Knowix/protocol/openid-connect/certs
+
+jwt:
+  auth:
+    converter:
+      principle-attribute: preferred_username
+      resource-id: knowix_frontend
+
+logging:
+  level:
+    org:
+      keycloak: DEBUG
 
 # Configuración para la API de Exercisedb
 exercisedb:
