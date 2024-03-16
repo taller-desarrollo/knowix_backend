@@ -1,0 +1,5 @@
+### Obtener todos los idiomas:
+GET http://localhost:8081/api/v1/language
+
+### Obtener idioma por id:
+GET http://localhost:8081/api/v1/language/3
