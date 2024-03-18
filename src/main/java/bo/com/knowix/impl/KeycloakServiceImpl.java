@@ -14,7 +14,9 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KeycloakServiceImpl implements IKeycloakService {
@@ -98,5 +100,14 @@ public class KeycloakServiceImpl implements IKeycloakService {
         UserResource userResource = KeycloakProvider.getUserResource().get(userId);
         userResource.update(userRepresentation);
 
+    }
+
+    @Override
+    public UserRepresentation findUserBySubject(String subject) {
+        List<UserRepresentation> users = KeycloakProvider.getRealmResource().users().list();
+        Optional<UserRepresentation> userOptional = users.stream()
+                .filter(user -> user.getId().equals(subject))
+                .findFirst();
+        return userOptional.orElse(null);
     }
 }

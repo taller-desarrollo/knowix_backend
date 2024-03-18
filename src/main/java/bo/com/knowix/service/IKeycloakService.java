@@ -11,4 +11,5 @@ public interface IKeycloakService {
     String createUser(UserDto userDto);
     void deleteUser(String userId);
     void updateUser(String userId, UserDto userDto);
+    UserRepresentation findUserBySubject(String subject);
 }

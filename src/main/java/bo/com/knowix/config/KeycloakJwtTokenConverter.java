@@ -43,7 +43,7 @@ public class KeycloakJwtTokenConverter implements Converter<Jwt, AbstractAuthent
                 .orElse(jwt.getClaimAsString(JwtClaimNames.SUB));
     }
 
-    private String getSubject(Jwt jwt) {
+    public String getSubject(Jwt jwt) {
         return jwt.getClaimAsString(JwtClaimNames.SUB);
     }
 
