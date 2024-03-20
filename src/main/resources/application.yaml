@@ -57,4 +57,3 @@ security-constraints:
             - /api/v1/test/test-educator
           methods:
             - GET
-

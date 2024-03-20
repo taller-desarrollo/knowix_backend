@@ -1,4 +1,4 @@
-package bo.com.knowix.impl;
+package bo.com.knowix.service.impl;
 
 import bo.com.knowix.dto.UserDto;
 import bo.com.knowix.service.IKeycloakService;
@@ -6,7 +6,6 @@ import bo.com.knowix.util.KeycloakProvider;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.resource.*;
-import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
