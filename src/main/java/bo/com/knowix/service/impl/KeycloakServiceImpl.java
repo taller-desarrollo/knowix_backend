@@ -5,21 +5,25 @@ import bo.com.knowix.service.IKeycloakService;
 import bo.com.knowix.util.KeycloakProvider;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.OAuth2Constants;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.admin.client.resource.*;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class KeycloakServiceImpl implements IKeycloakService {
+
+    private final Logger logger = LoggerFactory.getLogger(KeycloakServiceImpl.class);
 
     @Override
     public List<UserRepresentation> findAllUsers() {
@@ -32,7 +36,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
     }
 
     @Override
-    public String createUser(@NonNull UserDto userDto) {
+    public UserRepresentation createUser(@NonNull UserDto userDto) {
         int status = 0;
         UsersResource userResource = KeycloakProvider.getUserResource();
 
@@ -64,15 +68,22 @@ public class KeycloakServiceImpl implements IKeycloakService {
                 roleRepresentations = List.of(realmResource.roles().get("user").toRepresentation());
                 realmResource.users().get(userId).roles().realmLevel().add(roleRepresentations);
             } else {
-                roleRepresentations = userDto.getRoles().stream().map(role -> realmResource.clients().get("knowix_frontend").roles().get(role).toRepresentation()).toList();
-                realmResource.users().get(userId).roles().clientLevel("knowix_frontend").add(roleRepresentations);
+               //assing roles by client level "knowix_frontend"
+                realmResource.clients().findByClientId("knowix_frontend").forEach(clientRepresentation -> {
+                    List<RoleRepresentation> finalRoleRepresentations = new ArrayList<>();
+                    userDto.getRoles().forEach(role -> {
+                        finalRoleRepresentations.add(realmResource.clients().get(clientRepresentation.getId()).roles().get(role).toRepresentation());
+                    });
+                    realmResource.users().get(userId).roles().clientLevel(clientRepresentation.getId()).add(finalRoleRepresentations);
+                });
             }
 
-            return "User created successfully";
+            return userResource.get(userId).toRepresentation();
+
         }else if(status == 409) {
-            return "User already exists";
+            return null;
         } else {
-            return "Error creating user";
+            return null;
         }
     }
 
