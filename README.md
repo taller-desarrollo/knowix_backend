@@ -60,6 +60,23 @@ Para hacer correr este proyecto se necesita tener instalado:
 
 8. De esta forma se creará la base de datos con sus respectivas tablas y datos.
 
+## Autenticación con Keycloak
+
+El proyecto utiliza Keycloak como servidor de autenticación. Para instalar la imagen Docker, ejecuta el siguiente comando:
+
+```bash
+docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:24.0.1 start-dev
+```
+
+Después de ejecutar este comando, accede a Keycloak ingresando a localhost:8080 utilizando las credenciales de administrador (usuario: admin, contraseña: admin). Luego, en el menú de la izquierda, crea un nuevo realm. Para hacerlo, sigue estos pasos:
+
+1. Haz clic en el dropdown "Keycloak" en el menú de la izquierda.
+2. Haz clic en "Create realm".
+3. Importa el archivo 'realm-export.json' que se encuentra en la carpeta 'keycloak' de este repositorio.
+4. Haz clic en "Create".
+
+Con estos pasos, se configurará Keycloak con las configuraciones necesarias para la autenticación del proyecto.
+
 ## Ejecución
 
 Para compilar el proyecto se debe correr el siguiente comando:

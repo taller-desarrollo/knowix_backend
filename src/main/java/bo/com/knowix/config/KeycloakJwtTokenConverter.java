@@ -43,10 +43,21 @@ public class KeycloakJwtTokenConverter implements Converter<Jwt, AbstractAuthent
                 .orElse(jwt.getClaimAsString(JwtClaimNames.SUB));
     }
 
+    public String getSubject(Jwt jwt) {
+        return jwt.getClaimAsString(JwtClaimNames.SUB);
+    }
+
 
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         Map<String, Object> resourceRoles = (Map<String, Object>) resourceAccess.get(properties.getResourceId());
+        if (resourceRoles == null) {
+            resourceRoles = (Map<String, Object>) resourceAccess.get("account");
+            Collection<String> roles = (Collection<String>) resourceRoles.get("roles");
+            return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                    .collect(Collectors.toSet());
+        }
         Collection<String> roles = (Collection<String>) resourceRoles.get("roles");
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))

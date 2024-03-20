@@ -37,6 +37,15 @@ public class GlobalSecurityConfiguration {
 
         List<SecurityConstraint> securityConstraints = securityConstraintsProperties.getConstraints();
 
+        if (securityConstraints == null){
+            logger.info("No security constraints found");
+            return http.authorizeHttpRequests( (authorizeHttpRequests) -> {
+                authorizeHttpRequests.anyRequest().permitAll();
+            }).oauth2ResourceServer( (oauth2) -> {
+                oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
+            }).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+        }
+
         http.authorizeHttpRequests( (authorizeHttpRequests) -> {
             securityConstraints.forEach( (constraint) -> {
                 try {
@@ -136,4 +145,5 @@ public class GlobalSecurityConfiguration {
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
+
 }
