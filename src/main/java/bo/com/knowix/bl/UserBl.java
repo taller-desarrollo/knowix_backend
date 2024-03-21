@@ -60,14 +60,7 @@ public class UserBl {
         return keycloackUser;
     }
 
-    public UserRepresentation updateUser(UserDto user, String kcUuid, HttpServletRequest request){
-
-        String tokenUuid = (String) request.getAttribute("sub");
-
-        if (!kcUuid.equals(tokenUuid)){
-            throw new RuntimeException("You are not authorized to update this user");
-        }
-
+    public UserRepresentation updateUser(UserDto user, String kcUuid){
         logger.info("Updating user: " + user);
         UserRepresentation keycloackUser =  keycloakService.updateUser(kcUuid, user);
         KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(kcUuid);
@@ -88,13 +81,7 @@ public class UserBl {
         return keycloackUser;
     }
 
-    public UserRepresentation updateUserRoles(UserDto user, String kcUuid, HttpServletRequest request){
-
-        String tokenUuid = (String) request.getAttribute("sub");
-        if (!kcUuid.equals(tokenUuid)){
-            throw new RuntimeException("You are not authorized to update this user");
-        }
-
+    public UserRepresentation updateUserRoles(UserDto user, String kcUuid){
         logger.info("Updating user roles: " + user.getRoles());
         UserRepresentation keycloackUser =  keycloakService.updateUserRoles(kcUuid, user.getRoles().stream().toList());
         return keycloackUser;

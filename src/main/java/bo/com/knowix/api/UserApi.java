@@ -29,14 +29,14 @@ public class UserApi {
     }
 
     @PutMapping()
-    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto, @RequestHeader("X-UUID") String kcuuid, HttpServletRequest request){
-        UserRepresentation response = userBl.updateUser(userDto, kcuuid, request);
+    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto, @RequestHeader("X-UUID") String kcuuid){
+        UserRepresentation response = userBl.updateUser(userDto, kcuuid);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/roles")
-    public ResponseEntity<?> updateUserRoles(@RequestBody UserDto userDto , @RequestHeader("X-UUID") String kcuuid, HttpServletRequest request){
-        UserRepresentation response = userBl.updateUserRoles(userDto, kcuuid, request);
+    public ResponseEntity<?> updateUserRoles(@RequestBody UserDto userDto , @RequestHeader("X-UUID") String kcuuid){
+        UserRepresentation response = userBl.updateUserRoles(userDto, kcuuid);
         return ResponseEntity.ok(response);
     }
 
