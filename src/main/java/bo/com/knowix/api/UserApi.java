@@ -2,11 +2,14 @@ package bo.com.knowix.api;
 
 import bo.com.knowix.bl.UserBl;
 import bo.com.knowix.dto.UserDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -22,6 +25,18 @@ public class UserApi {
     @PostMapping()
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
         UserRepresentation response = userBl.createUser(userDto);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping()
+    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto, @RequestHeader("X-UUID") String kcuuid, HttpServletRequest request){
+        UserRepresentation response = userBl.updateUser(userDto, kcuuid, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/roles")
+    public ResponseEntity<?> updateUserRoles(@RequestBody UserDto userDto , @RequestHeader("X-UUID") String kcuuid, HttpServletRequest request){
+        UserRepresentation response = userBl.updateUserRoles(userDto, kcuuid, request);
         return ResponseEntity.ok(response);
     }
 

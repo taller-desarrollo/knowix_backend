@@ -6,6 +6,7 @@ import bo.com.knowix.dao.repository.KcGroupRepository;
 import bo.com.knowix.dao.repository.KcUserRepository;
 import bo.com.knowix.dto.UserDto;
 import bo.com.knowix.service.IKeycloakService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,46 @@ public class UserBl {
 
         KcUserEntity savedUser = kcUserRepository.save(kcUserEntity);
 
+        return keycloackUser;
+    }
+
+    public UserRepresentation updateUser(UserDto user, String kcUuid, HttpServletRequest request){
+
+        String tokenUuid = (String) request.getAttribute("sub");
+
+        if (!kcUuid.equals(tokenUuid)){
+            throw new RuntimeException("You are not authorized to update this user");
+        }
+
+        logger.info("Updating user: " + user);
+        UserRepresentation keycloackUser =  keycloakService.updateUser(kcUuid, user);
+        KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(kcUuid);
+        kcUserEntity.setFirstName(keycloackUser.getFirstName());
+        kcUserEntity.setLastName(keycloackUser.getLastName());
+        kcUserEntity.setTxDate(
+                new Timestamp(new Date().getTime())
+        );
+        kcUserEntity.setTxHost(
+                "localhost"
+        );
+        kcUserEntity.setTxUser(
+                "admin"
+        );
+
+        KcUserEntity savedUser = kcUserRepository.save(kcUserEntity);
+
+        return keycloackUser;
+    }
+
+    public UserRepresentation updateUserRoles(UserDto user, String kcUuid, HttpServletRequest request){
+
+        String tokenUuid = (String) request.getAttribute("sub");
+        if (!kcUuid.equals(tokenUuid)){
+            throw new RuntimeException("You are not authorized to update this user");
+        }
+
+        logger.info("Updating user roles: " + user.getRoles());
+        UserRepresentation keycloackUser =  keycloakService.updateUserRoles(kcUuid, user.getRoles().stream().toList());
         return keycloackUser;
     }
 

@@ -90,14 +90,24 @@ public class GlobalSecurityConfiguration {
                                     authorizeHttpRequests
                                             .requestMatchers(patterns.toArray(new String[0]))
                                             .permitAll();
-                                }else{
+                                }else if(role.equals("denyAll")){
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: denyAll with no methods");
+                                    authorizeHttpRequests
+                                            .requestMatchers(patterns.toArray(new String[0]))
+                                            .denyAll();
+                                }else if(role.equals("authenticated")) {
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: authenticated with no methods");
+                                    authorizeHttpRequests
+                                            .requestMatchers(patterns.toArray(new String[0]))
+                                            .authenticated();
+                                }else {
                                     logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with no methods");
                                     authorizeHttpRequests
                                             .requestMatchers(patterns.toArray(new String[0]))
                                             .hasAnyRole(authRoles.toArray(new String[0]));
                                 }
                             }else{
-                                logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration:" + authRoles + " with no methods");
+                                logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with no methods");
                                 authorizeHttpRequests
                                         .requestMatchers(patterns.toArray(new String[0]))
                                         .hasAnyRole(authRoles.toArray(new String[0]));
@@ -112,6 +122,22 @@ public class GlobalSecurityConfiguration {
                                         authorizeHttpRequests
                                                 .requestMatchers(httpMethod, patterns.toArray(new String[0]))
                                                 .permitAll();
+                                    }
+                                }else if(role.equals("denyAll")){
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: denyAll with methods: " + httpMethods);
+                                    for (HttpMethod httpMethod: httpMethods
+                                    ) {
+                                        authorizeHttpRequests
+                                                .requestMatchers(httpMethod, patterns.toArray(new String[0]))
+                                                .denyAll();
+                                    }
+                                }else if(role.equals("authenticated")) {
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: authenticated with methods: " + httpMethods);
+                                    for (HttpMethod httpMethod : httpMethods
+                                    ) {
+                                        authorizeHttpRequests
+                                                .requestMatchers(httpMethod, patterns.toArray(new String[0]))
+                                                .authenticated();
                                     }
                                 }else{
                                     logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with methods: " + httpMethods);

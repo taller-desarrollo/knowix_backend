@@ -57,3 +57,13 @@ security-constraints:
             - /api/v1/test/test-educator
           methods:
             - GET
+
+    - auth-roles:
+        - authenticated
+      security-collections:
+        - name: updateUser
+          patterns:
+            - /api/v1/user
+            - /api/v1/user/roles
+          methods:
+            - PUT

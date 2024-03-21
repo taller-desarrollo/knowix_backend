@@ -10,6 +10,7 @@ public interface IKeycloakService {
     List<UserRepresentation> findUsersByUsername(String username);
     UserRepresentation createUser(UserDto userDto);
     void deleteUser(String userId);
-    void updateUser(String userId, UserDto userDto);
+    UserRepresentation updateUser(String userId, UserDto userDto);
+    UserRepresentation updateUserRoles(String userId, List<String> roles);
     UserRepresentation findUserBySubject(String subject);
 }

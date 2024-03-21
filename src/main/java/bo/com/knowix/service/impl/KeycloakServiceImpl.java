@@ -91,7 +91,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
     }
 
     @Override
-    public void updateUser(String userId, UserDto userDto) {
+    public UserRepresentation updateUser(String userId, UserDto userDto) {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setTemporary(false);
         credentialRepresentation.setType(OAuth2Constants.PASSWORD);
@@ -109,6 +109,24 @@ public class KeycloakServiceImpl implements IKeycloakService {
         UserResource userResource = KeycloakProvider.getUserResource().get(userId);
         userResource.update(userRepresentation);
 
+        return userResource.toRepresentation();
+
+    }
+
+    public UserRepresentation updateUserRoles (String userId, List<String> roles) {
+        RealmResource realmResource = KeycloakProvider.getRealmResource();
+        UserResource userResource = KeycloakProvider.getUserResource().get(userId);
+        List<RoleRepresentation> roleRepresentations = new ArrayList<>();
+        //assing roles by client level "knowix_frontend"
+        realmResource.clients().findByClientId("knowix_frontend").forEach(clientRepresentation -> {
+            List<RoleRepresentation> finalRoleRepresentations = new ArrayList<>();
+            roles.forEach(role -> {
+                finalRoleRepresentations.add(realmResource.clients().get(clientRepresentation.getId()).roles().get(role).toRepresentation());
+            });
+            userResource.roles().clientLevel(clientRepresentation.getId()).add(finalRoleRepresentations);
+        });
+        userResource.roles().realmLevel().add(roleRepresentations);
+        return userResource.toRepresentation();
     }
 
     @Override
