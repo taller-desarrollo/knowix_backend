@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseBL {
@@ -24,6 +25,7 @@ public class CourseBL {
         this.categoryDAO = categoryDAO;
         this.languageDAO = languageDAO;
     }
+
 
     public CourseEntity createCourse(CourseDTO courseDTO, String kcUserKcUuid) {
         CourseEntity course = new CourseEntity();
@@ -64,5 +66,13 @@ public class CourseBL {
             
             return courseDAO.save(course);
         }).orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+    }
+
+    public List<CourseEntity> findCoursesByUserId(String kcUserKcUuid) {
+        List<CourseEntity> allCourses = courseDAO.findAll();
+
+        return allCourses.stream()
+                        .filter(course -> kcUserKcUuid.equals(course.getKcUserKcUuid()))
+                        .collect(Collectors.toList());
     }
 }

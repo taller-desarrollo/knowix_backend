@@ -7,9 +7,9 @@ GET http://localhost:8081/api/v1/language/3
 
 ### agregar:
 POST http://localhost:8081/api/v1/language
-content-type: application/json
+Content-Type: application/json
 
 {
-    "language_name": "arabeee",
-    "status": "True"
+    "languageName": "arabeee",
+    "status": true
 }

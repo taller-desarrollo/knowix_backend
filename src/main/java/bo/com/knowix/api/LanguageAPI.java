@@ -25,7 +25,8 @@ public class LanguageAPI {
     }
 
     @GetMapping()
-    public ResponseEntity<List<LanguageEntity>> getAllLanguages() {
+    public ResponseEntity<List<LanguageEntity>> getAllLanguages(@RequestHeader(value="Authorization", required = false) String token) {
+        LOGGER.info("Token recibido: " + token);
         LOGGER.info("Iniciando el proceso de obtener todos los idiomas");
         try {
             List<LanguageEntity> languages = languageBL.findAllLanguages();
@@ -39,7 +40,8 @@ public class LanguageAPI {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LanguageEntity> getLanguageById(@PathVariable("id") int languageId) {
+    public ResponseEntity<LanguageEntity> getLanguageById(@PathVariable("id") int languageId, @RequestHeader(value="Authorization", required = false) String token) {
+        LOGGER.info("Token recibido: " + token);
         LOGGER.info("Iniciando el proceso de obtener el idioma con ID: " + languageId);
         try {
             Optional<LanguageEntity> language = languageBL.findLanguageById(languageId);
@@ -58,7 +60,8 @@ public class LanguageAPI {
     }
 
     @PostMapping()
-    public ResponseEntity<LanguageEntity> addLanguage(@RequestBody LanguageEntity language) {
+    public ResponseEntity<LanguageEntity> addLanguage(@RequestBody LanguageEntity language, @RequestHeader(value="Authorization", required = false) String token) {
+        LOGGER.info("Token recibido: " + token);
         LOGGER.info("Iniciando el proceso de agregar un nuevo idioma");
         try {
             LanguageEntity newLanguage = languageBL.addLanguage(language);

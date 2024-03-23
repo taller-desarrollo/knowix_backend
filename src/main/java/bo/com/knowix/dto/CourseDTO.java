@@ -27,7 +27,6 @@ public class CourseDTO {
         this.kcUserKcUuid = kcUserKcUuid; // Inicializar el nuevo campo
     }
 
-    // Getters
 
     public int getCourseId() {
         return courseId;

@@ -2,6 +2,7 @@ package bo.com.knowix.api;
 
 import bo.com.knowix.bl.CourseBL;
 import bo.com.knowix.dto.CourseDTO;
+import bo.com.knowix.dto.CourseDTOResponse;
 import bo.com.knowix.entity.CourseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/v1/course")
@@ -81,4 +84,48 @@ public class CourseAPI {
             LOGGER.info("Finished process to update course by ID: " + courseId);
         }
     }
+
+   private CourseDTOResponse convertToDTO(CourseEntity courseEntity) {
+        // Asume que ya tienes métodos o lógica para obtener los nombres de la categoría y el idioma
+        String categoryName = courseEntity.getCategory() != null ? courseEntity.getCategory().getCategoryName() : "Unknown Category";
+        String languageName = courseEntity.getLanguage() != null ? courseEntity.getLanguage().getLanguageName() : "Unknown Language";
+
+        return new CourseDTOResponse(
+                courseEntity.getCourseId(),
+                courseEntity.getCourseDescription(),
+                courseEntity.getCourseStandardPrice(),
+                courseEntity.getCourseName(),
+                courseEntity.getCourseRequirements(),
+                courseEntity.getStatus(),
+                categoryName, // Nombre de la categoría
+                languageName, // Nombre del idioma
+                courseEntity.getKcUserKcUuid()
+        );
+    }
+
+    @GetMapping("/user/{kcUserKcUuid}")
+    public ResponseEntity<List<CourseDTOResponse>> getCoursesByUserId(@PathVariable("kcUserKcUuid") String kcUserKcUuid) {
+        LOGGER.info("Starting process to fetch courses by user ID: " + kcUserKcUuid);
+        try {
+            List<CourseEntity> courses = courseBL.findCoursesByUserId(kcUserKcUuid);
+            List<CourseDTOResponse> courseDTOResponses = courses.stream()
+                                                .map(this::convertToDTO)
+                                                .collect(Collectors.toList());
+
+            if(courseDTOResponses.isEmpty()) {
+                LOGGER.info("No courses found for user ID: " + kcUserKcUuid);
+                return ResponseEntity.noContent().build();
+            }
+            LOGGER.info(courseDTOResponses.size() + " courses found for user ID: " + kcUserKcUuid);
+            return ResponseEntity.ok(courseDTOResponses);
+        } catch (Exception e) {
+            LOGGER.warning("Error occurred while fetching courses by user ID: " + kcUserKcUuid + " - " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finished process to fetch courses by user ID: " + kcUserKcUuid);
+        }
+    }
+
+
+
 }

@@ -11,3 +11,6 @@ Content-Type: application/json
   "languageLanguageId": 1,
   "kcUserKcUuid": "123e4567-e89b-12d3-a456-426614174000"
 }
+
+### obtener cursos por id de usuario:
+GET http://localhost:8081/api/v1/course/user/123e4567-e89b-12d3-a456-426614174000

@@ -34,15 +34,14 @@ public class CourseEntity {
     @Column(name = "status", nullable = false, length = 50)
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "Category_category_id", referencedColumnName = "category_id")
     private CategoryEntity category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "language_language_id", referencedColumnName = "language_id")
     private LanguageEntity language;
 
-    // Although not a foreign key yet, we include kc_uuid as a placeholder for future implementation.
     @Column(name = "kc_user_kc_uuid", nullable = false, length = 50)
     private String kcUserKcUuid;
 
