@@ -6,11 +6,7 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import bo.com.knowix.bl.LanguageBL;
 import bo.com.knowix.entity.LanguageEntity;
@@ -58,6 +54,20 @@ public class LanguageAPI {
             return ResponseEntity.badRequest().build();
         } finally {
             LOGGER.info("Finalizando el proceso de obtener el idioma con ID: " + languageId);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<LanguageEntity> addLanguage(@RequestBody LanguageEntity language) {
+        LOGGER.info("Iniciando el proceso de agregar un nuevo idioma");
+        try {
+            LanguageEntity newLanguage = languageBL.addLanguage(language);
+            return ResponseEntity.ok(newLanguage);
+        } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al agregar el nuevo idioma: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finalizando el proceso de agregar un nuevo idioma");
         }
     }
 }

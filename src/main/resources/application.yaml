@@ -43,11 +43,11 @@ security-constraints:
         - educator
         - student
       security-collections:
-      - name : TestStudent-Educator
-        patterns:
-          - /api/v1/test/test-student
-        methods:
-          - GET
+        - name: TestStudent-Educator
+          patterns:
+            - /api/v1/test/test-student
+          methods:
+            - GET
 
     - auth-roles:
         - educator
@@ -57,3 +57,12 @@ security-constraints:
             - /api/v1/test/test-educator
           methods:
             - GET
+    - auth-roles:
+        - permitAll
+      security-collections:
+        - name: CreateCourse
+          patterns:
+            - /api/v1/language
+          methods:
+            - GET
+            - POST

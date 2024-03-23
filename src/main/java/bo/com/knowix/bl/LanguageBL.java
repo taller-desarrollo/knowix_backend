@@ -25,4 +25,9 @@ public class LanguageBL {
     public Optional<LanguageEntity> findLanguageById(int languageId) {
         return languageDAO.findById(languageId);
     }
+    
+    // Método para agregar un nuevo idioma
+    public LanguageEntity addLanguage(LanguageEntity language) {
+        return languageDAO.save(language);
+    }
 }
