@@ -52,21 +52,28 @@ public class CourseBL {
     }
 
     public CourseEntity updateCourse(Integer courseId, CourseDTO courseDTO, String kcUserKcUuid) {
-        return courseDAO.findById(courseId).map(course -> {
-            course.setCourseDescription(courseDTO.getCourseDescription());
-            course.setCourseStandardPrice(courseDTO.getCourseStandardPrice());
-            course.setCourseName(courseDTO.getCourseName());
-            course.setCourseRequirements(courseDTO.getCourseRequirements());
-            course.setStatus(courseDTO.getStatus());
-            course.setKcUserKcUuid(kcUserKcUuid); // Actualizar el UUID del usuario
-            
-            // Buscar categoría e idioma por ID y asignarlos al curso si es necesario
-            categoryDAO.findById(courseDTO.getCategoryCategoryId()).ifPresent(course::setCategory);
-            languageDAO.findById(courseDTO.getLanguageLanguageId()).ifPresent(course::setLanguage);
-            
-            return courseDAO.save(course);
-        }).orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+        CourseEntity existingCourse = courseDAO.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+        if (!existingCourse.getKcUserKcUuid().equals(kcUserKcUuid)) {
+            throw new RuntimeException("El usuario no está autorizado para editar este curso");
+        }
+
+        existingCourse.setCourseDescription(courseDTO.getCourseDescription());
+        existingCourse.setCourseStandardPrice(courseDTO.getCourseStandardPrice());
+        existingCourse.setCourseName(courseDTO.getCourseName());
+        existingCourse.setCourseRequirements(courseDTO.getCourseRequirements());
+        existingCourse.setStatus(courseDTO.getStatus());
+
+        categoryDAO.findById(courseDTO.getCategoryCategoryId()).ifPresent(existingCourse::setCategory);
+        languageDAO.findById(courseDTO.getLanguageLanguageId()).ifPresent(existingCourse::setLanguage);
+
+        return courseDAO.save(existingCourse);
     }
+
+
+
+
 
     public List<CourseEntity> findCoursesByUserId(String kcUserKcUuid) {
         List<CourseEntity> allCourses = courseDAO.findAll();

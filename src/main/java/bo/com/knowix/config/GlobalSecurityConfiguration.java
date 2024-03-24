@@ -36,121 +36,117 @@ public class GlobalSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
+
+
+        List<SecurityConstraint> securityConstraints = securityConstraintsProperties.getConstraints();
+
+        if (securityConstraints == null){
+            logger.info("No security constraints found");
+            return http.authorizeHttpRequests( (authorizeHttpRequests) -> {
+                authorizeHttpRequests.anyRequest().permitAll();
+            }).oauth2ResourceServer( (oauth2) -> {
+                oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
+            }).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+        }
+
+        http.authorizeHttpRequests( (authorizeHttpRequests) -> {
+            securityConstraints.forEach( (constraint) -> {
+                try {
+                    List<String> authRoles = constraint.getAuthRoles();
+                    List<SecurityCollection> securityCollections = constraint.getSecurityCollections();
+
+                    securityCollections.forEach(collection -> {
+                        String name = collection.getName();
+                        List<String> patterns = collection.getPatterns();
+                        List<String> methods = collection.getMethods();
+
+                        List<HttpMethod> httpMethods = new ArrayList<>();
+
+                        for (String method: methods
+                        ) {
+                            switch (method) {
+                                case "GET":
+                                    httpMethods.add(HttpMethod.GET);
+                                    break;
+                                case "POST":
+                                    httpMethods.add(HttpMethod.POST);
+                                    break;
+                                case "PUT":
+                                    httpMethods.add(HttpMethod.PUT);
+                                    break;
+                                case "DELETE":
+                                    httpMethods.add(HttpMethod.DELETE);
+                                    break;
+                                case "PATCH":
+                                    httpMethods.add(HttpMethod.PATCH);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                        if (httpMethods.isEmpty()) {
+                            if(authRoles.size() == 1){
+                                String role = authRoles.get(0);
+                                if(role.equals("permitAll")){
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: permitAll with no methods");
+                                    authorizeHttpRequests
+                                            .requestMatchers(patterns.toArray(new String[0]))
+                                            .permitAll();
+                                }else{
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with no methods");
+                                    authorizeHttpRequests
+                                            .requestMatchers(patterns.toArray(new String[0]))
+                                            .hasAnyRole(authRoles.toArray(new String[0]));
+                                }
+                            }else{
+                                logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration:" + authRoles + " with no methods");
+                                authorizeHttpRequests
+                                        .requestMatchers(patterns.toArray(new String[0]))
+                                        .hasAnyRole(authRoles.toArray(new String[0]));
+                            }
+                        }else{
+                            if (authRoles.size() == 1) {
+                                String role = authRoles.get(0);
+                                if (role.equals("permitAll")) {
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: permitAll with methods: " + httpMethods);
+                                    for (HttpMethod httpMethod: httpMethods
+                                    ) {
+                                        authorizeHttpRequests
+                                                .requestMatchers(httpMethod, patterns.toArray(new String[0]))
+                                                .permitAll();
+                                    }
+                                }else{
+                                    logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with methods: " + httpMethods);
+                                    for (HttpMethod httpMethod: httpMethods
+                                    ) {
+                                        authorizeHttpRequests
+                                                .requestMatchers(httpMethod, patterns.toArray(new String[0]))
+                                                .hasAnyRole(authRoles.toArray(new String[0]));
+                                    }
+                                }
+                            }else{
+                                logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration:" + authRoles + "with methods: " + httpMethods);
+                                for (HttpMethod httpMethod: httpMethods
+                                ) {
+                                    authorizeHttpRequests
+                                            .requestMatchers(httpMethod, patterns.toArray(new String[0]))
+                                            .hasAnyRole(authRoles.toArray(new String[0]));
+                                }
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            authorizeHttpRequests.anyRequest().permitAll();
+        });
         http.oauth2ResourceServer( (oauth2) -> {
             oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
         });
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
-
-        // List<SecurityConstraint> securityConstraints = securityConstraintsProperties.getConstraints();
-
-        // if (securityConstraints == null){
-        //     logger.info("No security constraints found");
-        //     return http.authorizeHttpRequests( (authorizeHttpRequests) -> {
-        //         authorizeHttpRequests.anyRequest().permitAll();
-        //     }).oauth2ResourceServer( (oauth2) -> {
-        //         oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
-        //     }).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
-        // }
-
-        // http.authorizeHttpRequests( (authorizeHttpRequests) -> {
-        //     securityConstraints.forEach( (constraint) -> {
-        //         try {
-        //             List<String> authRoles = constraint.getAuthRoles();
-        //             List<SecurityCollection> securityCollections = constraint.getSecurityCollections();
-
-        //             securityCollections.forEach(collection -> {
-        //                 String name = collection.getName();
-        //                 List<String> patterns = collection.getPatterns();
-        //                 List<String> methods = collection.getMethods();
-
-        //                 List<HttpMethod> httpMethods = new ArrayList<>();
-
-        //                 for (String method: methods
-        //                 ) {
-        //                     switch (method) {
-        //                         case "GET":
-        //                             httpMethods.add(HttpMethod.GET);
-        //                             break;
-        //                         case "POST":
-        //                             httpMethods.add(HttpMethod.POST);
-        //                             break;
-        //                         case "PUT":
-        //                             httpMethods.add(HttpMethod.PUT);
-        //                             break;
-        //                         case "DELETE":
-        //                             httpMethods.add(HttpMethod.DELETE);
-        //                             break;
-        //                         case "PATCH":
-        //                             httpMethods.add(HttpMethod.PATCH);
-        //                             break;
-        //                         default:
-        //                             break;
-        //                     }
-        //                 }
-
-        //                 if (httpMethods.isEmpty()) {
-        //                     if(authRoles.size() == 1){
-        //                         String role = authRoles.get(0);
-        //                         if(role.equals("permitAll")){
-        //                             logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: permitAll with no methods");
-        //                             authorizeHttpRequests
-        //                                     .requestMatchers(patterns.toArray(new String[0]))
-        //                                     .permitAll();
-        //                         }else{
-        //                             logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with no methods");
-        //                             authorizeHttpRequests
-        //                                     .requestMatchers(patterns.toArray(new String[0]))
-        //                                     .hasAnyRole(authRoles.toArray(new String[0]));
-        //                         }
-        //                     }else{
-        //                         logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration:" + authRoles + " with no methods");
-        //                         authorizeHttpRequests
-        //                                 .requestMatchers(patterns.toArray(new String[0]))
-        //                                 .hasAnyRole(authRoles.toArray(new String[0]));
-        //                     }
-        //                 }else{
-        //                     if (authRoles.size() == 1) {
-        //                         String role = authRoles.get(0);
-        //                         if (role.equals("permitAll")) {
-        //                             logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: permitAll with methods: " + httpMethods);
-        //                             for (HttpMethod httpMethod: httpMethods
-        //                             ) {
-        //                                 authorizeHttpRequests
-        //                                         .requestMatchers(httpMethod, patterns.toArray(new String[0]))
-        //                                         .permitAll();
-        //                             }
-        //                         }else{
-        //                             logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration: " + authRoles + " with methods: " + httpMethods);
-        //                             for (HttpMethod httpMethod: httpMethods
-        //                             ) {
-        //                                 authorizeHttpRequests
-        //                                         .requestMatchers(httpMethod, patterns.toArray(new String[0]))
-        //                                         .hasAnyRole(authRoles.toArray(new String[0]));
-        //                             }
-        //                         }
-        //                     }else{
-        //                         logger.info("CONFIGURATION name: " + name + " patterns: " + patterns + " configuration:" + authRoles + "with methods: " + httpMethods);
-        //                         for (HttpMethod httpMethod: httpMethods
-        //                         ) {
-        //                             authorizeHttpRequests
-        //                                     .requestMatchers(httpMethod, patterns.toArray(new String[0]))
-        //                                     .hasAnyRole(authRoles.toArray(new String[0]));
-        //                         }
-        //                     }
-        //                 }
-        //             });
-        //         } catch (Exception e) {
-        //             e.printStackTrace();
-        //         }
-        //     });
-        //     authorizeHttpRequests.anyRequest().permitAll();
-        // });
-        // http.oauth2ResourceServer( (oauth2) -> {
-        //     oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
-        // });
-        // http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        // return http.build();
     }
 
 }
