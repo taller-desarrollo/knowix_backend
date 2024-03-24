@@ -1,0 +1,15 @@
+### Obtener todos los idiomas:
+GET http://localhost:8081/api/v1/language
+
+### Obtener idioma por id:
+GET http://localhost:8081/api/v1/language/3
+
+
+### agregar:
+POST http://localhost:8081/api/v1/language
+Content-Type: application/json
+
+{
+    "languageName": "arabeee",
+    "status": true
+}

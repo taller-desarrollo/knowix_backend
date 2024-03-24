@@ -1,0 +1,16 @@
+POST http://localhost:8081/api/v1/course
+Content-Type: application/json
+
+{
+  "courseDescription": "Descripción del curso",
+  "courseStandardPrice": 100.00,
+  "courseName": "Nombre del Curso",
+  "courseRequirements": "Requisitos del curso",
+  "status": "true",
+  "categoryCategoryId": 1,
+  "languageLanguageId": 1,
+  "kcUserKcUuid": "123e4567-e89b-12d3-a456-426614174000"
+}
+
+### obtener cursos por id de usuario:
+GET http://localhost:8081/api/v1/course/user/123e4567-e89b-12d3-a456-426614174000
