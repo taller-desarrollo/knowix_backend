@@ -10,6 +10,6 @@ POST http://localhost:8081/api/v1/language
 Content-Type: application/json
 
 {
-    "languageName": "arabeee",
+    "languageName": "arabzzzzeee",
     "status": true
 }

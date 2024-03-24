@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 
 @RestController
@@ -71,21 +72,32 @@ public class CourseAPI {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseEntity> updateCourse(@PathVariable("id") Integer courseId, @RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<?> updateCourse(@PathVariable("id") Integer courseId, @RequestBody CourseDTO courseDTO) {
         LOGGER.info("Starting process to update course by ID: " + courseId);
         try {
-            // Asumiendo que CourseDTO ahora incluye un campo para kcUserKcUuid
+            // Aquí se asume que la lógica de negocio en BL podría lanzar una excepción RuntimeException 
+            // para casos específicos, como no encontrar el curso o el usuario no autorizado.
             CourseEntity updatedCourse = courseBL.updateCourse(courseId, courseDTO, courseDTO.getKcUserKcUuid());
             return ResponseEntity.ok(updatedCourse);
-        } catch (Exception e) {
-            LOGGER.warning("Error occurred while updating course by ID: " + courseId + " - " + e.getMessage());
-            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Curso no encontrado")) {
+                LOGGER.warning("Course not found: " + e.getMessage());
+                return ResponseEntity.notFound().build();
+            } else if (e.getMessage().contains("El usuario no está autorizado")) {
+                LOGGER.warning("Unauthorized user attempt to update course: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unauthorized: " + e.getMessage());
+            } else {
+                LOGGER.warning("Error occurred while updating course by ID: " + courseId + " - " + e.getMessage());
+                // Aquí decidimos devolver un error genérico de servidor.
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
+            }
         } finally {
             LOGGER.info("Finished process to update course by ID: " + courseId);
         }
     }
 
-   private CourseDTOResponse convertToDTO(CourseEntity courseEntity) {
+
+    private CourseDTOResponse convertToDTO(CourseEntity courseEntity) {
         // Asume que ya tienes métodos o lógica para obtener los nombres de la categoría y el idioma
         String categoryName = courseEntity.getCategory() != null ? courseEntity.getCategory().getCategoryName() : "Unknown Category";
         String languageName = courseEntity.getLanguage() != null ? courseEntity.getLanguage().getLanguageName() : "Unknown Language";

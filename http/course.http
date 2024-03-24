@@ -14,3 +14,22 @@ Content-Type: application/json
 
 ### obtener cursos por id de usuario:
 GET http://localhost:8081/api/v1/course/user/123e4567-e89b-12d3-a456-426614174000
+
+### obtener cursos por id de curso:
+GET http://localhost:8081/api/v1/course/10
+
+
+### editar curso:
+PUT http://localhost:8081/api/v1/course/10
+Content-Type: application/json
+
+{
+  "courseDescription": "Descripción del curso editado",
+  "courseStandardPrice": 111.00,
+  "courseName": "Nombre del Curso editado",
+  "courseRequirements": "Requisitos del curso editado",
+  "status": "true",
+  "categoryCategoryId": 2,
+  "languageLanguageId": 2,
+  "kcUserKcUuid": "123e4567-e89b-12d3-a456-426614174000"
+}
