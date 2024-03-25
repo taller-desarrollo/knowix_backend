@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/v1/course")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CourseAPI {
 
     private final CourseBL courseBL;

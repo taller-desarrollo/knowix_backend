@@ -17,7 +17,6 @@ import bo.com.knowix.entity.CategoryEntity;
 
 @RestController
 @RequestMapping("/api/v1/category")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoryAPI {
     
     private final CategoryBL categoryBL;

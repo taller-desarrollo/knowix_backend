@@ -34,10 +34,6 @@ public class GlobalSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.csrf().disable();
-
-
         List<SecurityConstraint> securityConstraints = securityConstraintsProperties.getConstraints();
 
         if (securityConstraints == null){
@@ -142,6 +138,7 @@ public class GlobalSecurityConfiguration {
             });
             authorizeHttpRequests.anyRequest().permitAll();
         });
+        http.csrf().disable();
         http.oauth2ResourceServer( (oauth2) -> {
             oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
         });
