@@ -77,6 +77,15 @@ Después de ejecutar este comando, accede a Keycloak ingresando a localhost:8080
 
 Con estos pasos, se configurará Keycloak con las configuraciones necesarias para la autenticación del proyecto.
 
+Para importar automaticamente el archivo de configuración al crear el contenedor usar el siguiente comando en el directorio de knowix_backend
+
+```bash
+docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOACK_ADMIN_PASSWORD=admin \
+        -v /Keycloak/realm-export.json:/opt/keycloak/data/import \
+        quay.io/keycloak/keycloak:24.0.1 \
+        start-dev --import-realm
+```
+
 ## Ejecución
 
 Para compilar el proyecto se debe correr el siguiente comando:
