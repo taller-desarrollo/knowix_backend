@@ -13,7 +13,6 @@ import bo.com.knowix.entity.LanguageEntity;
 
 @RestController
 @RequestMapping("/api/v1/language")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LanguageAPI {
     
     private final LanguageBL languageBL;
