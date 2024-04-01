@@ -26,7 +26,7 @@ public class ContentEntity {
     private String contentTitle;
 
     @Column(name = "status", nullable = false)
-    private String status;
+    private Boolean status;
 
     @OneToMany(mappedBy = "content")
     private List<AttachmentEntity> attachments;
@@ -55,11 +55,11 @@ public class ContentEntity {
         this.contentTitle = contentTitle;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

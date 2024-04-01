@@ -4,6 +4,8 @@ import bo.com.knowix.bl.CourseBL;
 import bo.com.knowix.dto.CourseDTO;
 import bo.com.knowix.dto.CourseDTOResponse;
 import bo.com.knowix.dto.SectionDTO;
+import bo.com.knowix.dto.Requests.CreateContentRequestDTO;
+import bo.com.knowix.entity.ContentEntity;
 import bo.com.knowix.entity.CourseEntity;
 import bo.com.knowix.entity.SectionEntity;
 
@@ -105,6 +107,7 @@ public class CourseAPI {
         try {
             sectionDTO.setCourseId(courseId);
             SectionEntity newSection = courseBL.createSection(sectionDTO);
+            //TODO fix recursion of data
             newSection.setCourse(null);
 
             return ResponseEntity.ok(newSection);
@@ -121,6 +124,24 @@ public class CourseAPI {
         
     // }
 
+    @PostMapping("/section/{id}/content")
+    public ResponseEntity<ContentEntity> createContent(@PathVariable("id") Integer sectionId, @RequestBody CreateContentRequestDTO createContentRequestDTO) {
+        //TODO unify loggers, use the other logger everywhere
+        LOGGER.info("Starting process to create content for section with sectionId " + sectionId);
+
+        try {
+            createContentRequestDTO.sectionId = sectionId;
+            ContentEntity newContent = courseBL.createContent(createContentRequestDTO);
+            newContent.setSection(null);
+
+            return ResponseEntity.ok(newContent);
+        } catch (Exception e) {
+            LOGGER.warning("Error ocurred while creating a content: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finished process to create content");
+        }
+    }
 
     private CourseDTOResponse convertToDTO(CourseEntity courseEntity) {
         // Asume que ya tienes métodos o lógica para obtener los nombres de la categoría y el idioma

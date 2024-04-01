@@ -1,9 +1,0 @@
-POST http://localhost:8081/api/v1/course/3/section
-Content-Type: application/json
-
-{
-    "sectionName": "section 1",
-    "sectionDescription": "section desc",
-    "sectionDate": "2024-04-01",
-    "status": true
-}

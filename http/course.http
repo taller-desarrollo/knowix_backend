@@ -33,3 +33,41 @@ Content-Type: application/json
   "languageLanguageId": 2,
   "kcUserKcUuid": "123e4567-e89b-12d3-a456-426614174000"
 }
+
+#Create Section
+POST http://localhost:8081/api/v1/course/3/section
+Content-Type: application/json
+
+{
+    "sectionName": "section 1",
+    "sectionDescription": "section desc",
+    "sectionDate": "2024-04-01",
+    "status": true
+}
+
+#Create content
+POST http://localhost:8081/api/v1/course/section/1/content
+Content-Type: application/json
+
+{
+  "contentTitle": "titulo contenido",
+  "status": true,
+  "attachments": [] 
+}
+
+#replace attachment string for base64 file
+POST http://localhost:8081/api/v1/course/section/1/content
+Content-Type: application/json
+
+{
+  "contentTitle": "titulo contenido 2",
+  "status": true,
+  "attachments": [
+    {
+      "attachmentName": "nombre",
+      "attachment": "",
+      "contentId": 1,
+      "status": true
+    }
+  ] 
+}

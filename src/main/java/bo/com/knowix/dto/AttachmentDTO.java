@@ -6,13 +6,13 @@ public class AttachmentDTO {
     private String attachmentName;
     private byte[] attachment;
     private Integer contentId;
-    private String status;
+    private Boolean status;
 
     // Constructors
 
     public AttachmentDTO() {}
 
-    public AttachmentDTO(Integer attachmentId, String attachmentName, byte[] attachment, Integer contentId, String status) {
+    public AttachmentDTO(Integer attachmentId, String attachmentName, byte[] attachment, Integer contentId, Boolean status) {
         this.attachmentId = attachmentId;
         this.attachmentName = attachmentName;
         this.attachment = attachment;
@@ -54,11 +54,11 @@ public class AttachmentDTO {
         this.contentId = contentId;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

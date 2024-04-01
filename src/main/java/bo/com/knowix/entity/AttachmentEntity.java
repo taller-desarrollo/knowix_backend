@@ -30,7 +30,7 @@ public class AttachmentEntity {
     
 
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
     public AttachmentEntity() {}
 
@@ -68,11 +68,11 @@ public class AttachmentEntity {
         this.content = contentEntity;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return this.status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

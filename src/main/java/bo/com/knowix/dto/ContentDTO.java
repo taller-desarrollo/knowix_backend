@@ -6,19 +6,19 @@ public class ContentDTO {
 
     private Integer contentId;
     private String contentTitle;
-    private String status;
-    private List<AttachmentDTO> attachments;
+    private Boolean status;
+    // private List<AttachmentDTO> attachments;
     private Integer sectionId;
 
     // Constructors
 
     public ContentDTO() {}
 
-    public ContentDTO(Integer contentId, String contentTitle, String status, List<AttachmentDTO> attachments, Integer sectionId) {
+    public ContentDTO(Integer contentId, String contentTitle, Boolean status, Integer sectionId) {
         this.contentId = contentId;
         this.contentTitle = contentTitle;
         this.status = status;
-        this.attachments = attachments;
+        // this.attachments = attachments;
         this.sectionId = sectionId;
     }
 
@@ -40,21 +40,21 @@ public class ContentDTO {
         this.contentTitle = contentTitle;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
-    public List<AttachmentDTO> getAttachments() {
-        return attachments;
-    }
+    // public List<AttachmentDTO> getAttachments() {
+    //     return attachments;
+    // }
 
-    public void setAttachments(List<AttachmentDTO> attachments) {
-        this.attachments = attachments;
-    }
+    // public void setAttachments(List<AttachmentDTO> attachments) {
+    //     this.attachments = attachments;
+    // }
 
     public Integer getSectionId() {
         return sectionId;
