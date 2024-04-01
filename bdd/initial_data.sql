@@ -28,4 +28,4 @@ INSERT INTO language (language_name, status) VALUES
 
 
 INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_user, tx_host, s3_profile_picture, kc_group_kc_group_id) VALUES
-('084d2382-f36a-4afb-b9da-64ae9ff96455’, 'Juan', 'Pérez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
+('084d2382-f36a-4afb-b9da-64ae9ff96455', 'Juan', 'Pérez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);

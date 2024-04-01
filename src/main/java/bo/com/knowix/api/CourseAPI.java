@@ -3,7 +3,10 @@ package bo.com.knowix.api;
 import bo.com.knowix.bl.CourseBL;
 import bo.com.knowix.dto.CourseDTO;
 import bo.com.knowix.dto.CourseDTOResponse;
+import bo.com.knowix.dto.SectionDTO;
 import bo.com.knowix.entity.CourseEntity;
+import bo.com.knowix.entity.SectionEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -95,6 +98,28 @@ public class CourseAPI {
         }
     }
 
+    @PostMapping("/{id}/section")
+    public ResponseEntity<SectionEntity> createSection(@PathVariable("id") Integer courseId, @RequestBody SectionDTO sectionDTO) {
+        LOGGER.info("Starting process to create a section for course with ID: " + courseId);
+        
+        try {
+            sectionDTO.setCourseId(courseId);
+            SectionEntity newSection = courseBL.createSection(sectionDTO);
+
+            return ResponseEntity.ok(newSection);
+        } catch (Exception e) {
+            LOGGER.warning("Error ocurred while creating a section: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finished process to create section");
+        }
+    }
+
+    // @GetMapping("/{id}/section")
+    // public ResponseEntity<List<SectionEntity>> getSectionsByCourseId() {
+        
+    // }
+
 
     private CourseDTOResponse convertToDTO(CourseEntity courseEntity) {
         // Asume que ya tienes métodos o lógica para obtener los nombres de la categoría y el idioma
@@ -136,7 +161,5 @@ public class CourseAPI {
             LOGGER.info("Finished process to fetch courses by user ID: " + kcUserKcUuid);
         }
     }
-
-
 
 }

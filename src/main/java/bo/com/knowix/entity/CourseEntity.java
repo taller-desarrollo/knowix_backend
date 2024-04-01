@@ -1,13 +1,15 @@
 package bo.com.knowix.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -41,6 +43,9 @@ public class CourseEntity {
     @ManyToOne
     @JoinColumn(name = "language_language_id", referencedColumnName = "language_id")
     private LanguageEntity language;
+
+    @OneToMany(mappedBy = "course")
+    private List<SectionEntity> sections;
 
     @Column(name = "kc_user_kc_uuid", nullable = false, length = 50)
     private String kcUserKcUuid;
@@ -114,6 +119,14 @@ public class CourseEntity {
         this.language = language;
     }
 
+    public List<SectionEntity> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<SectionEntity> sections) {
+        this.sections = sections;
+    }
+
     public String getKcUserKcUuid() {
         return kcUserKcUuid;
     }
@@ -133,6 +146,7 @@ public class CourseEntity {
                 ", status='" + status + '\'' +
                 ", category=" + (category != null ? category.getCategoryId() : "null") +
                 ", language=" + (language != null ? language.getLanguageId() : "null") +
+                ", sections=" + sections + 
                 ", kcUserKcUuid='" + kcUserKcUuid + '\'' +
                 '}';
     }

@@ -3,8 +3,12 @@ package bo.com.knowix.bl;
 import bo.com.knowix.dao.CategoryDAO;
 import bo.com.knowix.dao.CourseDAO;
 import bo.com.knowix.dao.LanguageDAO;
+import bo.com.knowix.dao.SectionDAO;
 import bo.com.knowix.dto.CourseDTO;
+import bo.com.knowix.dto.SectionDTO;
 import bo.com.knowix.entity.CourseEntity;
+import bo.com.knowix.entity.SectionEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +22,14 @@ public class CourseBL {
     private final CourseDAO courseDAO;
     private final CategoryDAO categoryDAO;
     private final LanguageDAO languageDAO;
+    private final SectionDAO sectionDAO;
 
     @Autowired
-    public CourseBL(CourseDAO courseDAO, CategoryDAO categoryDAO, LanguageDAO languageDAO) {
+    public CourseBL(CourseDAO courseDAO, CategoryDAO categoryDAO, LanguageDAO languageDAO, SectionDAO sectionDAO) {
         this.courseDAO = courseDAO;
         this.categoryDAO = categoryDAO;
         this.languageDAO = languageDAO;
+        this.sectionDAO = sectionDAO;
     }
 
 
@@ -71,15 +77,22 @@ public class CourseBL {
         return courseDAO.save(existingCourse);
     }
 
-
-
-
-
     public List<CourseEntity> findCoursesByUserId(String kcUserKcUuid) {
         List<CourseEntity> allCourses = courseDAO.findAll();
 
         return allCourses.stream()
                         .filter(course -> kcUserKcUuid.equals(course.getKcUserKcUuid()))
                         .collect(Collectors.toList());
+    }
+
+    public SectionEntity createSection(SectionDTO sectionDTO) {
+        SectionEntity section = new SectionEntity();
+        section.setSectionDate(sectionDTO.getSectionDate());
+        section.setSectionDescription(sectionDTO.getSectionDescription());
+        section.setSectionName(sectionDTO.getSectionName());
+        
+        courseDAO.findById(sectionDTO.getCourseId()).ifPresent(section::setCourse);
+
+        return sectionDAO.save(section);
     }
 }
