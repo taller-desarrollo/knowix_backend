@@ -2,6 +2,8 @@ package bo.com.knowix.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,6 +46,7 @@ public class CourseEntity {
     @JoinColumn(name = "language_language_id", referencedColumnName = "language_id")
     private LanguageEntity language;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "course")
     private List<SectionEntity> sections;
 
