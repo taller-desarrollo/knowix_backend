@@ -8,6 +8,6 @@ import bo.com.knowix.entity.AttachmentEntity;
 
 public interface AttachmentDAO extends JpaRepository<AttachmentEntity, Integer>{
     
-    List<AttachmentEntity> findByContentId(Integer contentId);
+    // List<AttachmentEntity> findByContentId(Integer contentId);
 
 }
