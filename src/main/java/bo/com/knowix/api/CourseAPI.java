@@ -105,6 +105,7 @@ public class CourseAPI {
         try {
             sectionDTO.setCourseId(courseId);
             SectionEntity newSection = courseBL.createSection(sectionDTO);
+            newSection.setCourse(null);
 
             return ResponseEntity.ok(newSection);
         } catch (Exception e) {

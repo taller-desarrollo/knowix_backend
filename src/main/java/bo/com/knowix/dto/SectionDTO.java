@@ -8,14 +8,14 @@ public class SectionDTO {
     private String sectionName;
     private String sectionDescription;
     private Date sectionDate;
-    private String status;
+    private Boolean status;
     private Integer courseId;
 
     // Constructors
 
     public SectionDTO() {}
 
-    public SectionDTO(Integer sectionId, String sectionName, String sectionDescription, Date sectionDate, String status, Integer courseId) {
+    public SectionDTO(Integer sectionId, String sectionName, String sectionDescription, Date sectionDate, Boolean status, Integer courseId) {
         this.sectionId = sectionId;
         this.sectionName = sectionName;
         this.sectionDescription = sectionDescription;
@@ -58,11 +58,11 @@ public class SectionDTO {
         this.sectionDate = sectionDate;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

@@ -35,6 +35,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     @Override
     public UserRepresentation createUser(@NonNull UserDto userDto) {
+        logger.info("Creating keycloak user {}", userDto);
         int status = 0;
         UsersResource userResource = KeycloakProvider.getUserResource();
 
@@ -45,9 +46,12 @@ public class KeycloakServiceImpl implements IKeycloakService {
         userRepresentation.setUsername(userDto.getUsername());
         userRepresentation.setEmailVerified(true);
         userRepresentation.setEnabled(true);
-
+        logger.info("Saving user {}", userRepresentation);
+        
         Response response = userResource.create(userRepresentation);
         status = response.getStatus();
+        //TODO handle case where no group exists
+        logger.info("Keycloak user creation responded with status code {}", response.getStatus());
 
         if (status == 201) {
             String path = response.getLocation().getPath();
@@ -79,6 +83,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
             return userResource.get(userId).toRepresentation();
 
         }else if(status == 409) {
+            //TODO handle insecure password
             return null;
         } else {
             return null;

@@ -10,11 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Section")
+@Table(name = "Sections")
 public class SectionEntity {
 
     @Id
@@ -32,7 +31,7 @@ public class SectionEntity {
     private Date sectionDate;
     
     @Column(name = "status", nullable = false, length = 50)
-    private String status;
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "course_course_id", nullable = false)
@@ -75,11 +74,11 @@ public class SectionEntity {
         this.sectionDate = sectionDate;
     }
     
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
