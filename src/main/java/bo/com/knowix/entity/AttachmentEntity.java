@@ -1,5 +1,7 @@
 package bo.com.knowix.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,7 @@ public class AttachmentEntity {
     @Column(name = "attachment")
     private byte[] attachment;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "content_content_id", referencedColumnName = "content_id")
     private ContentEntity content;

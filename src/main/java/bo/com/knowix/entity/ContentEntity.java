@@ -3,6 +3,9 @@ package bo.com.knowix.entity;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,9 +31,11 @@ public class ContentEntity {
     @Column(name = "status", nullable = false)
     private Boolean status;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "content")
     private List<AttachmentEntity> attachments;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "sections_section_id", referencedColumnName = "section_id")
     private SectionEntity section;
