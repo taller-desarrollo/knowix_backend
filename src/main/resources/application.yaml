@@ -20,8 +20,8 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: http://161.35.142.129:8080/realms/Knowix
-          jwk-set-uri: http://161.35.142.129:8080/realms/Knowix/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/Knowix
+          jwk-set-uri: http://localhost:8080/realms/Knowix/protocol/openid-connect/certs
 
 token:
   converter:

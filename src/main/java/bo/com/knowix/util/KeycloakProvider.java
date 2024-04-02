@@ -8,7 +8,7 @@ import org.keycloak.admin.client.resource.UsersResource;
 
 public class KeycloakProvider {
 
-    private static final String SERVER_URL = "http://161.35.142.129:8080";
+    private static final String SERVER_URL = "http://localhost:8080";
     private static final String REALM_NAME = "Knowix";
     private static final String REALM_MASTER = "master";
     private static final String ADMIN_CLI = "admin-cli";
