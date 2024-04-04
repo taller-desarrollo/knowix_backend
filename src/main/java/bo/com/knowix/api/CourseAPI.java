@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/v1/course")
@@ -182,6 +183,24 @@ public class CourseAPI {
         } finally {
             LOGGER.info("Finished process to fetch courses by user ID: " + kcUserKcUuid);
         }
+    }
+
+    @PostMapping("/search")
+    public Page<CourseEntity> searchCoursesByName(@RequestBody SearchCourseRequest searchCourseRequest) {
+        return courseBL.findCoursesByName(searchCourseRequest.getName(), searchCourseRequest.getPage(), searchCourseRequest.getSize());
+    }
+
+    private static class SearchCourseRequest {
+        private String name;
+        private int page;
+        private int size;
+
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public int getPage() { return page; }
+        public void setPage(int page) { this.page = page; }
+        public int getSize() { return size; }
+        public void setSize(int size) { this.size = size; }
     }
 
 }
