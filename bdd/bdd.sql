@@ -102,6 +102,15 @@ CREATE TABLE s3_object (
     CONSTRAINT s3_object_pk PRIMARY KEY (s3_object_id)
 );
 
+-- Table: user_social_media
+CREATE TABLE user_social_media (
+    social_media_id serial NOT NULL,
+    kc_user_uuid varchar(50) NOT NULL,
+    social_media_url varchar(255) NOT NULL,
+    status boolean NOT NULL,
+    CONSTRAINT user_social_media_pk PRIMARY KEY (social_media_id)
+);
+
 -- foreign keys
 -- Reference: Contenido_Secciones (table: Content)
 ALTER TABLE Content ADD CONSTRAINT Contenido_Secciones
@@ -155,6 +164,14 @@ ALTER TABLE attachment ADD CONSTRAINT attachment_Content
 ALTER TABLE kc_user ADD CONSTRAINT kc_user_kc_group
     FOREIGN KEY (kc_group_kc_group_id)
     REFERENCES kc_group (kc_group_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: user_social_media_kc_user (table: user_social_media)
+ALTER TABLE user_social_media ADD CONSTRAINT user_social_media_kc_user_fk
+    FOREIGN KEY (kc_user_uuid)
+    REFERENCES kc_user (kc_uuid)
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
