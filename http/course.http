@@ -71,3 +71,16 @@ Content-Type: application/json
     }
   ] 
 }
+
+### obtener listado de todos los cursos (sin paginación):
+GET http://localhost:8081/api/v1/course
+
+### Buscar cursos por nombre:
+POST http://localhost:8081/api/v1/course/search
+Content-Type: application/json
+
+{
+  "name": "prueba",
+  "page": 1,
+  "size": 5
+}

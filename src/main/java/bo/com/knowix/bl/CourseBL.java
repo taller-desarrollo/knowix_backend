@@ -24,6 +24,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import bo.com.knowix.dto.CourseDTOResponse;
+
+
 @Service
 public class CourseBL {
 
@@ -147,4 +153,24 @@ public class CourseBL {
         newContent.setAttachments(attachments);
         return newContent;
     }
+
+    public Page<CourseEntity> findCoursesByName(String courseName, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return courseDAO.findByCourseNameIgnoreCaseContaining(courseName, pageable);
+    }
+
+    // alternativa para mapear:
+    // public Page<Map<String, Object>> findCoursesByName(String courseName, int page, int size) {
+    //     Pageable pageable = PageRequest.of(page, size);
+    //     Page<CourseEntity> courseEntities = courseDAO.findByCourseNameIgnoreCaseContaining(courseName, pageable);
+        
+    //     return courseEntities.map(courseEntity -> {
+    //         Map<String, Object> courseMap = new HashMap<>();
+    //         courseMap.put("courseId", courseEntity.getCourseId());
+    //         courseMap.put("courseDescription", courseEntity.getCourseDescription());
+    //         // Agrega otros campos necesarios
+    //         return courseMap;
+    //     });
+    // }
+
 }
