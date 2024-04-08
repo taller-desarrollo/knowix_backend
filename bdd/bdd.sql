@@ -204,9 +204,9 @@ CREATE TABLE bank (
 
 
 
--- Table: paymemt_method
-CREATE TABLE paymemt_method (
-    paymemt_method_id int  NOT NULL,
+-- Table: payment_method
+CREATE TABLE payment_method (
+    payment_method_id int  NOT NULL,
     ci_person varchar(30)  NOT NULL,
     name_owner varchar(30)  NOT NULL,
     phone_number varchar(30)  NOT NULL,
@@ -215,30 +215,30 @@ CREATE TABLE paymemt_method (
     bank_bank_id int  NOT NULL,
     kc_user_kc_uuid varchar(50)  NOT NULL,
     account_type_account_type_id int  NOT NULL,
-    CONSTRAINT paymemt_method_pk PRIMARY KEY (paymemt_method_id)
+    CONSTRAINT payment_method_pk PRIMARY KEY (payment_method_id)
 );
 
 
 -- foreign keys
 
--- Reference: paymemt_method_account_type (table: paymemt_method)
-ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_account_type
+-- Reference: payment_method_account_type (table: payment_method)
+ALTER TABLE payment_method ADD CONSTRAINT payment_method_account_type
     FOREIGN KEY (account_type_account_type_id)
     REFERENCES account_type (account_type_id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
 
--- Reference: paymemt_method_bank (table: paymemt_method)
-ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_bank
+-- Reference: payment_method_bank (table: payment_method)
+ALTER TABLE payment_method ADD CONSTRAINT payment_method_bank
     FOREIGN KEY (bank_bank_id)
     REFERENCES bank (bank_id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
 
--- Reference: paymemt_method_kc_user (table: paymemt_method)
-ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_kc_user
+-- Reference: payment_method_kc_user (table: payment_method)
+ALTER TABLE payment_method ADD CONSTRAINT payment_method_kc_user
     FOREIGN KEY (kc_user_kc_uuid)
     REFERENCES kc_user (kc_uuid)  
     NOT DEFERRABLE 
