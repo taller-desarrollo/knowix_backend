@@ -1,10 +1,10 @@
 package bo.com.knowix.bl;
 
-import bo.com.knowix.dao.KcGroupEntity;
-import bo.com.knowix.dao.KcUserEntity;
 import bo.com.knowix.dao.repository.KcGroupRepository;
 import bo.com.knowix.dao.repository.KcUserRepository;
 import bo.com.knowix.dto.UserDto;
+import bo.com.knowix.entity.KcGroupEntity;
+import bo.com.knowix.entity.KcUserEntity;
 import bo.com.knowix.service.IKeycloakService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.representations.idm.UserRepresentation;

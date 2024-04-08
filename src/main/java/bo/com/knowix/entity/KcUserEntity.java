@@ -1,4 +1,4 @@
-package bo.com.knowix.dao;
+package bo.com.knowix.entity;
 
 import jakarta.persistence.*;
 
