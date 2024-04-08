@@ -178,3 +178,70 @@ ALTER TABLE user_social_media ADD CONSTRAINT user_social_media_kc_user_fk
 
 -- End of file.
 
+
+
+
+
+
+
+-- Table: account_type
+CREATE TABLE account_type (
+    account_type_id int  NOT NULL,
+    description varchar(30)  NOT NULL,
+    CONSTRAINT account_type_pk PRIMARY KEY (account_type_id)
+);
+
+
+
+-- Table: bank
+CREATE TABLE bank (
+    bank_id int  NOT NULL,
+    bank_name varchar(30)  NOT NULL,
+    phone_number varchar(30)  NOT NULL,
+    webpage varchar(30)  NOT NULL,
+    CONSTRAINT bank_pk PRIMARY KEY (bank_id)
+);
+
+
+
+-- Table: paymemt_method
+CREATE TABLE paymemt_method (
+    paymemt_method_id int  NOT NULL,
+    ci_person varchar(30)  NOT NULL,
+    name_owner varchar(30)  NOT NULL,
+    phone_number varchar(30)  NOT NULL,
+    qr_image varchar(3000)  NOT NULL,
+    account_number int  NOT NULL,
+    bank_bank_id int  NOT NULL,
+    kc_user_kc_uuid varchar(50)  NOT NULL,
+    account_type_account_type_id int  NOT NULL,
+    CONSTRAINT paymemt_method_pk PRIMARY KEY (paymemt_method_id)
+);
+
+
+-- foreign keys
+
+-- Reference: paymemt_method_account_type (table: paymemt_method)
+ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_account_type
+    FOREIGN KEY (account_type_account_type_id)
+    REFERENCES account_type (account_type_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: paymemt_method_bank (table: paymemt_method)
+ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_bank
+    FOREIGN KEY (bank_bank_id)
+    REFERENCES bank (bank_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: paymemt_method_kc_user (table: paymemt_method)
+ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_kc_user
+    FOREIGN KEY (kc_user_kc_uuid)
+    REFERENCES kc_user (kc_uuid)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+

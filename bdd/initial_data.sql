@@ -26,6 +26,17 @@ INSERT INTO language (language_name, status) VALUES
 ('Japonés', TRUE),
 ('Quechua', TRUE);
 
+-- tipo de cuenta bancaria:
+INSERT INTO account_type (account_type_id, description) VALUES (1, 'Caja de Ahorro');
+INSERT INTO account_type (account_type_id, description) VALUES (2, 'Cuenta Corriente');
+
+-- bancos:
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (1, 'Banco Nacional de Bolivia', '800 17 7272', 'https://www.bnb.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (2, 'BMSC', '800 17 0777', 'http://www.bmsc.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (3, 'Banco Fortaleza', '2114141', 'https://www.bcp.com.bo');
+
+-- ejemplos de usuarios:
+
 insert into kc_group(kc_group_name, status, tx_date, tx_user, tx_host) values 
 ('knowix', true, CURRENT_TIMESTAMP, 'admin', 'localhost');
 
