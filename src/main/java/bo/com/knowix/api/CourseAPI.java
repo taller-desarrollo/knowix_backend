@@ -102,10 +102,10 @@ public class CourseAPI {
     }
 
     @PutMapping("/{id}/is-public")
-    public ResponseEntity<CourseEntity> updateCourseIsPublic(@PathVariable("id") Integer courseId) {
+    public ResponseEntity<CourseEntity> updateCourseIsPublic(@PathVariable("id") Integer courseId, @RequestHeader("X-UUID") String kcuuid) {
         LOGGER.info("Starting process to update course is public by ID: " + courseId);
         try {
-            CourseEntity updatedCourse = courseBL.updateCourseIsPublic(courseId);
+            CourseEntity updatedCourse = courseBL.updateCourseIsPublic(courseId, kcuuid);
             return ResponseEntity.ok(updatedCourse);
         } catch (Exception e) {
             LOGGER.warning("Error occurred while updating course is public by ID: " + courseId + " - " + e.getMessage());

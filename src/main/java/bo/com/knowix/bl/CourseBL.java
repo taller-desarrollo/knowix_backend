@@ -97,9 +97,14 @@ public class CourseBL {
         return courseDAO.save(existingCourse);
     }
 
-    public CourseEntity updateCourseIsPublic(Integer courseId) {
+    public CourseEntity updateCourseIsPublic(Integer courseId, String kcUuid) {
         CourseEntity existingCourse = courseDAO.findById(courseId)
             .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+        //verificar que el curso modificado pertenezca al usuario que lo quiere eliminar
+        if (!existingCourse.getKcUserKcUuid().equals(kcUuid)) {
+            throw new RuntimeException("El usuario no está autorizado para editar este curso");
+        }
 
         boolean isPublic = existingCourse.getCourseIsPublic();
 

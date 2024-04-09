@@ -57,6 +57,7 @@ security-constraints:
             - /api/v1/test/test-educator
           methods:
             - GET
+
     - auth-roles:
         - permitAll
       security-collections:
@@ -66,3 +67,12 @@ security-constraints:
           methods:
             - GET
             - POST
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: UpdateCourse
+          patterns:
+            - /api/v1/course/*/is-public
+          methods:
+            - PUT
