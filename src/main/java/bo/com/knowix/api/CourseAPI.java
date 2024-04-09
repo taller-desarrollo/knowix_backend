@@ -101,6 +101,20 @@ public class CourseAPI {
         }
     }
 
+    @PutMapping("/{id}/is-public")
+    public ResponseEntity<CourseEntity> updateCourseIsPublic(@PathVariable("id") Integer courseId) {
+        LOGGER.info("Starting process to update course is public by ID: " + courseId);
+        try {
+            CourseEntity updatedCourse = courseBL.updateCourseIsPublic(courseId);
+            return ResponseEntity.ok(updatedCourse);
+        } catch (Exception e) {
+            LOGGER.warning("Error occurred while updating course is public by ID: " + courseId + " - " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finished process to update course is public by ID: " + courseId);
+        }
+    }
+
     @PostMapping("/{id}/section")
     public ResponseEntity<SectionEntity> createSection(@PathVariable("id") Integer courseId, @RequestBody SectionDTO sectionDTO) {
         LOGGER.info("Starting process to create a section for course with ID: " + courseId);

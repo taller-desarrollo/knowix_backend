@@ -97,6 +97,8 @@ public class CourseBL {
         return courseDAO.save(existingCourse);
     }
 
+
+
     public List<CourseEntity> findCoursesByUserId(String kcUserKcUuid) {
         List<CourseEntity> allCourses = courseDAO.findAll();
 

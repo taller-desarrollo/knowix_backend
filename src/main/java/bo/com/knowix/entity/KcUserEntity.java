@@ -18,7 +18,7 @@ public class KcUserEntity {
     private String lastName;
 
     @Column(name = "email", nullable = false)
-    private int email;
+    private String email;
 
     @Column(name = "status", nullable = false)
     private boolean status;
@@ -65,11 +65,11 @@ public class KcUserEntity {
         this.lastName = lastName;
     }
 
-    public int getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(int email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -124,7 +124,7 @@ public class KcUserEntity {
     public KcUserEntity() {
     }
 
-    public KcUserEntity(String kcUuid, String firstName, String lastName, int email, boolean status, Timestamp txDate, String txUser, String txHost, int s3ProfilePicture, KcGroupEntity kcGroup) {
+    public KcUserEntity(String kcUuid, String firstName, String lastName, String email, boolean status, Timestamp txDate, String txUser, String txHost, int s3ProfilePicture, KcGroupEntity kcGroup) {
         this.kcUuid = kcUuid;
         this.firstName = firstName;
         this.lastName = lastName;
