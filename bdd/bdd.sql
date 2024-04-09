@@ -206,7 +206,7 @@ CREATE TABLE bank (
 
 -- Table: payment_method
 CREATE TABLE payment_method (
-    payment_method_id int  NOT NULL,
+    payment_method_id serial NOT NULL,
     ci_person varchar(30)  NOT NULL,
     name_owner varchar(30)  NOT NULL,
     phone_number varchar(30)  NOT NULL,
