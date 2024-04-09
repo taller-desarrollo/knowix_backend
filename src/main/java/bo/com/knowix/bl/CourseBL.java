@@ -97,7 +97,17 @@ public class CourseBL {
         return courseDAO.save(existingCourse);
     }
 
+    public CourseEntity updateCourseIsPublic(Integer courseId) {
+        CourseEntity existingCourse = courseDAO.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
 
+        boolean isPublic = existingCourse.getCourseIsPublic();
+
+        isPublic = !isPublic;
+
+        existingCourse.setCourseIsPublic(isPublic);
+        return courseDAO.save(existingCourse);
+    }
 
     public List<CourseEntity> findCoursesByUserId(String kcUserKcUuid) {
         List<CourseEntity> allCourses = courseDAO.findAll();
