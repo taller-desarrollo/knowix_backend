@@ -1,0 +1,37 @@
+POST http://localhost:8081/api/v1/paymentmethod
+Content-Type: application/json
+
+{
+  "ciPerson": "12345678",
+  "nameOwner": "Juan Perez",
+  "phoneNumber": "123456789",
+  "qrImage": "data:image/png;base64,iVBORw0KGgo...",
+  "accountNumber": 1234567890,
+  "bankBankId": 1,
+  "kcUserKcUuid": "084d2382-f36a-4afb-b9da-64ae9ff96455",
+  "accountTypeAccountTypeId": 1
+}
+
+### obtener pagos de un usuario por uuid:
+
+GET http://localhost:8081/api/v1/paymentmethod/user/084d2382-f36a-4afb-b9da-64ae9ff96455
+
+
+### editar un metodo de pago:
+PUT http://localhost:8081/api/v1/paymentmethod/user/084d2382-f36a-4afb-b9da-64ae9ff96455/1
+Content-Type: application/json
+
+{
+  "ciPerson": "12345678",
+  "nameOwner": "Juan Perez Editado",
+  "phoneNumber": "987654321",
+  "qrImage": "data:image/png;base64,iVBORw0KGgo...",
+  "accountNumber": 98763210,
+  "bankBankId": 2,
+  "kcUserKcUuid": "084d2382-f36a-4afb-b9da-64ae9ff96455",
+  "accountTypeAccountTypeId": 2
+}
+
+
+### obtener metodo de pago por id:
+GET http://localhost:8081/api/v1/paymentmethod/1
