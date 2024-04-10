@@ -6,7 +6,7 @@ public class PaymentMethodDTO {
     private String nameOwner;
     private String phoneNumber;
     private String qrImage;
-    private int accountNumber;
+    private String accountNumber;
     private int bankBankId;
     private String kcUserKcUuid;
     private int accountTypeAccountTypeId;
@@ -14,7 +14,7 @@ public class PaymentMethodDTO {
     public PaymentMethodDTO() {
     }
 
-    public PaymentMethodDTO(int paymentMethodId, String ciPerson, String nameOwner, String phoneNumber, String qrImage, int accountNumber, int bankBankId, String kcUserKcUuid, int accountTypeAccountTypeId) {
+    public PaymentMethodDTO(int paymentMethodId, String ciPerson, String nameOwner, String phoneNumber, String qrImage, String accountNumber, int bankBankId, String kcUserKcUuid, int accountTypeAccountTypeId) {
         this.paymentMethodId = paymentMethodId;
         this.ciPerson = ciPerson;
         this.nameOwner = nameOwner;
@@ -68,11 +68,11 @@ public class PaymentMethodDTO {
         this.qrImage = qrImage;
     }
 
-    public int getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(int accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

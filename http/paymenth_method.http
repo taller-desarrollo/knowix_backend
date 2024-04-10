@@ -6,15 +6,15 @@ Content-Type: application/json
   "nameOwner": "Juan Perez",
   "phoneNumber": "123456789",
   "qrImage": "data:image/png;base64,iVBORw0KGgo...",
-  "accountNumber": 1234567890,
+  "accountNumber": "125670ll",
   "bankBankId": 1,
-  "kcUserKcUuid": "084d2382-f36a-4afb-b9da-64ae9ff96455",
+  "kcUserKcUuid": "05f0b4fa-e28b-409f-96ec-1f3d2f505554",
   "accountTypeAccountTypeId": 1
 }
 
 ### obtener pagos de un usuario por uuid:
 
-GET http://localhost:8081/api/v1/paymentmethod/user/084d2382-f36a-4afb-b9da-64ae9ff96455
+GET http://localhost:8081/api/v1/paymentmethod/user/05f0b4fa-e28b-409f-96ec-1f3d2f505554
 
 
 ### editar un metodo de pago:
@@ -35,3 +35,8 @@ Content-Type: application/json
 
 ### obtener metodo de pago por id:
 GET http://localhost:8081/api/v1/paymentmethod/1
+
+
+### prueba:
+
+GET http://localhost:8081/api/v1/paymentmethod/user/05f0b4fa-e28b-409f-96ec-1f3d2f505554
