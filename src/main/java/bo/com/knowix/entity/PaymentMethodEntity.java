@@ -28,11 +28,11 @@ public class PaymentMethodEntity {
     @Column(name = "phone_number", nullable = false, length = 30)
     private String phoneNumber;
 
-    @Column(name = "qr_image", nullable = false, length = 3000)
+    @Column(name = "qr_image", nullable = false, length = 300000)
     private String qrImage;
 
-    @Column(name = "account_number", nullable = false)
-    private Integer accountNumber;
+    @Column(name = "account_number", nullable = false, length = 50)
+    private String accountNumber;
 
     @Column(name = "bank_bank_id", nullable = false)
     private Integer bankBankId;
@@ -46,7 +46,7 @@ public class PaymentMethodEntity {
     public PaymentMethodEntity() {
     }
 
-    public PaymentMethodEntity(Integer paymentMethodId, String ciPerson, String nameOwner, String phoneNumber, String qrImage, Integer accountNumber, Integer bankBankId, String kcUserKcUuid, Integer accountTypeAccountTypeId) {
+    public PaymentMethodEntity(Integer paymentMethodId, String ciPerson, String nameOwner, String phoneNumber, String qrImage, String accountNumber, Integer bankBankId, String kcUserKcUuid, Integer accountTypeAccountTypeId) {
         this.paymentMethodId = paymentMethodId;
         this.ciPerson = ciPerson;
         this.nameOwner = nameOwner;
@@ -100,11 +100,11 @@ public class PaymentMethodEntity {
         this.qrImage = qrImage;
     }
 
-    public Integer getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Integer accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

@@ -41,7 +41,7 @@ insert into kc_group(kc_group_name, status, tx_date, tx_user, tx_host) values
 ('knowix', true, CURRENT_TIMESTAMP, 'admin', 'localhost');
 
 INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_user, tx_host, s3_profile_picture, kc_group_kc_group_id) VALUES
-('084d2382-f36a-4afb-b9da-64ae9ff96455', 'Juan', 'Pérez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
+('05f0b4fa-e28b-409f-96ec-1f3d2f505554', 'Jose', 'Campero', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
 
 
 INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_user, tx_host, s3_profile_picture, kc_group_kc_group_id) VALUES
