@@ -1,6 +1,8 @@
 server:
   port: 8081
 spring:
+  resources:
+    static-locations: file:/bdd/qr/
   datasource:
     url: jdbc:postgresql://localhost:5434/bddknowix
     username: postgres
@@ -76,3 +78,4 @@ security-constraints:
             - /api/v1/course/*/is-public
           methods:
             - PUT
+

@@ -5,7 +5,7 @@ Content-Type: application/json
   "ciPerson": "12345678",
   "nameOwner": "Juan Perez",
   "phoneNumber": "123456789",
-  "qrImage": "data:image/png;base64,iVBORw0KGgo...",
+  "qrImage": "",
   "accountNumber": "125670ll",
   "bankBankId": 1,
   "kcUserKcUuid": "05f0b4fa-e28b-409f-96ec-1f3d2f505554",
