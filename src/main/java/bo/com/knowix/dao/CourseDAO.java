@@ -13,46 +13,44 @@ import java.util.List;
 public interface CourseDAO extends JpaRepository<CourseEntity, Integer> {
 
     List<CourseEntity> findByKcUserKcUuid(String kcUserKcUuid);
+
+    Page<CourseEntity> findAllByCourseIsPublicIsTrueAndStatusEquals( String status, Pageable pageable);
     
-    Page<CourseEntity> findByCourseNameIgnoreCaseContaining(String courseName, Pageable pageable);
+    Page<CourseEntity> findByCourseNameIgnoreCaseContaining(String courseName,Pageable pageable);
 
-    Page<CourseEntity> findByCourseNameContainingIgnoreCase(String searchTerm, Pageable pageable);
+    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseIsPublicIsTrueAndStatusEquals(String searchTerm, String status, Pageable pageable);
 
-    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetween(String searchTerm, Double minPrice, Double maxPrice, Pageable pageable);
+    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCourseIsPublicIsTrueAndStatusEquals(String searchTerm, Double minPrice, Double maxPrice, String status, Pageable pageable);
 
-    @Query("SELECT c FROM CourseEntity c WHERE LOWER(c.courseName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) AND c.courseStandardPrice BETWEEN :minPrice AND :maxPrice")
-    Page<CourseEntity> findCoursesBySearchTermAndPriceRange(
-            @Param("searchTerm") String searchTerm,
-            @Param("minPrice") Double minPrice,
-            @Param("maxPrice") Double maxPrice,
-            Pageable pageable
-    );
+    Page<CourseEntity> findByCourseStandardPriceBetweenAndCourseIsPublicIsTrueAndStatusEquals(Double minPrice, Double maxPrice, String status, Pageable pageable);
 
-    Page<CourseEntity> findByCourseStandardPriceBetween(Double minPrice, Double maxPrice, Pageable pageable);
-
-    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategory(
+    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategoryInAndCourseIsPublicIsTrueAndStatusEquals(
             String searchTerm,
             Double minPrice,
             Double maxPrice,
-            CategoryEntity category,
+            List<CategoryEntity> categories,
+            String status,
             Pageable pageable
     );
 
-    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCategory(
+    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCategoryInAndCourseIsPublicIsTrueAndStatusEquals(
             String searchTerm,
-            CategoryEntity category,
+            List<CategoryEntity> categories,
+            String status,
             Pageable pageable
     );
 
-    Page<CourseEntity> findByCourseStandardPriceBetweenAndCategory(
+    Page<CourseEntity> findByCourseStandardPriceBetweenAndCategoryInAndCourseIsPublicIsTrueAndStatusEquals(
             Double minPrice,
             Double maxPrice,
-            CategoryEntity category,
+            List<CategoryEntity> categories,
+            String status,
             Pageable pageable
     );
 
-    Page<CourseEntity> findByCategory(
-            CategoryEntity category,
+    Page<CourseEntity> findByCategoryInAndCourseIsPublicIsTrueAndStatusEquals(
+            List<CategoryEntity> categories,
+            String status,
             Pageable pageable
     );
 }

@@ -57,7 +57,7 @@ public class CourseAPI {
             @RequestParam(required = false) String searchTerm,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
-            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) List<Integer> categoryIds,
             @RequestParam(defaultValue = "asc") String sort
     ) {
         LOGGER.info("Starting process to fetch all courses");
@@ -70,18 +70,18 @@ public class CourseAPI {
             }
 
             Page<CourseEntity> coursesPage;
-            if(categoryId != null) {
+            if(categoryIds != null && !categoryIds.isEmpty()){
                 if(searchTerm != null && !searchTerm.isEmpty()){
                     if(minPrice != null && maxPrice != null){
-                        coursesPage = courseBL.findCoursesBySearchTermAndPriceRangeAndCategoryId(searchTerm, minPrice, maxPrice, categoryId, pageable);
+                        coursesPage = courseBL.findCoursesBySearchTermAndPriceRangeAndCategoryId(searchTerm, minPrice, maxPrice, categoryIds, pageable);
                     }else{
-                        coursesPage = courseBL.findCoursesBySearchTermAndCategoryId(searchTerm, categoryId, pageable);
+                        coursesPage = courseBL.findCoursesBySearchTermAndCategoryId(searchTerm, categoryIds, pageable);
                     }
                 }else{
                     if(minPrice != null && maxPrice != null){
-                        coursesPage = courseBL.findCoursesByPriceRangeAndCategoryId(minPrice, maxPrice, categoryId, pageable);
+                        coursesPage = courseBL.findCoursesByPriceRangeAndCategoryId(minPrice, maxPrice, categoryIds, pageable);
                     }else{
-                        coursesPage = courseBL.findCoursesByCategoryId(categoryId, pageable);
+                        coursesPage = courseBL.findCoursesByCategoryId(categoryIds, pageable);
                     }
                 }
             }else

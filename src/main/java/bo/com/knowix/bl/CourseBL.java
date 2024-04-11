@@ -59,6 +59,7 @@ public class CourseBL {
         course.setCourseRequirements(courseDTO.getCourseRequirements());
         course.setStatus(courseDTO.getStatus()); // Asumiendo que quieres usar el status del DTO
         course.setKcUserKcUuid(kcUserKcUuid); // Establecer el UUID del usuario
+        course.setCourseIsPublic(true);
         
         // Buscar categoría e idioma por ID y asignarlos al curso
         categoryDAO.findById(courseDTO.getCategoryCategoryId()).ifPresent(course::setCategory);
@@ -70,61 +71,57 @@ public class CourseBL {
     public Page<CourseEntity> findAllCourses(
             Pageable pageable
     ) {
-        return courseDAO.findAll(pageable);
+        return courseDAO.findAllByCourseIsPublicIsTrueAndStatusEquals("true", pageable);
     }
 
     public Page<CourseEntity> findCoursesBySearchTerm(String searchTerm, Pageable pageable){
-        return courseDAO.findByCourseNameContainingIgnoreCase(searchTerm, pageable);
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseIsPublicIsTrueAndStatusEquals(searchTerm,"true", pageable);
     }
 
     public Page<CourseEntity> findCoursesBySearchTermAndPriceRange(String searchTerm, Double minPrice, Double maxPrice, Pageable pageable){
-        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetween(searchTerm, minPrice, maxPrice, pageable);
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCourseIsPublicIsTrueAndStatusEquals(searchTerm, minPrice, maxPrice, "true", pageable);
     }
 
     public Page<CourseEntity> findCoursesByPriceRange(Double minPrice, Double maxPrice, Pageable pageable){
-        return courseDAO.findByCourseStandardPriceBetween(minPrice, maxPrice, pageable);
+        return courseDAO.findByCourseStandardPriceBetweenAndCourseIsPublicIsTrueAndStatusEquals(minPrice, maxPrice, "true", pageable);
     }
 
     public Page<CourseEntity> findCoursesBySearchTermAndPriceRangeAndCategoryId(
             String searchTerm,
             Double minPrice,
             Double maxPrice,
-            Integer categoryId,
+            List<Integer> categoryIds,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategory(searchTerm, minPrice, maxPrice, category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryIds);
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategoryInAndCourseIsPublicIsTrueAndStatusEquals(searchTerm, minPrice, maxPrice, categories, "true", pageable);
     }
 
     public Page<CourseEntity> findCoursesBySearchTermAndCategoryId(
             String searchTerm,
-            Integer categoryId,
+            List<Integer> categoryId,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCourseNameContainingIgnoreCaseAndCategory(searchTerm, category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryId);
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCategoryInAndCourseIsPublicIsTrueAndStatusEquals(searchTerm, categories, "true", pageable);
     }
 
     public Page<CourseEntity> findCoursesByPriceRangeAndCategoryId(
             Double minPrice,
             Double maxPrice,
-            Integer categoryId,
+            List<Integer> categoryId,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCourseStandardPriceBetweenAndCategory(minPrice, maxPrice, category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryId);
+        return courseDAO.findByCourseStandardPriceBetweenAndCategoryInAndCourseIsPublicIsTrueAndStatusEquals(minPrice, maxPrice, categories, "true", pageable);
     }
 
     public Page<CourseEntity> findCoursesByCategoryId(
-            Integer categoryId,
+            List<Integer> categoryId,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCategory(category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryId);
+        return courseDAO.findByCategoryInAndCourseIsPublicIsTrueAndStatusEquals(categories, "true", pageable);
     }
 
     public Optional<CourseEntity> findCourseById(Integer courseId) {

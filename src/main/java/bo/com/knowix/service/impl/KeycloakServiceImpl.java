@@ -97,10 +97,10 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     @Override
     public UserRepresentation updateUser(String userId, UserDto userDto) {
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+        /*CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setTemporary(false);
         credentialRepresentation.setType(OAuth2Constants.PASSWORD);
-        credentialRepresentation.setValue(userDto.getPassword());
+        credentialRepresentation.setValue(userDto.getPassword());*/
 
         UserRepresentation userRepresentation = new UserRepresentation();
         userRepresentation.setFirstName(userDto.getFirstName());
@@ -109,7 +109,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
         userRepresentation.setUsername(userDto.getUsername());
         userRepresentation.setEmailVerified(true);
         userRepresentation.setEnabled(true);
-        userRepresentation.setCredentials(List.of(credentialRepresentation));
+        //userRepresentation.setCredentials(List.of(credentialRepresentation));
 
         UserResource userResource = KeycloakProvider.getUserResource().get(userId);
         userResource.update(userRepresentation);
