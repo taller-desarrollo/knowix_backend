@@ -89,42 +89,38 @@ public class CourseBL {
             String searchTerm,
             Double minPrice,
             Double maxPrice,
-            Integer categoryId,
+            List<Integer> categoryIds,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategory(searchTerm, minPrice, maxPrice, category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryIds);
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategoryIn(searchTerm, minPrice, maxPrice, categories, pageable);
     }
 
     public Page<CourseEntity> findCoursesBySearchTermAndCategoryId(
             String searchTerm,
-            Integer categoryId,
+            List<Integer> categoryId,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCourseNameContainingIgnoreCaseAndCategory(searchTerm, category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryId);
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCategoryIn(searchTerm, categories, pageable);
     }
 
     public Page<CourseEntity> findCoursesByPriceRangeAndCategoryId(
             Double minPrice,
             Double maxPrice,
-            Integer categoryId,
+            List<Integer> categoryId,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCourseStandardPriceBetweenAndCategory(minPrice, maxPrice, category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryId);
+        return courseDAO.findByCourseStandardPriceBetweenAndCategoryIn(minPrice, maxPrice, categories, pageable);
     }
 
     public Page<CourseEntity> findCoursesByCategoryId(
-            Integer categoryId,
+            List<Integer> categoryId,
             Pageable pageable
     ) {
-        CategoryEntity category = categoryDAO.findById(categoryId)
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        return courseDAO.findByCategory(category, pageable);
+        List<CategoryEntity> categories = categoryDAO.findAllById(categoryId);
+        return courseDAO.findByCategoryIn(categories, pageable);
     }
 
     public Optional<CourseEntity> findCourseById(Integer courseId) {

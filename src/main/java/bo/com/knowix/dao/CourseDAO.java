@@ -30,29 +30,29 @@ public interface CourseDAO extends JpaRepository<CourseEntity, Integer> {
 
     Page<CourseEntity> findByCourseStandardPriceBetween(Double minPrice, Double maxPrice, Pageable pageable);
 
-    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategory(
+    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategoryIn(
             String searchTerm,
             Double minPrice,
             Double maxPrice,
-            CategoryEntity category,
+            List<CategoryEntity> categories,
             Pageable pageable
     );
 
-    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCategory(
+    Page<CourseEntity> findByCourseNameContainingIgnoreCaseAndCategoryIn(
             String searchTerm,
-            CategoryEntity category,
+            List<CategoryEntity> categories,
             Pageable pageable
     );
 
-    Page<CourseEntity> findByCourseStandardPriceBetweenAndCategory(
+    Page<CourseEntity> findByCourseStandardPriceBetweenAndCategoryIn(
             Double minPrice,
             Double maxPrice,
-            CategoryEntity category,
+            List<CategoryEntity> categories,
             Pageable pageable
     );
 
-    Page<CourseEntity> findByCategory(
-            CategoryEntity category,
+    Page<CourseEntity> findByCategoryIn(
+            List<CategoryEntity> categories,
             Pageable pageable
     );
 }
