@@ -10,6 +10,9 @@ import bo.com.knowix.entity.CourseEntity;
 import bo.com.knowix.entity.SectionEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,10 +51,54 @@ public class CourseAPI {
     }
 
     @GetMapping()
-    public ResponseEntity<List<CourseEntity>> getAllCourses() {
+    public ResponseEntity<Page<CourseEntity>> getAllCourses(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(defaultValue = "asc") String sort
+    ) {
         LOGGER.info("Starting process to fetch all courses");
         try {
-            List<CourseEntity> courses = courseBL.findAllCourses();
+            Pageable pageable;
+            if(sort.equals("desc")){
+                pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").descending());
+            }else{
+                pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").ascending());
+            }
+
+            Page<CourseEntity> coursesPage;
+            if(categoryId != null) {
+                if(searchTerm != null && !searchTerm.isEmpty()){
+                    if(minPrice != null && maxPrice != null){
+                        coursesPage = courseBL.findCoursesBySearchTermAndPriceRangeAndCategoryId(searchTerm, minPrice, maxPrice, categoryId, pageable);
+                    }else{
+                        coursesPage = courseBL.findCoursesBySearchTermAndCategoryId(searchTerm, categoryId, pageable);
+                    }
+                }else{
+                    if(minPrice != null && maxPrice != null){
+                        coursesPage = courseBL.findCoursesByPriceRangeAndCategoryId(minPrice, maxPrice, categoryId, pageable);
+                    }else{
+                        coursesPage = courseBL.findCoursesByCategoryId(categoryId, pageable);
+                    }
+                }
+            }else
+            if(searchTerm != null && !searchTerm.isEmpty()){
+                if(minPrice != null && maxPrice != null){
+                    coursesPage = courseBL.findCoursesBySearchTermAndPriceRange(searchTerm, minPrice, maxPrice, pageable);
+                }else{
+                    coursesPage = courseBL.findCoursesBySearchTerm(searchTerm, pageable);
+                }
+            }else{
+                if(minPrice != null && maxPrice != null){
+                    coursesPage = courseBL.findCoursesByPriceRange(minPrice, maxPrice, pageable);
+                }else{
+                    coursesPage = courseBL.findAllCourses(pageable);
+                }
+            }
+            Page<CourseEntity> courses = coursesPage;
             return ResponseEntity.ok(courses);
         } catch (Exception e) {
             LOGGER.warning("Error occurred while fetching courses: " + e.getMessage());
@@ -98,6 +145,20 @@ public class CourseAPI {
             }
         } finally {
             LOGGER.info("Finished process to update course by ID: " + courseId);
+        }
+    }
+
+    @PutMapping("/{id}/is-public")
+    public ResponseEntity<CourseEntity> updateCourseIsPublic(@PathVariable("id") Integer courseId, @RequestHeader("X-UUID") String kcuuid) {
+        LOGGER.info("Starting process to update course is public by ID: " + courseId);
+        try {
+            CourseEntity updatedCourse = courseBL.updateCourseIsPublic(courseId, kcuuid);
+            return ResponseEntity.ok(updatedCourse);
+        } catch (Exception e) {
+            LOGGER.warning("Error occurred while updating course is public by ID: " + courseId + " - " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finished process to update course is public by ID: " + courseId);
         }
     }
 

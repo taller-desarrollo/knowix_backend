@@ -26,8 +26,23 @@ INSERT INTO language (language_name, status) VALUES
 ('Japonés', TRUE),
 ('Quechua', TRUE);
 
+-- tipo de cuenta bancaria:
+INSERT INTO account_type (account_type_id, description) VALUES (1, 'Caja de Ahorro');
+INSERT INTO account_type (account_type_id, description) VALUES (2, 'Cuenta Corriente');
+
+-- bancos:
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (1, 'Banco Nacional de Bolivia', '800 17 7272', 'https://www.bnb.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (2, 'BMSC', '800 17 0777', 'http://www.bmsc.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (3, 'Banco Fortaleza', '2114141', 'https://www.bcp.com.bo');
+
+-- ejemplos de usuarios:
+
 insert into kc_group(kc_group_name, status, tx_date, tx_user, tx_host) values 
 ('knowix', true, CURRENT_TIMESTAMP, 'admin', 'localhost');
 
 INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_user, tx_host, s3_profile_picture, kc_group_kc_group_id) VALUES
-('084d2382-f36a-4afb-b9da-64ae9ff96455', 'Juan', 'Pérez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
+('05f0b4fa-e28b-409f-96ec-1f3d2f505554', 'Jose', 'Campero', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
+
+
+INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_user, tx_host, s3_profile_picture, kc_group_kc_group_id) VALUES
+('9bebffb8-b0de-443e-a774-f2e04b49ada7', 'Fernanda', 'Gutierrez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);

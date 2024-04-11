@@ -1,0 +1,27 @@
+## obtener listado de redes sociales por usuario:
+GET http://localhost:8081/api/v1/social-media/user/9bebffb8-b0de-443e-a774-f2e04b49ada7
+
+### obtener listado de redes sociales por usuario:
+GET http://localhost:8081/api/v1/social-media/user/084d2382-f36a-4afb-b9da-64ae9ff96455
+
+### crear listado de redes sociales para un usuario:
+POST http://localhost:8081/api/v1/social-media
+Content-Type: application/json
+
+{
+    "kcUserUuid": "084d2382-f36a-4afb-b9da-64ae9ff96455",
+    "socialMediaUrl": "prueba04.hamelin.com",
+    "status": "True"
+    
+}
+
+
+### editar red social por id de red social:
+PUT http://localhost:8081/api/v1/social-media/2
+Content-Type: application/json
+
+{
+    "kcUserUuid": "084d2382-f36a-4afb-b9da-64ae9ff96455",
+    "socialMediaUrl": "prueba02.sample.com",
+    "status": "True"
+}

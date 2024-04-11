@@ -10,11 +10,9 @@ import bo.com.knowix.dto.AttachmentDTO;
 import bo.com.knowix.dto.CourseDTO;
 import bo.com.knowix.dto.SectionDTO;
 import bo.com.knowix.dto.Requests.CreateContentRequestDTO;
-import bo.com.knowix.entity.AttachmentEntity;
-import bo.com.knowix.entity.ContentEntity;
-import bo.com.knowix.entity.CourseEntity;
-import bo.com.knowix.entity.SectionEntity;
+import bo.com.knowix.entity.*;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,8 +67,64 @@ public class CourseBL {
         return courseDAO.save(course);
     }
 
-    public List<CourseEntity> findAllCourses() {
-        return courseDAO.findAll();
+    public Page<CourseEntity> findAllCourses(
+            Pageable pageable
+    ) {
+        return courseDAO.findAll(pageable);
+    }
+
+    public Page<CourseEntity> findCoursesBySearchTerm(String searchTerm, Pageable pageable){
+        return courseDAO.findByCourseNameContainingIgnoreCase(searchTerm, pageable);
+    }
+
+    public Page<CourseEntity> findCoursesBySearchTermAndPriceRange(String searchTerm, Double minPrice, Double maxPrice, Pageable pageable){
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetween(searchTerm, minPrice, maxPrice, pageable);
+    }
+
+    public Page<CourseEntity> findCoursesByPriceRange(Double minPrice, Double maxPrice, Pageable pageable){
+        return courseDAO.findByCourseStandardPriceBetween(minPrice, maxPrice, pageable);
+    }
+
+    public Page<CourseEntity> findCoursesBySearchTermAndPriceRangeAndCategoryId(
+            String searchTerm,
+            Double minPrice,
+            Double maxPrice,
+            Integer categoryId,
+            Pageable pageable
+    ) {
+        CategoryEntity category = categoryDAO.findById(categoryId)
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCourseStandardPriceBetweenAndCategory(searchTerm, minPrice, maxPrice, category, pageable);
+    }
+
+    public Page<CourseEntity> findCoursesBySearchTermAndCategoryId(
+            String searchTerm,
+            Integer categoryId,
+            Pageable pageable
+    ) {
+        CategoryEntity category = categoryDAO.findById(categoryId)
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        return courseDAO.findByCourseNameContainingIgnoreCaseAndCategory(searchTerm, category, pageable);
+    }
+
+    public Page<CourseEntity> findCoursesByPriceRangeAndCategoryId(
+            Double minPrice,
+            Double maxPrice,
+            Integer categoryId,
+            Pageable pageable
+    ) {
+        CategoryEntity category = categoryDAO.findById(categoryId)
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        return courseDAO.findByCourseStandardPriceBetweenAndCategory(minPrice, maxPrice, category, pageable);
+    }
+
+    public Page<CourseEntity> findCoursesByCategoryId(
+            Integer categoryId,
+            Pageable pageable
+    ) {
+        CategoryEntity category = categoryDAO.findById(categoryId)
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        return courseDAO.findByCategory(category, pageable);
     }
 
     public Optional<CourseEntity> findCourseById(Integer courseId) {
@@ -94,6 +148,23 @@ public class CourseBL {
         categoryDAO.findById(courseDTO.getCategoryCategoryId()).ifPresent(existingCourse::setCategory);
         languageDAO.findById(courseDTO.getLanguageLanguageId()).ifPresent(existingCourse::setLanguage);
 
+        return courseDAO.save(existingCourse);
+    }
+
+    public CourseEntity updateCourseIsPublic(Integer courseId, String kcUuid) {
+        CourseEntity existingCourse = courseDAO.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+        //verificar que el curso modificado pertenezca al usuario que lo quiere eliminar
+        if (!existingCourse.getKcUserKcUuid().equals(kcUuid)) {
+            throw new RuntimeException("El usuario no está autorizado para editar este curso");
+        }
+
+        boolean isPublic = existingCourse.getCourseIsPublic();
+
+        isPublic = !isPublic;
+
+        existingCourse.setCourseIsPublic(isPublic);
         return courseDAO.save(existingCourse);
     }
 

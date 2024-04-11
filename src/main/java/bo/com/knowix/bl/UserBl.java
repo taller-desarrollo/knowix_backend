@@ -1,10 +1,10 @@
 package bo.com.knowix.bl;
 
-import bo.com.knowix.dao.KcGroupEntity;
-import bo.com.knowix.dao.KcUserEntity;
 import bo.com.knowix.dao.repository.KcGroupRepository;
 import bo.com.knowix.dao.repository.KcUserRepository;
 import bo.com.knowix.dto.UserDto;
+import bo.com.knowix.entity.KcGroupEntity;
+import bo.com.knowix.entity.KcUserEntity;
 import bo.com.knowix.service.IKeycloakService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -38,8 +38,7 @@ public class UserBl {
         KcGroupEntity kcGroupEntity = kcGroupRepository.findByKcGroupId(1L);
         KcUserEntity kcUserEntity = new KcUserEntity();
         kcUserEntity.setKcUuid(keycloackUser.getId());
-        //TODO: Correct this in database, email is not a number
-        kcUserEntity.setEmail(1);
+        kcUserEntity.setEmail(keycloackUser.getEmail());
         kcUserEntity.setFirstName(keycloackUser.getFirstName());
         kcUserEntity.setLastName(keycloackUser.getLastName());
         kcUserEntity.setStatus(true);

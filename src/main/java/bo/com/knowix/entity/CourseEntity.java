@@ -38,6 +38,9 @@ public class CourseEntity {
     @Column(name = "status", nullable = false, length = 50)
     private String status;
 
+    @Column(name = "course_is_public", nullable = false)
+    private boolean courseIsPublic;
+
     @ManyToOne
     @JoinColumn(name = "Category_category_id", referencedColumnName = "category_id")
     private CategoryEntity category;
@@ -96,6 +99,14 @@ public class CourseEntity {
 
     public void setCourseRequirements(String courseRequirements) {
         this.courseRequirements = courseRequirements;
+    }
+
+    public boolean getCourseIsPublic() {
+        return courseIsPublic;
+    }
+
+    public void setCourseIsPublic(boolean courseIsPublic) {
+        this.courseIsPublic = courseIsPublic;
     }
 
     public String getStatus() {

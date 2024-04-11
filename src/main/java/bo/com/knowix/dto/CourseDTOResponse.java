@@ -8,9 +8,9 @@ public class CourseDTOResponse {
     private String courseName;
     private String courseRequirements;
     private String status;
-    private String categoryName; // Nombre de la categoría en lugar del ID
-    private String languageName; // Nombre del lenguaje en lugar del ID
-    private String kcUserKcUuid; // Campo para almacenar el UUID del usuario
+    private String categoryName; 
+    private String languageName; 
+    private String kcUserKcUuid; 
 
     public CourseDTOResponse() {
     }

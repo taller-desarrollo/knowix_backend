@@ -1,0 +1,5 @@
+### Obtener todos los bancos:
+GET http://localhost:8081/api/v1/bank
+
+### Obtener banco por id:
+GET http://localhost:8081/api/v1/bank/3

@@ -102,6 +102,15 @@ CREATE TABLE s3_object (
     CONSTRAINT s3_object_pk PRIMARY KEY (s3_object_id)
 );
 
+-- Table: user_social_media
+CREATE TABLE user_social_media (
+    social_media_id serial NOT NULL,
+    kc_user_uuid varchar(50) NOT NULL,
+    social_media_url varchar(255) NOT NULL,
+    status boolean NOT NULL,
+    CONSTRAINT user_social_media_pk PRIMARY KEY (social_media_id)
+);
+
 -- foreign keys
 -- Reference: Contenido_Secciones (table: Content)
 ALTER TABLE Content ADD CONSTRAINT Contenido_Secciones
@@ -159,5 +168,80 @@ ALTER TABLE kc_user ADD CONSTRAINT kc_user_kc_group
     INITIALLY IMMEDIATE
 ;
 
+-- Reference: user_social_media_kc_user (table: user_social_media)
+ALTER TABLE user_social_media ADD CONSTRAINT user_social_media_kc_user_fk
+    FOREIGN KEY (kc_user_uuid)
+    REFERENCES kc_user (kc_uuid)
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
 -- End of file.
+
+
+
+
+
+
+
+-- Table: account_type
+CREATE TABLE account_type (
+    account_type_id int  NOT NULL,
+    description varchar(30)  NOT NULL,
+    CONSTRAINT account_type_pk PRIMARY KEY (account_type_id)
+);
+
+
+
+-- Table: bank
+CREATE TABLE bank (
+    bank_id int  NOT NULL,
+    bank_name varchar(30)  NOT NULL,
+    phone_number varchar(30)  NOT NULL,
+    webpage varchar(30)  NOT NULL,
+    CONSTRAINT bank_pk PRIMARY KEY (bank_id)
+);
+
+
+
+-- Table: payment_method
+CREATE TABLE payment_method (
+    payment_method_id serial NOT NULL,
+    ci_person varchar(30)  NOT NULL,
+    name_owner varchar(30)  NOT NULL,
+    phone_number varchar(30)  NOT NULL,
+    qr_image varchar(300000)  NOT NULL,
+    account_number varchar(50)  NOT NULL,
+    bank_bank_id int  NOT NULL,
+    kc_user_kc_uuid varchar(50)  NOT NULL,
+    account_type_account_type_id int  NOT NULL,
+    CONSTRAINT payment_method_pk PRIMARY KEY (payment_method_id)
+);
+
+
+-- foreign keys
+
+-- Reference: payment_method_account_type (table: payment_method)
+ALTER TABLE payment_method ADD CONSTRAINT payment_method_account_type
+    FOREIGN KEY (account_type_account_type_id)
+    REFERENCES account_type (account_type_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: payment_method_bank (table: payment_method)
+ALTER TABLE payment_method ADD CONSTRAINT payment_method_bank
+    FOREIGN KEY (bank_bank_id)
+    REFERENCES bank (bank_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: payment_method_kc_user (table: payment_method)
+ALTER TABLE payment_method ADD CONSTRAINT payment_method_kc_user
+    FOREIGN KEY (kc_user_kc_uuid)
+    REFERENCES kc_user (kc_uuid)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
 
