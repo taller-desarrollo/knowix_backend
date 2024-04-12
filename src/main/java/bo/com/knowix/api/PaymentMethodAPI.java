@@ -19,35 +19,32 @@ import java.util.List;
 public class PaymentMethodAPI {
 
     private final PaymentMethodBL paymentMethodBL;
-    private final ObjectMapper objectMapper; // Jackson's ObjectMapper
+    private final ObjectMapper objectMapper; 
 
     @Autowired
     public PaymentMethodAPI(PaymentMethodBL paymentMethodBL, ObjectMapper objectMapper) {
         this.paymentMethodBL = paymentMethodBL;
-        this.objectMapper = objectMapper; // Inyecta ObjectMapper
+        this.objectMapper = objectMapper; 
     }
 
-    @PostMapping(consumes = {"multipart/form-data"}) // Asegúrate de especificar el tipo de contenido adecuado
+    @PostMapping(consumes = {"multipart/form-data"}) 
     public ResponseEntity<PaymentMethodDTO> createPaymentMethod(@RequestParam("paymentMethod") String paymentMethodJSON,
-                                                                 @RequestParam("qrImage") MultipartFile qrImage) {
+                                                                @RequestParam("qrImage") MultipartFile qrImage) {
         try {
-            // Convierte JSON a DTO
             PaymentMethodDTO paymentMethodDTO = objectMapper.readValue(paymentMethodJSON, PaymentMethodDTO.class);
 
-            // Guarda el archivo QR
             String filePath = saveQrImageFile(qrImage);
             paymentMethodDTO.setQrImage(filePath);
 
             PaymentMethodDTO created = paymentMethodBL.createPaymentMethod(paymentMethodDTO);
             return new ResponseEntity<>(created, HttpStatus.CREATED);
         } catch (Exception e) {
-            e.printStackTrace(); // Para propósitos de depuración en el desarrollo
+            e.printStackTrace(); 
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     private String saveQrImageFile(MultipartFile qrImage) throws IOException {
-        // Asegúrate de tener este directorio creado en tu servidor o adapta la lógica para crearlo si no existe
         String uploadDir = "bdd/qr/";
         String fileName = "qr_" + System.currentTimeMillis() + ".png";
         String filePath = uploadDir + fileName;
@@ -62,10 +59,8 @@ public class PaymentMethodAPI {
                                                                 @RequestParam("paymentMethod") String paymentMethodJSON,
                                                                 @RequestParam("qrImage") MultipartFile qrImage) {
         try {
-            // Convertir JSON a DTO
             PaymentMethodDTO paymentMethodDTO = objectMapper.readValue(paymentMethodJSON, PaymentMethodDTO.class);
 
-            // Guarda el nuevo archivo QR, si se proporciona
             if (!qrImage.isEmpty()) {
                 String filePath = saveQrImageFile(qrImage);
                 paymentMethodDTO.setQrImage(filePath);
@@ -75,12 +70,11 @@ public class PaymentMethodAPI {
                     .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                     .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
-            e.printStackTrace(); // Para propósitos de depuración en el desarrollo
+            e.printStackTrace(); 
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    // Los demás métodos permanecen sin cambios
     @GetMapping("/user/{kcUserKcUuid}")
     public ResponseEntity<List<PaymentMethodDTO>> getPaymentMethodsByUserKcUuid(@PathVariable String kcUserKcUuid) {
         try {

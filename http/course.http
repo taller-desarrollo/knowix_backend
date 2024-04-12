@@ -9,14 +9,14 @@ Content-Type: application/json
   "status": "true",
   "categoryCategoryId": 1,
   "languageLanguageId": 1,
-  "kcUserKcUuid": "123e4567-e89b-12d3-a456-426614174000"
+  "kcUserKcUuid": "05f0b4fa-e28b-409f-96ec-1f3d2f505554"
 }
 
 ### obtener cursos por id de usuario:
-GET http://localhost:8081/api/v1/course/user/123e4567-e89b-12d3-a456-426614174000
+GET http://localhost:8081/api/v1/course/user/05f0b4fa-e28b-409f-96ec-1f3d2f505554
 
 ### obtener cursos por id de curso:
-GET http://localhost:8081/api/v1/course/10
+GET http://localhost:8081/api/v1/course/1
 
 
 ### editar curso:
