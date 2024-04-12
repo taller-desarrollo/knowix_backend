@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CourseDAO extends JpaRepository<CourseEntity, Integer> {
 
-    List<CourseEntity> findByKcUserKcUuid(String kcUserKcUuid);
+    Page<CourseEntity> findByKcUserKcUuid(String kcUserKcUuid, Pageable pageable);
 
     Page<CourseEntity> findAllByCourseIsPublicIsTrueAndStatusEquals( String status, Pageable pageable);
     

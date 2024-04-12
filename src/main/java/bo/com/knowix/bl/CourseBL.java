@@ -165,12 +165,8 @@ public class CourseBL {
         return courseDAO.save(existingCourse);
     }
 
-    public List<CourseEntity> findCoursesByUserId(String kcUserKcUuid) {
-        List<CourseEntity> allCourses = courseDAO.findAll();
-
-        return allCourses.stream()
-                        .filter(course -> kcUserKcUuid.equals(course.getKcUserKcUuid()))
-                        .collect(Collectors.toList());
+    public Page<CourseEntity> findCoursesByUserId(String kcUserKcUuid, Pageable pageable) {
+        return courseDAO.findByKcUserKcUuid(kcUserKcUuid, pageable);
     }
 
     public SectionEntity createSection(SectionDTO sectionDTO) {

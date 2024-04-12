@@ -224,11 +224,24 @@ public class CourseAPI {
     }
 
     @GetMapping("/user/{kcUserKcUuid}")
-    public ResponseEntity<List<CourseDTOResponse>> getCoursesByUserId(@PathVariable("kcUserKcUuid") String kcUserKcUuid) {
+    public ResponseEntity<Page<CourseEntity>> getCoursesByUserId(
+            @PathVariable("kcUserKcUuid") String kcUserKcUuid,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "asc") String sort
+    ) {
         LOGGER.info("Starting process to fetch courses by user ID: " + kcUserKcUuid);
         try {
-            List<CourseEntity> courses = courseBL.findCoursesByUserId(kcUserKcUuid);
-            List<CourseDTOResponse> courseDTOResponses = courses.stream()
+            Pageable pageable;
+            if(sort.equals("desc")){
+                pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").descending());
+            }else{
+                pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").ascending());
+            }
+
+            Page<CourseEntity> courses = courseBL.findCoursesByUserId(kcUserKcUuid, pageable);
+            return ResponseEntity.ok(courses);
+            /*List<CourseDTOResponse> courseDTOResponses = courses.stream()
                                                 .map(this::convertToDTO)
                                                 .collect(Collectors.toList());
 
@@ -237,7 +250,7 @@ public class CourseAPI {
                 return ResponseEntity.noContent().build();
             }
             LOGGER.info(courseDTOResponses.size() + " courses found for user ID: " + kcUserKcUuid);
-            return ResponseEntity.ok(courseDTOResponses);
+            return ResponseEntity.ok(courseDTOResponses);*/
         } catch (Exception e) {
             LOGGER.warning("Error occurred while fetching courses by user ID: " + kcUserKcUuid + " - " + e.getMessage());
             return ResponseEntity.badRequest().build();
