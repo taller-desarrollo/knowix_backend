@@ -24,7 +24,6 @@ public class PaymentMethodBL {
     @Transactional
     public PaymentMethodDTO createPaymentMethod(PaymentMethodDTO dto) {
         PaymentMethodEntity entity = new PaymentMethodEntity();
-        // Assuming all necessary fields are set in the dto
         entity.setCiPerson(dto.getCiPerson());
         entity.setNameOwner(dto.getNameOwner());
         entity.setPhoneNumber(dto.getPhoneNumber());
@@ -34,7 +33,7 @@ public class PaymentMethodBL {
         entity.setKcUserKcUuid(dto.getKcUserKcUuid());
         entity.setAccountTypeAccountTypeId(dto.getAccountTypeAccountTypeId());
         paymentMethodDAO.save(entity);
-        dto.setPaymentMethodId(entity.getPaymentMethodId()); // Set generated ID back to dto
+        dto.setPaymentMethodId(entity.getPaymentMethodId()); 
         return dto;
     }
 
