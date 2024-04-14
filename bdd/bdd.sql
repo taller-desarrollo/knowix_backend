@@ -20,6 +20,14 @@ CREATE TABLE Content (
     CONSTRAINT Content_pk PRIMARY KEY (content_id)
 );
 
+-- Table: course_image
+CREATE TABLE course_image (
+    course_image_id int  NOT NULL,
+    image varchar(200)  NOT NULL,
+    Course_course_id serial  NOT NULL,
+    CONSTRAINT course_image_pk PRIMARY KEY (course_image_id)
+);
+
 -- Table: Course
 CREATE TABLE Course (
     course_id serial  NOT NULL,
@@ -179,6 +187,13 @@ ALTER TABLE user_social_media ADD CONSTRAINT user_social_media_kc_user_fk
 -- End of file.
 
 
+-- Reference: course_image_Course (table: course_image)
+ALTER TABLE course_image ADD CONSTRAINT course_image_Course
+    FOREIGN KEY (Course_course_id)
+    REFERENCES Course (course_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
 
 
 
@@ -245,3 +260,7 @@ ALTER TABLE payment_method ADD CONSTRAINT payment_method_kc_user
     INITIALLY IMMEDIATE
 ;
 
+ALTER TABLE course
+ADD COLUMN course_is_public boolean NOT NULL DEFAULT true;
+ALTER TABLE kc_user
+ALTER COLUMN email TYPE varchar(255);
