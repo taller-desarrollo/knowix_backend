@@ -22,7 +22,7 @@ CREATE TABLE Content (
 
 -- Table: course_image
 CREATE TABLE course_image (
-    course_image_id int  NOT NULL,
+    course_image_id serial  NOT NULL,
     image varchar(200)  NOT NULL,
     Course_course_id serial  NOT NULL,
     CONSTRAINT course_image_pk PRIMARY KEY (course_image_id)
@@ -194,10 +194,6 @@ ALTER TABLE course_image ADD CONSTRAINT course_image_Course
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
-
-
-
-
 
 -- Table: account_type
 CREATE TABLE account_type (

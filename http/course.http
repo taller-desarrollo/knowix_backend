@@ -16,7 +16,7 @@ Content-Type: application/json
 GET http://localhost:8081/api/v1/course/user/05f0b4fa-e28b-409f-96ec-1f3d2f505554
 
 ### obtener cursos por id de curso:
-GET http://localhost:8081/api/v1/course/1
+GET http://localhost:8081/api/v1/course/5
 
 
 ### editar curso:
@@ -84,3 +84,7 @@ Content-Type: application/json
   "page": 1,
   "size": 5
 }
+
+
+### Obtener imagen de curso:
+GET http://localhost:8081/api/v1/courseimage/course/7
