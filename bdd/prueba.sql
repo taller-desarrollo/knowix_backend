@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2024-03-10 01:02:04.236
+-- Last modification date: 2024-04-15 23:45:53.604
 
 -- tables
 -- Table: Category
@@ -18,14 +18,6 @@ CREATE TABLE Content (
     status boolean  NOT NULL,
     Sections_section_id serial  NOT NULL,
     CONSTRAINT Content_pk PRIMARY KEY (content_id)
-);
-
--- Table: course_image
-CREATE TABLE course_image (
-    course_image_id serial  NOT NULL,
-    image varchar(200)  NOT NULL,
-    Course_course_id serial  NOT NULL,
-    CONSTRAINT course_image_pk PRIMARY KEY (course_image_id)
 );
 
 -- Table: Course
@@ -53,6 +45,13 @@ CREATE TABLE Sections (
     CONSTRAINT Sections_pk PRIMARY KEY (section_id)
 );
 
+-- Table: account_type
+CREATE TABLE account_type (
+    account_type_id int  NOT NULL,
+    description varchar(30)  NOT NULL,
+    CONSTRAINT account_type_pk PRIMARY KEY (account_type_id)
+);
+
 -- Table: attachment
 CREATE TABLE attachment (
     attachment_id serial  NOT NULL,
@@ -61,6 +60,23 @@ CREATE TABLE attachment (
     status boolean  NOT NULL,
     Content_content_id serial  NOT NULL,
     CONSTRAINT attachment_pk PRIMARY KEY (attachment_id)
+);
+
+-- Table: bank
+CREATE TABLE bank (
+    bank_id int  NOT NULL,
+    bank_name varchar(30)  NOT NULL,
+    phone_number varchar(30)  NOT NULL,
+    webpage varchar(30)  NOT NULL,
+    CONSTRAINT bank_pk PRIMARY KEY (bank_id)
+);
+
+-- Table: course_image
+CREATE TABLE course_image (
+    course_image_id int  NOT NULL,
+    image varchar(200)  NOT NULL,
+    Course_course_id serial  NOT NULL,
+    CONSTRAINT course_image_pk PRIMARY KEY (course_image_id)
 );
 
 -- Table: kc_group
@@ -97,6 +113,42 @@ CREATE TABLE language (
     CONSTRAINT language_pk PRIMARY KEY (language_id)
 );
 
+-- Table: paymemt_method
+CREATE TABLE paymemt_method (
+    paymemt_method_id int  NOT NULL,
+    ci_person varchar(30)  NOT NULL,
+    name_owner varchar(30)  NOT NULL,
+    phone_number varchar(30)  NOT NULL,
+    qr_image varchar(3000)  NOT NULL,
+    account_number int  NOT NULL,
+    bank_bank_id int  NOT NULL,
+    kc_user_kc_uuid varchar(50)  NOT NULL,
+    account_type_account_type_id int  NOT NULL,
+    CONSTRAINT paymemt_method_pk PRIMARY KEY (paymemt_method_id)
+);
+
+-- Table: purchase
+CREATE TABLE purchase (
+    purchase_id int  NOT NULL,
+    date_purchase timestamp  NOT NULL,
+    amount decimal(10,5)  NOT NULL,
+    image_comprobant varchar(255)  NOT NULL,
+    Course_course_id serial  NOT NULL,
+    paymemt_method_paymemt_method_id int  NOT NULL,
+    kc_user_kc_uuid varchar(50)  NOT NULL,
+    CONSTRAINT purchase_pk PRIMARY KEY (purchase_id)
+);
+
+-- Table: reply
+CREATE TABLE reply (
+    reply_id int  NOT NULL,
+    status boolean  NOT NULL,
+    date timestamp  NOT NULL,
+    coment varchar(500)  NOT NULL,
+    purchase_purchase_id int  NOT NULL,
+    CONSTRAINT reply_pk PRIMARY KEY (reply_id)
+);
+
 -- Table: s3_object
 CREATE TABLE s3_object (
     s3_object_id serial  NOT NULL,
@@ -112,66 +164,14 @@ CREATE TABLE s3_object (
 
 -- Table: user_social_media
 CREATE TABLE user_social_media (
-    social_media_id serial NOT NULL,
-    kc_user_uuid varchar(50) NOT NULL,
-    social_media_url varchar(255) NOT NULL,
-    status boolean NOT NULL,
+    social_media_id serial  NOT NULL,
+    social_media_url varchar(255)  NOT NULL,
+    status boolean  NOT NULL,
+    kc_user_kc_uuid varchar(50)  NOT NULL,
     CONSTRAINT user_social_media_pk PRIMARY KEY (social_media_id)
 );
 
-CREATE TABLE purchase (
-    purchase_id int  NOT NULL,
-    date_purchase timestamp  NOT NULL,
-    amount decimal(10,5)  NOT NULL,
-    image_comprobant varchar(255)  NOT NULL,
-    Course_course_id serial  NOT NULL,
-    paymemt_method_paymemt_method_id int  NOT NULL,
-    kc_user_kc_uuid varchar(50)  NOT NULL,
-    CONSTRAINT purchase_pk PRIMARY KEY (purchase_id)
-);
-
-CREATE TABLE reply (
-    reply_id int  NOT NULL,
-    status boolean  NOT NULL,
-    date timestamp  NOT NULL,
-    coment varchar(500)  NOT NULL,
-    purchase_purchase_id int  NOT NULL,
-    CONSTRAINT reply_pk PRIMARY KEY (reply_id)
-);
-
-
--- Reference: purchase_Course (table: purchase)
-ALTER TABLE purchase ADD CONSTRAINT purchase_Course
-    FOREIGN KEY (Course_course_id)
-    REFERENCES Course (course_id)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
--- Reference: purchase_kc_user (table: purchase)
-ALTER TABLE purchase ADD CONSTRAINT purchase_kc_user
-    FOREIGN KEY (kc_user_kc_uuid)
-    REFERENCES kc_user (kc_uuid)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
--- Reference: purchase_paymemt_method (table: purchase)
-ALTER TABLE purchase ADD CONSTRAINT purchase_paymemt_method
-    FOREIGN KEY (paymemt_method_paymemt_method_id)
-    REFERENCES paymemt_method (paymemt_method_id)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
--- Reference: reply_purchase (table: reply)
-ALTER TABLE reply ADD CONSTRAINT reply_purchase
-    FOREIGN KEY (purchase_purchase_id)
-    REFERENCES purchase (purchase_id)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
+-- foreign keys
 -- Reference: Contenido_Secciones (table: Content)
 ALTER TABLE Content ADD CONSTRAINT Contenido_Secciones
     FOREIGN KEY (Sections_section_id)
@@ -220,25 +220,6 @@ ALTER TABLE attachment ADD CONSTRAINT attachment_Content
     INITIALLY IMMEDIATE
 ;
 
--- Reference: kc_user_kc_group (table: kc_user)
-ALTER TABLE kc_user ADD CONSTRAINT kc_user_kc_group
-    FOREIGN KEY (kc_group_kc_group_id)
-    REFERENCES kc_group (kc_group_id)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
--- Reference: user_social_media_kc_user (table: user_social_media)
-ALTER TABLE user_social_media ADD CONSTRAINT user_social_media_kc_user_fk
-    FOREIGN KEY (kc_user_uuid)
-    REFERENCES kc_user (kc_uuid)
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
--- End of file.
-
-
 -- Reference: course_image_Course (table: course_image)
 ALTER TABLE course_image ADD CONSTRAINT course_image_Course
     FOREIGN KEY (Course_course_id)
@@ -247,68 +228,132 @@ ALTER TABLE course_image ADD CONSTRAINT course_image_Course
     INITIALLY IMMEDIATE
 ;
 
--- Table: account_type
-CREATE TABLE account_type (
-    account_type_id int  NOT NULL,
-    description varchar(30)  NOT NULL,
-    CONSTRAINT account_type_pk PRIMARY KEY (account_type_id)
-);
+-- Reference: kc_user_kc_group (table: kc_user)
+ALTER TABLE kc_user ADD CONSTRAINT kc_user_kc_group
+    FOREIGN KEY (kc_group_kc_group_id)
+    REFERENCES kc_group (kc_group_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
 
-
-
--- Table: bank
-CREATE TABLE bank (
-    bank_id int  NOT NULL,
-    bank_name varchar(30)  NOT NULL,
-    phone_number varchar(30)  NOT NULL,
-    webpage varchar(30)  NOT NULL,
-    CONSTRAINT bank_pk PRIMARY KEY (bank_id)
-);
-
-
-
--- Table: payment_method
-CREATE TABLE payment_method (
-    payment_method_id serial NOT NULL,
-    ci_person varchar(30)  NOT NULL,
-    name_owner varchar(30)  NOT NULL,
-    phone_number varchar(30)  NOT NULL,
-    qr_image varchar(300000)  NOT NULL,
-    account_number varchar(50)  NOT NULL,
-    bank_bank_id int  NOT NULL,
-    kc_user_kc_uuid varchar(50)  NOT NULL,
-    account_type_account_type_id int  NOT NULL,
-    CONSTRAINT payment_method_pk PRIMARY KEY (payment_method_id)
-);
-
-
--- foreign keys
-
--- Reference: payment_method_account_type (table: payment_method)
-ALTER TABLE payment_method ADD CONSTRAINT payment_method_account_type
+-- Reference: paymemt_method_account_type (table: paymemt_method)
+ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_account_type
     FOREIGN KEY (account_type_account_type_id)
     REFERENCES account_type (account_type_id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
 
--- Reference: payment_method_bank (table: payment_method)
-ALTER TABLE payment_method ADD CONSTRAINT payment_method_bank
+-- Reference: paymemt_method_bank (table: paymemt_method)
+ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_bank
     FOREIGN KEY (bank_bank_id)
     REFERENCES bank (bank_id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
 
--- Reference: payment_method_kc_user (table: payment_method)
-ALTER TABLE payment_method ADD CONSTRAINT payment_method_kc_user
+-- Reference: paymemt_method_kc_user (table: paymemt_method)
+ALTER TABLE paymemt_method ADD CONSTRAINT paymemt_method_kc_user
     FOREIGN KEY (kc_user_kc_uuid)
     REFERENCES kc_user (kc_uuid)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;
 
-ALTER TABLE course
-ADD COLUMN course_is_public boolean NOT NULL DEFAULT true;
-ALTER TABLE kc_user
-ALTER COLUMN email TYPE varchar(255);
+-- Reference: purchase_Course (table: purchase)
+ALTER TABLE purchase ADD CONSTRAINT purchase_Course
+    FOREIGN KEY (Course_course_id)
+    REFERENCES Course (course_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: purchase_kc_user (table: purchase)
+ALTER TABLE purchase ADD CONSTRAINT purchase_kc_user
+    FOREIGN KEY (kc_user_kc_uuid)
+    REFERENCES kc_user (kc_uuid)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: purchase_paymemt_method (table: purchase)
+ALTER TABLE purchase ADD CONSTRAINT purchase_paymemt_method
+    FOREIGN KEY (paymemt_method_paymemt_method_id)
+    REFERENCES paymemt_method (paymemt_method_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: reply_purchase (table: reply)
+ALTER TABLE reply ADD CONSTRAINT reply_purchase
+    FOREIGN KEY (purchase_purchase_id)
+    REFERENCES purchase (purchase_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: user_social_media_kc_user (table: user_social_media)
+ALTER TABLE user_social_media ADD CONSTRAINT user_social_media_kc_user
+    FOREIGN KEY (kc_user_kc_uuid)
+    REFERENCES kc_user (kc_uuid)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- sequences
+-- Sequence: account_type_seq
+CREATE SEQUENCE account_type_seq
+      INCREMENT BY 1
+      NO MINVALUE
+      NO MAXVALUE
+      START WITH 1
+      NO CYCLE
+;
+
+-- Sequence: bank_seq
+CREATE SEQUENCE bank_seq
+      INCREMENT BY 1
+      NO MINVALUE
+      NO MAXVALUE
+      START WITH 1
+      NO CYCLE
+;
+
+-- Sequence: course_image_seq
+CREATE SEQUENCE course_image_seq
+      INCREMENT BY 1
+      NO MINVALUE
+      NO MAXVALUE
+      START WITH 1
+      NO CYCLE
+;
+
+-- Sequence: paymemt_method_seq
+CREATE SEQUENCE paymemt_method_seq
+      INCREMENT BY 1
+      NO MINVALUE
+      NO MAXVALUE
+      START WITH 1
+      NO CYCLE
+;
+
+-- Sequence: purchase_seq
+CREATE SEQUENCE purchase_seq
+      INCREMENT BY 1
+      NO MINVALUE
+      NO MAXVALUE
+      START WITH 1
+      NO CYCLE
+;
+
+-- Sequence: reply_seq
+CREATE SEQUENCE reply_seq
+      INCREMENT BY 1
+      NO MINVALUE
+      NO MAXVALUE
+      START WITH 1
+      NO CYCLE
+;
+
+-- End of file.
+

@@ -87,4 +87,4 @@ Content-Type: application/json
 
 
 ### Obtener imagen de curso:
-GET http://localhost:8081/api/v1/courseimage/course/7
+GET http://localhost:8081/api/v1/courseimage/course/9
