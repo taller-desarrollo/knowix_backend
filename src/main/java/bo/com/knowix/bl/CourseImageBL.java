@@ -21,6 +21,10 @@ public class CourseImageBL {
 
     @Transactional
     public CourseImageDTO saveCourseImage(CourseImageDTO dto, String imageFilePath) {
+        List<CourseImageEntity> existingImages = courseImageDAO.findByCourseCourseId(dto.getCourseCourseId());
+        if (!existingImages.isEmpty()) {
+            existingImages.forEach(courseImageDAO::delete);
+        }
         CourseImageEntity entity = new CourseImageEntity();
         entity.setImage(imageFilePath);
         entity.setCourseCourseId(dto.getCourseCourseId());
@@ -31,7 +35,8 @@ public class CourseImageBL {
 
     public List<CourseImageDTO> findCourseImagesByCourseId(int courseId) {
         return courseImageDAO.findByCourseCourseId(courseId).stream()
-                .map(entity -> new CourseImageDTO(entity.getCourseImageId(), entity.getImage(), entity.getCourseCourseId()))
+                .map(entity -> new CourseImageDTO(entity.getCourseImageId(), entity.getImage(),
+                        entity.getCourseCourseId()))
                 .collect(Collectors.toList());
     }
 }

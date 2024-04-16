@@ -24,9 +24,9 @@ public class CourseImageAPI {
         this.courseImageBL = courseImageBL;
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = { "multipart/form-data" })
     public ResponseEntity<CourseImageDTO> uploadCourseImage(@RequestParam("image") MultipartFile image,
-                                                            @RequestParam("courseCourseId") int courseCourseId) {
+            @RequestParam("courseCourseId") int courseCourseId) {
         try {
             String filePath = saveImageFile(image, courseCourseId);
             CourseImageDTO courseImageDTO = new CourseImageDTO();
@@ -60,4 +60,20 @@ public class CourseImageAPI {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping(value = "/course/{courseId}", consumes = { "multipart/form-data" })
+    public ResponseEntity<CourseImageDTO> updateCourseImage(@PathVariable int courseId,
+            @RequestParam("image") MultipartFile image) {
+        try {
+            String filePath = saveImageFile(image, courseId);
+            CourseImageDTO courseImageDTO = new CourseImageDTO();
+            courseImageDTO.setCourseCourseId(courseId);
+            CourseImageDTO updated = courseImageBL.saveCourseImage(courseImageDTO, filePath);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
