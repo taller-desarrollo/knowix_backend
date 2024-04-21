@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.PUT;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/verification-request")
@@ -30,7 +31,7 @@ public class VerificationRequestAPI {
     }
 
     @PostMapping()
-    public VerificationRequestEntity createVerificationRequest(
+    public VerificationRequestDTO createVerificationRequest(
             @RequestHeader("X-UUID") String kcUserUUID
             ) {
         logger.info("Creating verification request");
@@ -38,7 +39,7 @@ public class VerificationRequestAPI {
     }
 
     @PutMapping("/{id}")
-    public VerificationRequestEntity updateVerificationRequest(
+    public VerificationRequestDTO updateVerificationRequest(
             @PathVariable("id") Long id,
             @RequestBody VerificationRequestDTO verificationRequestDTO,
             @RequestHeader("X-UUID") String kcUserUUID
@@ -62,11 +63,58 @@ public class VerificationRequestAPI {
     }
 
     @PostMapping("/{id}/observation")
-    public VerificationRequestObservationEntity addObservation(
+    public VerificationRequestObservationDTO addObservation(
             @PathVariable("id") Long id,
             @RequestBody VerificationRequestObservationDTO verificationRequestObservationDTO
             ) {
         logger.info("Adding observation to verification request");
         return verificationRequestBL.addObservation(id, verificationRequestObservationDTO);
+    }
+
+    @PutMapping("/{id}/approve")
+    public VerificationRequestDTO approveVerificationRequest(
+            @PathVariable("id") Long id
+            ) {
+        logger.info("Approving verification request");
+        return verificationRequestBL.approveVerificationRequest(id);
+    }
+
+    @PutMapping("/{id}/reject")
+    public VerificationRequestDTO rejectVerificationRequest(
+            @PathVariable("id") Long id
+            ) {
+        logger.info("Rejecting verification request");
+        return verificationRequestBL.rejectVerificationRequest(id);
+    }
+
+    @PutMapping("/{id}/pending")
+    public VerificationRequestDTO pendingVerificationRequest(
+            @PathVariable("id") Long id
+            ) {
+        logger.info("Pending verification request");
+        return verificationRequestBL.pendingVerificationRequest(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteVerificationRequest(
+            @PathVariable("id") Long id
+            ) {
+        logger.info("Deleting verification request");
+        verificationRequestBL.deleteVerificationRequest(id);
+        return "Verification request deleted successfully";
+    }
+
+    @GetMapping("/educator")
+    public List<VerificationRequestDTO> getVerificationRequest(
+            @RequestHeader("X-UUID") String kcUserUUID
+            ) {
+        logger.info("Getting verification request");
+        return verificationRequestBL.getVerificationRequestEducator(kcUserUUID);
+    }
+
+    @GetMapping()
+    public List<VerificationRequestDTO> getAllVerificationRequest() {
+        logger.info("Getting verification request");
+        return verificationRequestBL.getVerificationRequest();
     }
 }

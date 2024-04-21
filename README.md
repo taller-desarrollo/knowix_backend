@@ -85,6 +85,49 @@ docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOACK_ADMIN_PASSWORD=admi
         quay.io/keycloak/keycloak:24.0.1 \
         start-dev --import-realm
 ```
+## Configuracion de Minio
+
+Para configurar Minio se debe ejecutar el siguiente comando:
+
+para windows:
+```bash
+docker run \
+   -p 9000:9000 \
+   -p 9001:9001 \
+   --name minio1 \
+   -v D:\minio\data:/data \
+   -e "MINIO_ROOT_USER=ROOTUSER" \
+   -e "MINIO_ROOT_PASSWORD=CHANGEME123" \
+   quay.io/minio/minio server /data --console-address ":9001"
+```
+
+para linux/MacOS:
+```bash
+mkdir -p ~/minio/data
+
+docker run \
+   -p 9000:9000 \
+   -p 9001:9001 \
+   --name minio \
+   -v ~/minio/data:/data \
+   -e "MINIO_ROOT_USER=adminuser" \
+   -e "MINIO_ROOT_PASSWORD=adminpassword" \
+   quay.io/minio/minio server /data --console-address ":9001"
+```
+
+Luego se debe acceder a la interfaz de Minio en la dirección localhost:9000 y configurar el bucket con el nombre 'verification-request-attachment'.
+
+Crea un access key y secret key en la interfaz de Minio y configura las variables de entorno en el archivo .env.
+
+Se debe crear un archivo .env en la raíz del proyecto con las siguientes variables de entorno:
+
+```bash
+MINIO_SERVER_URL=http://localhost:9000
+MINIO_ACCESS_KEY=access_KEY
+MINIO_SECRET_KEY=secret_key
+```
+
+Cambia 'access_KEY' y 'secret_key' por las credenciales que creaste en la interfaz de Minio.
 
 ## Ejecución
 

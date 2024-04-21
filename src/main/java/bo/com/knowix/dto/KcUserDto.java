@@ -22,6 +22,14 @@ public class KcUserDto {
         this.isVerified = isVerified;
     }
 
+    public KcUserDto(String kcUuid, String firstName, String lastName, String email, boolean isVerified) {
+        this.kcUuid = kcUuid;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.isVerified = isVerified;
+    }
+
     public String getKcUuid() {
         return kcUuid;
     }
