@@ -3,6 +3,8 @@ package bo.com.knowix.entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "kc_user")
@@ -35,11 +37,12 @@ public class KcUserEntity {
     @Column(name = "s3_profile_picture", nullable = false)
     private int s3ProfilePicture;
 
+    @Column(name = "is_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean verified;
+
     @ManyToOne
     @JoinColumn(name = "kc_group_kc_group_id", nullable = false)
     private KcGroupEntity kcGroup;
-
-    // Getters and Setters
 
     public String getKcUuid() {
         return kcUuid;
@@ -121,10 +124,18 @@ public class KcUserEntity {
         this.kcGroup = kcGroup;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
     public KcUserEntity() {
     }
 
-    public KcUserEntity(String kcUuid, String firstName, String lastName, String email, boolean status, Timestamp txDate, String txUser, String txHost, int s3ProfilePicture, KcGroupEntity kcGroup) {
+    public KcUserEntity(String kcUuid, String firstName, String lastName, String email, boolean status, Timestamp txDate, String txUser, String txHost, int s3ProfilePicture, KcGroupEntity kcGroup, boolean verified) {
         this.kcUuid = kcUuid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -135,6 +146,7 @@ public class KcUserEntity {
         this.txHost = txHost;
         this.s3ProfilePicture = s3ProfilePicture;
         this.kcGroup = kcGroup;
+        this.verified = verified;
     }
 
     public String toString() {
