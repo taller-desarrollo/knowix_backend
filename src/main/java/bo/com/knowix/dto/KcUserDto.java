@@ -8,15 +8,18 @@ public class KcUserDto {
     private boolean status;
     private int s3ProfilePicture;
 
+    private boolean isVerified;
+
     public KcUserDto() {
     }
 
-    public KcUserDto(String kcUuid, String firstName, String lastName, String email, int s3ProfilePicture) {
+    public KcUserDto(String kcUuid, String firstName, String lastName, String email, int s3ProfilePicture, boolean isVerified) {
         this.kcUuid = kcUuid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.s3ProfilePicture = s3ProfilePicture;
+        this.isVerified = isVerified;
     }
 
     public String getKcUuid() {
@@ -63,6 +66,13 @@ public class KcUserDto {
         this.s3ProfilePicture = s3ProfilePicture;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
     @Override
     public String toString() {
         return "KcUserDto{" +

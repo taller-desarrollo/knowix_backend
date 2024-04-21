@@ -1,5 +1,6 @@
 package bo.com.knowix.api;
 
+import bo.com.knowix.bl.MinioBL;
 import bo.com.knowix.dao.repository.S3ObjectRepository;
 import bo.com.knowix.dto.FileDto;
 import bo.com.knowix.dto.NewFileDto;
@@ -26,12 +27,14 @@ public class TestApi {
     @Autowired
     private S3ObjectRepository s3ObjectRepository;
 
+    @Autowired
+    private MinioBL minioBL;
+
     private Logger logger = LoggerFactory.getLogger(TestApi.class);
 
     public TestApi(IKeycloakService keycloakService) {
         this.keycloakService = keycloakService;
     }
-
     @GetMapping("/test-educator")
 
     public String helloEducator(@RequestHeader("X-UUID") String kcuuid){
@@ -55,40 +58,21 @@ public class TestApi {
     //Minio test
 
     @PostMapping(path= "/file", consumes = {"multipart/form-data"})
-    public FileDto uploadFile(@RequestPart("file") MultipartFile file, @RequestParam("bucket") String bucketName){
-        try {
-            logger.info("Uploading file: " + file.getOriginalFilename());
-            logger.info("Bucket: " + bucketName);
-            NewFileDto newFileDto = minioService.uploadFile(file, bucketName);
-            S3ObjectEntity s3ObjectEntity = new S3ObjectEntity();
-            s3ObjectEntity.setBucket(bucketName);
-            s3ObjectEntity.setFilename(newFileDto.getFileName());
-            s3ObjectEntity.setContentType(newFileDto.getContentType());
-            s3ObjectEntity.setStatus(true);
-            s3ObjectEntity.setTransactionDate(new java.util.Date());
-            s3ObjectEntity.setTransactionUser("test");
-            s3ObjectEntity.setTransactionHost("localhost");
-            S3ObjectEntity savedS3Object =  s3ObjectRepository.save(s3ObjectEntity);
-            return new FileDto(
-                    savedS3Object.getS3ObjectId(),
-                    savedS3Object.getContentType(),
-                    savedS3Object.getBucket(),
-                    savedS3Object.getFilename(),
-                    savedS3Object.isStatus()
-            );
-        } catch (Exception e) {
-            logger.error("Error uploading file: " + e.getMessage());
-            return new FileDto(null, null, null, null, false);
+    public S3ObjectEntity uploadFile(@RequestPart("file") MultipartFile file, @RequestParam("bucket") String bucketName){
+        S3ObjectEntity savedFile = minioBL.uploadFile(file, bucketName);
+        if(savedFile != null){
+            return savedFile;
+        }else{
+            return null;
         }
     }
 
     @GetMapping("/file")
     public String getFile (@RequestParam String bucket, @RequestParam String fileName){
-        try {
-            logger.info("Getting file: " + fileName);
-            return minioService.getFile(bucket, fileName);
-        } catch (Exception e) {
-            logger.error("Error getting file: " + e.getMessage());
+        String file = minioBL.getFile(bucket, fileName);
+        if(file != null){
+            return file;
+        }else{
             return null;
         }
     }
