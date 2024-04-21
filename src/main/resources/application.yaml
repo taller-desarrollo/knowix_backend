@@ -24,6 +24,12 @@ spring:
         jwt:
           issuer-uri: http://localhost:8080/realms/Knowix
           jwk-set-uri: http://localhost:8080/realms/Knowix/protocol/openid-connect/certs
+#Minio
+minio:
+  url: http://localhost:9000
+  access:
+    key: DCwgIxMimrGmEXrgxHHF
+    secret: Vrr12zWP5NCBHFChm5P5SYOn37XoB6SAlaXunHYq
 
 token:
   converter:
