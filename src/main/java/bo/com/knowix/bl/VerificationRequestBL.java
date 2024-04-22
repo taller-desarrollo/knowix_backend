@@ -99,7 +99,6 @@ public class VerificationRequestBL {
         }
 
         verificationRequest.setAdditionalComment(verificationRequestDTO.getAdditionalComment());
-        verificationRequest.setStatus(verificationRequestDTO.isStatus());
 
         VerificationRequestEntity verificationRequestEntity = verificationRequestDAO.save(verificationRequest);
         VerificationRequestDTO savedVerificationRequestDTO = new VerificationRequestDTO();
