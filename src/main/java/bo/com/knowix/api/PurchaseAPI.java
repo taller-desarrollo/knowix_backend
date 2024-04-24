@@ -17,7 +17,6 @@ import bo.com.knowix.entity.PurchaseEntity;
 import org.springframework.http.HttpStatus;
 import bo.com.knowix.dto.CourseDTO;
 
-
 @RestController
 @RequestMapping("/api/v1/purchase")
 public class PurchaseAPI {
@@ -32,17 +31,16 @@ public class PurchaseAPI {
         this.purchaseBL = purchaseBL;
     }
 
-
     @GetMapping
-    public ResponseEntity<List<PurchaseDTO>> getAllPurchases(@RequestHeader(value="Authorization", required = false) String token) {
+    public ResponseEntity<?> getAllPurchases(@RequestHeader(value="Authorization", required = false) String token) {
         LOGGER.info("Token recibido: " + token);
         LOGGER.info("Iniciando el proceso de obtener todos los purchase");
         try {
             List<PurchaseDTO> purchases = purchaseBL.findAllPurchases();
             if (purchases.isEmpty()) {
                 LOGGER.info("cantidad de purchase: " + purchases.size());
-
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String message = "No hay registros para esta solicitud";
+                return ResponseEntity.ok().body(message);
             }
             return new ResponseEntity<>(purchases, HttpStatus.OK);
         } catch (Exception e) {
@@ -62,17 +60,24 @@ public class PurchaseAPI {
     }
 
     @GetMapping("/seller/{sellerId}")
-    public ResponseEntity<List<PurchaseDTO>> getCoursesSoldBySeller(@PathVariable String sellerId) {
+    public ResponseEntity<?> getCoursesSoldBySeller(@PathVariable String sellerId) {
         List<PurchaseDTO> purchases = purchaseBL.findCoursesSoldBySeller(sellerId);
         if (!purchases.isEmpty()) {
             return new ResponseEntity<>(purchases, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            String message = "No hay registros para esta solicitud";
+            return ResponseEntity.ok().body(message);
         }
     }
 
-
-
-
-
+    @GetMapping("/buyer/{buyerId}")
+    public ResponseEntity<?> getPurchasesByBuyerId(@PathVariable String buyerId) {
+        List<PurchaseDTO> purchases = purchaseBL.findPurchasesByBuyerId(buyerId);
+        if (!purchases.isEmpty()) {
+            return new ResponseEntity<>(purchases, HttpStatus.OK);
+        } else {
+            String message = "No hay registros para esta solicitud";
+            return ResponseEntity.ok().body(message);
+        }
+    }
 }

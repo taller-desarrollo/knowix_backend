@@ -46,6 +46,14 @@ public class PurchaseBL {
                 .collect(Collectors.toList());
     }
 
+    public List<PurchaseDTO> findPurchasesByBuyerId(String buyerId) {
+        return purchaseDAO.findAll().stream()
+                .filter(purchase -> purchase.getKcUserKcUuid().equals(buyerId))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
 
     private PurchaseDTO convertToDTO(PurchaseEntity entity) {
         if (entity == null) {
