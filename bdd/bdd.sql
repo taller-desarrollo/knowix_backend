@@ -119,14 +119,15 @@ CREATE TABLE user_social_media (
     CONSTRAINT user_social_media_pk PRIMARY KEY (social_media_id)
 );
 
+-- Creación de la tabla purchase con todas las columnas necesarias.
 CREATE TABLE purchase (
-    purchase_id int  NOT NULL,
-    date_purchase timestamp  NOT NULL,
-    amount decimal(10,5)  NOT NULL,
-    image_comprobant varchar(255)  NOT NULL,
-    Course_course_id serial  NOT NULL,
-    paymemt_method_paymemt_method_id int  NOT NULL,
-    kc_user_kc_uuid varchar(50)  NOT NULL,
+    purchase_id serial NOT NULL,
+    date_purchase timestamp NOT NULL,
+    amount decimal(10,5) NOT NULL,
+    image_comprobant varchar(255) NOT NULL,
+    Course_course_id int NOT NULL,
+    payment_method_id int NOT NULL,
+    kc_user_kc_uuid varchar(50) NOT NULL,
     CONSTRAINT purchase_pk PRIMARY KEY (purchase_id)
 );
 
@@ -140,29 +141,27 @@ CREATE TABLE reply (
 );
 
 
--- Reference: purchase_Course (table: purchase)
+-- Agregar la llave foránea que relaciona purchase con Course
 ALTER TABLE purchase ADD CONSTRAINT purchase_Course
     FOREIGN KEY (Course_course_id)
-    REFERENCES Course (course_id)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
+    REFERENCES Course (course_id)
+    NOT DEFERRABLE
+    INITIALLY IMMEDIATE;
 
--- Reference: purchase_kc_user (table: purchase)
+-- Agregar la llave foránea que relaciona purchase con kc_user
 ALTER TABLE purchase ADD CONSTRAINT purchase_kc_user
     FOREIGN KEY (kc_user_kc_uuid)
-    REFERENCES kc_user (kc_uuid)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
+    REFERENCES kc_user (kc_uuid)
+    NOT DEFERRABLE
+    INITIALLY IMMEDIATE;
 
--- Reference: purchase_paymemt_method (table: purchase)
-ALTER TABLE purchase ADD CONSTRAINT purchase_paymemt_method
-    FOREIGN KEY (paymemt_method_paymemt_method_id)
-    REFERENCES paymemt_method (paymemt_method_id)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
+-- Agregar la llave foránea que relaciona purchase con payment_method
+ALTER TABLE purchase ADD CONSTRAINT purchase_payment_method
+    FOREIGN KEY (payment_method_id)
+    REFERENCES payment_method (payment_method_id)
+    NOT DEFERRABLE
+    INITIALLY IMMEDIATE;
+
 
 -- Reference: reply_purchase (table: reply)
 ALTER TABLE reply ADD CONSTRAINT reply_purchase

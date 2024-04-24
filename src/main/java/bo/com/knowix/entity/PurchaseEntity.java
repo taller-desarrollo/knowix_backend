@@ -27,15 +27,15 @@ public class PurchaseEntity {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "image_comprobante", nullable = false, length = 255)
+    @Column(name = "image_comprobant", nullable = false, length = 255) // Corregido para coincidir con el nombre de la columna en la base de datos.
     private String imageComprobante;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    @JoinColumn(name = "course_course_id", referencedColumnName = "course_id") // Asegúrate que los nombres de las columnas sean correctos.
     private CourseEntity course;
 
     @ManyToOne
-    @JoinColumn(name = "payment_method_id", referencedColumnName = "payment_method_id")
+    @JoinColumn(name = "payment_method_id", referencedColumnName = "payment_method_id") // Verifica que este nombre coincida con la columna de llave foránea.
     private PaymentMethodEntity paymentMethod;
 
     @Column(name = "kc_user_kc_uuid", nullable = false, length = 50)
@@ -98,18 +98,5 @@ public class PurchaseEntity {
 
     public void setKcUserKcUuid(String kcUserKcUuid) {
         this.kcUserKcUuid = kcUserKcUuid;
-    }
-
-    @Override
-    public String toString() {
-        return "PurchaseEntity{" +
-                "purchaseId=" + purchaseId +
-                ", datePurchase=" + datePurchase +
-                ", amount=" + amount +
-                ", imageComprobante='" + imageComprobante + '\'' +
-                ", course=" + (course != null ? course.getCourseId() : "null") +
-                ", paymentMethod=" + (paymentMethod != null ? paymentMethod.getPaymentMethodId() : "null") +
-                ", kcUserKcUuid='" + kcUserKcUuid + '\'' +
-                '}';
     }
 }

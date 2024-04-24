@@ -132,6 +132,7 @@ public class PaymentMethodEntity {
         this.accountTypeAccountTypeId = accountTypeAccountTypeId;
     }
 
+
     @Override
     public String toString() {
         return "PaymentMethodEntity{" +
