@@ -137,6 +137,15 @@ security-constraints:
           methods:
             - POST
 
-
-
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: Purchase
+          patterns:
+            - /api/v1/purchases
+          methods:
+            - POST
+            - PUT
+            - DELETE
+            - GET
 

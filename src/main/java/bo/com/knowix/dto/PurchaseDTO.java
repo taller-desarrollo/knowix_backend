@@ -2,15 +2,13 @@ package bo.com.knowix.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import bo.com.knowix.dto.CourseDTO;
-import bo.com.knowix.dto.PaymentMethodDTO;
 
 public class PurchaseDTO {
 
     private int purchaseId;
     private Timestamp datePurchase;
     private BigDecimal amount;
-    private String imageComprobante;
+    private String imageComprobant; // Corregido para reflejar el nombre correcto de la columna en la base de datos
     private CourseDTO course;
     private PaymentMethodDTO paymentMethod;
     private String kcUserKcUuid;
@@ -18,11 +16,11 @@ public class PurchaseDTO {
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(int purchaseId, Timestamp datePurchase, BigDecimal amount, String imageComprobante, CourseDTO course, PaymentMethodDTO paymentMethod, String kcUserKcUuid) {
+    public PurchaseDTO(int purchaseId, Timestamp datePurchase, BigDecimal amount, String imageComprobant, CourseDTO course, PaymentMethodDTO paymentMethod, String kcUserKcUuid) {
         this.purchaseId = purchaseId;
         this.datePurchase = datePurchase;
         this.amount = amount;
-        this.imageComprobante = imageComprobante;
+        this.imageComprobant = imageComprobant;
         this.course = course;
         this.paymentMethod = paymentMethod;
         this.kcUserKcUuid = kcUserKcUuid;
@@ -52,12 +50,12 @@ public class PurchaseDTO {
         this.amount = amount;
     }
 
-    public String getImageComprobante() {
-        return imageComprobante;
+    public String getImageComprobant() {
+        return imageComprobant;
     }
 
-    public void setImageComprobante(String imageComprobante) {
-        this.imageComprobante = imageComprobante;
+    public void setImageComprobant(String imageComprobant) {
+        this.imageComprobant = imageComprobant;
     }
 
     public CourseDTO getCourse() {
@@ -76,11 +74,11 @@ public class PurchaseDTO {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getKcUser() {
+    public String getKcUserKcUuid() {
         return kcUserKcUuid;
     }
 
-    public void setKcUser(String kcUserKcUuid) {
+    public void setKcUserKcUuid(String kcUserKcUuid) {
         this.kcUserKcUuid = kcUserKcUuid;
     }
 
@@ -90,10 +88,10 @@ public class PurchaseDTO {
                 "purchaseId=" + purchaseId +
                 ", datePurchase=" + datePurchase +
                 ", amount=" + amount +
-                ", imageComprobante='" + imageComprobante + '\'' +
+                ", imageComprobant='" + imageComprobant + '\'' +
                 ", course=" + course +
                 ", paymentMethod=" + paymentMethod +
-                ", kcUser=" + kcUserKcUuid +
+                ", kcUser='" + kcUserKcUuid + '\'' +
                 '}';
     }
 }
