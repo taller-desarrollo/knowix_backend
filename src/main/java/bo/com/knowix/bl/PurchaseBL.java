@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 @Service
 public class PurchaseBL {
@@ -27,6 +29,18 @@ public class PurchaseBL {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    //para conseguir purchase por id:
+    public PurchaseDTO findPurchaseById(int purchaseId) {
+        Optional<PurchaseEntity> purchaseEntityOptional = purchaseDAO.findById(purchaseId);
+        if (purchaseEntityOptional.isPresent()) {
+            PurchaseEntity purchaseEntity = purchaseEntityOptional.get();
+            return convertToDTO(purchaseEntity);
+        } else {
+            return null; // or throw an exception or handle the case accordingly
+        }
+    }
+
+
 
     private PurchaseDTO convertToDTO(PurchaseEntity entity) {
         if (entity == null) {

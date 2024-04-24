@@ -49,5 +49,17 @@ public class PurchaseAPI {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PurchaseDTO> getPurchaseById(@PathVariable int id) {
+        PurchaseDTO purchase = purchaseBL.findPurchaseById(id);
+        if (purchase != null) {
+            return new ResponseEntity<>(purchase, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 
 }
