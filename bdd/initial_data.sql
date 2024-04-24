@@ -32,8 +32,14 @@ INSERT INTO account_type (account_type_id, description) VALUES (2, 'Cuenta Corri
 
 -- bancos:
 INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (1, 'Banco Nacional de Bolivia', '800 17 7272', 'https://www.bnb.com.bo');
-INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (2, 'BMSC', '800 17 0777', 'http://www.bmsc.com.bo');
-INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (3, 'Banco Fortaleza', '2114141', 'https://www.bcp.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (2, 'Banco Fortaleza', '2114141', 'https://www.bcp.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (3, 'Banco Mercantil Santa Cruz', '800 10 2020', 'www.bmsc.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (4, 'Banco Ganadero', '800 10 12', 'www.bg.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (5, 'Banco Bisa', '800 10 212', 'www.bisa.com');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (6, 'Banco Económico', '800 10 21', 'www.baneco.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (7, 'Banco Unión', '800 10 66', 'bancounion.com.bo');
+INSERT INTO bank (bank_id, bank_name, phone_number, webpage) VALUES (8, 'Banco Sol', '800 10 666', 'www.bancosol.com.bo');
+
 
 -- ejemplos de usuarios:
 
