@@ -3,3 +3,7 @@ GET http://localhost:8081/api/v1/purchase
 
 ### obtener compras por id:
 GET http://localhost:8081/api/v1/purchase/2
+
+
+### obtener lista de compras por id de vendedor:
+GET http://localhost:8081/api/v1/purchase/seller/05f0b4fa-e28b-409f-96ec-1f3d2f505554

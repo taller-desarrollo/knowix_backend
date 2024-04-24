@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
-
 @Service
 public class PurchaseBL {
 
@@ -29,7 +28,7 @@ public class PurchaseBL {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-    //para conseguir purchase por id:
+
     public PurchaseDTO findPurchaseById(int purchaseId) {
         Optional<PurchaseEntity> purchaseEntityOptional = purchaseDAO.findById(purchaseId);
         if (purchaseEntityOptional.isPresent()) {
@@ -40,6 +39,12 @@ public class PurchaseBL {
         }
     }
 
+    public List<PurchaseDTO> findCoursesSoldBySeller(String sellerId) {
+        return purchaseDAO.findAll().stream()
+                .filter(purchase -> purchase.getCourse().getKcUserKcUuid().equals(sellerId))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
 
     private PurchaseDTO convertToDTO(PurchaseEntity entity) {
@@ -61,10 +66,8 @@ public class PurchaseBL {
         if (course == null) {
             return null;
         }
-        // Assuming Category and Language are also entities that have IDs
         int categoryID = (course.getCategory() != null) ? course.getCategory().getCategoryId() : 0;
         int languageID = (course.getLanguage() != null) ? course.getLanguage().getLanguageId() : 0;
-
         return new CourseDTO(
             course.getCourseId(),
             course.getCourseDescription(),

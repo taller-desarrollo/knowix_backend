@@ -15,6 +15,8 @@ import bo.com.knowix.dto.PurchaseDTO;
 import bo.com.knowix.entity.PurchaseEntity;
 
 import org.springframework.http.HttpStatus;
+import bo.com.knowix.dto.CourseDTO;
+
 
 @RestController
 @RequestMapping("/api/v1/purchase")
@@ -58,6 +60,17 @@ public class PurchaseAPI {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<List<PurchaseDTO>> getCoursesSoldBySeller(@PathVariable String sellerId) {
+        List<PurchaseDTO> purchases = purchaseBL.findCoursesSoldBySeller(sellerId);
+        if (!purchases.isEmpty()) {
+            return new ResponseEntity<>(purchases, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 
 
