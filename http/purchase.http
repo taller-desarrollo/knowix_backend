@@ -1,0 +1,2 @@
+## obtener compras listado:
+GET http://localhost:8081/api/v1/purchase

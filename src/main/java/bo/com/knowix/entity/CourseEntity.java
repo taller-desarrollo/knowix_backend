@@ -149,6 +149,7 @@ public class CourseEntity {
         this.kcUserKcUuid = kcUserKcUuid;
     }
 
+
     @Override
     public String toString() {
         return "CourseEntity{" +
