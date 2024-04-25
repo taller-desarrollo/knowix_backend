@@ -9,6 +9,9 @@ import bo.com.knowix.dto.*;
 import bo.com.knowix.entity.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -205,8 +208,8 @@ public class VerificationRequestBL {
         return verificationRequestDTOS;
     }
 
-    public List<VerificationRequestDTO> getVerificationRequest() {
-        List<VerificationRequestEntity> verificationRequestEntities = verificationRequestDAO.findAllByStatusIsTrue();
+    public Page<VerificationRequestDTO> getVerificationRequest() {
+        /*List<VerificationRequestEntity> verificationRequestEntities = verificationRequestDAO.findAllByStatusIsTrue();
         List<VerificationRequestDTO> verificationRequestDTOS = new ArrayList<>();
         for(VerificationRequestEntity verificationRequestEntity : verificationRequestEntities) {
             VerificationRequestDTO verificationRequestDTO = new VerificationRequestDTO();
@@ -233,8 +236,42 @@ public class VerificationRequestBL {
             verificationRequestDTO.setVerificationRequestObservationDTOList(verificationRequestObservationDTOS);
 
             verificationRequestDTOS.add(verificationRequestDTO);
-        }
-        return verificationRequestDTOS;
+        }*/
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<VerificationRequestEntity> verificationRequests = verificationRequestDAO.findAllByStatusIsTrue(pageable);
+
+        //convert to Page<VerificationRequestDTO>
+        Page<VerificationRequestDTO> verificationRequestDTOPage = verificationRequests.map(verificationRequestEntity -> {
+            VerificationRequestDTO verificationRequestDTO = new VerificationRequestDTO();
+            verificationRequestDTO.setId(verificationRequestEntity.getId());
+            verificationRequestDTO.setAdditionalComment(verificationRequestEntity.getAdditionalComment());
+            verificationRequestDTO.setRequestDate(verificationRequestEntity.getRequestDate().toString());
+            verificationRequestDTO.setState(verificationRequestEntity.getState());
+            verificationRequestDTO.setStatus(verificationRequestEntity.isStatus());
+
+            List<VerificationRequestAttachmentEntity> verificationRequestAttachmentEntities = verificationRequestAttachmentDAO.findByVerificationRequest(verificationRequestEntity);
+            List<VerificationRequestAttachmentDTO> verificationRequestAttachmentDTOS = new ArrayList<>();
+            for(VerificationRequestAttachmentEntity verificationRequestAttachmentEntity : verificationRequestAttachmentEntities) {
+                Optional<S3ObjectEntity> s3RecoveredObject = s3ObjectRepository.findById(
+                        (long)verificationRequestAttachmentEntity.getS3ObjectId()
+                );
+                String url = minioBL.getFile("verification-request-attachment", s3RecoveredObject.get().getFilename());
+                VerificationRequestAttachmentDTO verificationRequestAttachmentDTO = getVerificationRequestAttachmentDTO(verificationRequestAttachmentEntity, s3RecoveredObject, url);
+                verificationRequestAttachmentDTOS.add(verificationRequestAttachmentDTO);
+            }
+            verificationRequestDTO.setVerificationRequestAttachmentDTOList(verificationRequestAttachmentDTOS);
+
+            List<VerificationRequestObservationEntity> verificationRequestObservationEntities = verificationRequestObservationDAO.findByVerificationRequest(verificationRequestEntity);
+            List<VerificationRequestObservationDTO> verificationRequestObservationDTOS = getVerificationRequestObservationDTOS(verificationRequestObservationEntities);
+            verificationRequestDTO.setVerificationRequestObservationDTOList(verificationRequestObservationDTOS);
+
+
+            return verificationRequestDTO;
+        });
+
+
+        return verificationRequestDTOPage;
     }
 
     private VerificationRequestDTO changeVerificationRequestState(Long id, String state) {

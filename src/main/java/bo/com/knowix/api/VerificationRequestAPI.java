@@ -11,6 +11,8 @@ import bo.com.knowix.entity.VerificationRequestObservationEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,25 +33,27 @@ public class VerificationRequestAPI {
     }
 
     @PostMapping()
-    public VerificationRequestDTO createVerificationRequest(
+    public ResponseEntity<VerificationRequestDTO> createVerificationRequest(
             @RequestHeader("X-UUID") String kcUserUUID
             ) {
         logger.info("Creating verification request");
-        return verificationRequestBL.createVerificationRequest(kcUserUUID);
+        VerificationRequestDTO verificationRequestDTO = verificationRequestBL.createVerificationRequest(kcUserUUID);
+        return ResponseEntity.ok(verificationRequestDTO);
     }
 
     @PutMapping("/{id}")
-    public VerificationRequestDTO updateVerificationRequest(
+    public ResponseEntity<VerificationRequestDTO> updateVerificationRequest(
             @PathVariable("id") Long id,
             @RequestBody VerificationRequestDTO verificationRequestDTO,
             @RequestHeader("X-UUID") String kcUserUUID
             ) {
         logger.info("Updating verification request");
-        return verificationRequestBL.updateVerificationRequest(id, verificationRequestDTO, kcUserUUID);
+        VerificationRequestDTO updated = verificationRequestBL.updateVerificationRequest(id, verificationRequestDTO, kcUserUUID);
+        return ResponseEntity.ok(updated);
     }
 
     @PostMapping(path= "/{id}/attachment", consumes = "multipart/form-data")
-    public VerificationRequestAttachmentDTO addAttachment(
+    public ResponseEntity<VerificationRequestAttachmentDTO> addAttachment(
             @PathVariable("id") Long id,
             @RequestHeader("X-UUID") String kcUserUUID,
             @RequestParam("file") MultipartFile file,
@@ -59,62 +63,67 @@ public class VerificationRequestAPI {
             ) {
         logger.info("Adding attachment to verification request");
         String bucketName = "verification-request-attachment";
-        return verificationRequestBL.addAttachment(id, kcUserUUID, file, bucketName, title, description, schoolOrInstitution);
+        VerificationRequestAttachmentDTO verificationRequestAttachmentDTO = verificationRequestBL.addAttachment(id, kcUserUUID, file, bucketName, title, description, schoolOrInstitution);
+        return ResponseEntity.ok(verificationRequestAttachmentDTO);
     }
 
     @PostMapping("/{id}/observation")
-    public VerificationRequestObservationDTO addObservation(
+    public ResponseEntity<VerificationRequestObservationDTO> addObservation(
             @PathVariable("id") Long id,
             @RequestBody VerificationRequestObservationDTO verificationRequestObservationDTO
             ) {
         logger.info("Adding observation to verification request");
-        return verificationRequestBL.addObservation(id, verificationRequestObservationDTO);
+        VerificationRequestObservationDTO observation = verificationRequestBL.addObservation(id, verificationRequestObservationDTO);
+        return ResponseEntity.ok(observation);
     }
 
     @PutMapping("/{id}/approve")
-    public VerificationRequestDTO approveVerificationRequest(
+    public ResponseEntity<VerificationRequestDTO> approveVerificationRequest(
             @PathVariable("id") Long id
             ) {
         logger.info("Approving verification request");
-        return verificationRequestBL.approveVerificationRequest(id);
+        VerificationRequestDTO approved = verificationRequestBL.approveVerificationRequest(id);
+        return ResponseEntity.ok(approved);
     }
 
     @PutMapping("/{id}/reject")
-    public VerificationRequestDTO rejectVerificationRequest(
+    public ResponseEntity<VerificationRequestDTO> rejectVerificationRequest(
             @PathVariable("id") Long id
             ) {
         logger.info("Rejecting verification request");
-        return verificationRequestBL.rejectVerificationRequest(id);
+        VerificationRequestDTO rejected = verificationRequestBL.rejectVerificationRequest(id);
+        return ResponseEntity.ok(rejected);
     }
 
     @PutMapping("/{id}/pending")
-    public VerificationRequestDTO pendingVerificationRequest(
+    public ResponseEntity<VerificationRequestDTO> pendingVerificationRequest(
             @PathVariable("id") Long id
             ) {
         logger.info("Pending verification request");
-        return verificationRequestBL.pendingVerificationRequest(id);
+        VerificationRequestDTO pending = verificationRequestBL.pendingVerificationRequest(id);
+        return ResponseEntity.ok(pending);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteVerificationRequest(
+    public ResponseEntity<String> deleteVerificationRequest(
             @PathVariable("id") Long id
             ) {
         logger.info("Deleting verification request");
         verificationRequestBL.deleteVerificationRequest(id);
-        return "Verification request deleted successfully";
+        return ResponseEntity.ok("Verification request deleted");
     }
 
     @GetMapping("/educator")
-    public List<VerificationRequestDTO> getVerificationRequest(
+    public ResponseEntity<List<VerificationRequestDTO>> getVerificationRequest(
             @RequestHeader("X-UUID") String kcUserUUID
             ) {
         logger.info("Getting verification request");
-        return verificationRequestBL.getVerificationRequestEducator(kcUserUUID);
+        return ResponseEntity.ok(verificationRequestBL.getVerificationRequestEducator(kcUserUUID));
     }
 
     @GetMapping()
-    public List<VerificationRequestDTO> getAllVerificationRequest() {
+    public ResponseEntity<Page<VerificationRequestDTO>> getAllVerificationRequest() {
         logger.info("Getting verification request");
-        return verificationRequestBL.getVerificationRequest();
+        return ResponseEntity.ok(verificationRequestBL.getVerificationRequest());
     }
 }
