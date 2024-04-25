@@ -60,8 +60,8 @@ public class PurchaseAPI {
     }
 
     private String saveComprobantImage(MultipartFile image) throws IOException {
-        String uploadDir = "comprobant/qr/";
-        String fileName = "qr_" + System.currentTimeMillis() + ".png";
+        String uploadDir = "bdd/comprobant/";
+        String fileName = "comprobant_" + System.currentTimeMillis() + ".png";
         String filePath = uploadDir + fileName;
         File fileToSave = new File(filePath);
         FileUtils.writeByteArrayToFile(fileToSave, image.getBytes());

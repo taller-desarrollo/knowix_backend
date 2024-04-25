@@ -54,6 +54,9 @@ public class PurchaseBL {
         entity.setPaymentMethod(paymentMethod);
         entity.setKcUserKcUuid(dto.getKcUserKcUuid());
 
+        System.out.println("Before save: purchaseId is " + entity.getPurchaseId());  // Debug log
+        purchaseDAO.save(entity);
+        System.out.println("After save: purchaseId is " + entity.getPurchaseId());  // Debug log
 
         return dto;
     }
