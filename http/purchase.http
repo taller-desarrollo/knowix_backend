@@ -10,6 +10,3 @@ GET http://localhost:8081/api/v1/purchase/seller/05f0b4fa-e28b-409f-96ec-1f3d2f5
 
 ### obtener lista de compras por id de comprador:
 GET http://localhost:8081/api/v1/purchase/buyer/9bebffb8-b0de-443e-a774-f2e04b49ada7
-
-
-aún tengo ganas de hacer travesuras contigo :)
