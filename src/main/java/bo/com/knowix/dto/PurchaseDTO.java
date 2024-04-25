@@ -50,11 +50,11 @@ public class PurchaseDTO {
         this.amount = amount;
     }
 
-    public String getImageComprobant() {
+    public String getImageComprobante() {
         return imageComprobant;
     }
 
-    public void setImageComprobant(String imageComprobant) {
+    public void setImageComprobante(String imageComprobant) {
         this.imageComprobant = imageComprobant;
     }
 
