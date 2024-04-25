@@ -298,10 +298,22 @@ public class VerificationRequestBL {
     }
 
     public VerificationRequestDTO rejectVerificationRequest(Long id) {
+        //set the user as not verified if was approved before
+        VerificationRequestEntity verificationRequest = verificationRequestDAO.findById(id)
+                .orElseThrow(() -> new RuntimeException("Verification request not found"));
+        String kcUserUUID = verificationRequest.getKcUserEntity().getKcUuid();
+        KcUserEntity kcUser = kcUserRepository.findByKcUuid(kcUserUUID);
+        kcUser.setVerified(false);
         return changeVerificationRequestState(id, "REJECTED");
     }
 
     public VerificationRequestDTO pendingVerificationRequest(Long id) {
+        //set the user as not verified if was approved before
+        VerificationRequestEntity verificationRequest = verificationRequestDAO.findById(id)
+                .orElseThrow(() -> new RuntimeException("Verification request not found"));
+        String kcUserUUID = verificationRequest.getKcUserEntity().getKcUuid();
+        KcUserEntity kcUser = kcUserRepository.findByKcUuid(kcUserUUID);
+        kcUser.setVerified(false);
         return changeVerificationRequestState(id, "PENDING");
     }
 
