@@ -2,6 +2,7 @@ package bo.com.knowix.api;
 
 import bo.com.knowix.bl.UserBl;
 import bo.com.knowix.dto.UserDto;
+import bo.com.knowix.entity.KcUserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -39,5 +40,12 @@ public class UserApi {
         UserRepresentation response = userBl.updateUserRoles(userDto, kcuuid);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping()
+    public ResponseEntity<?> getUser(@RequestHeader("X-UUID") String kcuuid){
+        KcUserEntity response = userBl.getUser(kcuuid);
+        return ResponseEntity.ok(response);
+    }
+
 
 }

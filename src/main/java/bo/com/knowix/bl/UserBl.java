@@ -86,5 +86,10 @@ public class UserBl {
         return keycloackUser;
     }
 
+    public KcUserEntity getUser(String kcUuid){
+        logger.info("Getting user: " + kcUuid);
+        return kcUserRepository.findByKcUuid(kcUuid);
+    }
+
 
 }
