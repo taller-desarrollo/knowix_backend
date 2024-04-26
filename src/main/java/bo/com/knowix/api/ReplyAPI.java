@@ -61,6 +61,15 @@ public class ReplyAPI {
         );
     }
 
+    //utilizando     public ReplyDTO create(ReplyDTO replyDTO) {:
+    @PostMapping
+    public ResponseEntity<ReplyDTO> create(@RequestBody ReplyDTO replyDTO) {
+        return new ResponseEntity<>(
+                replyBL.create(replyDTO),
+                HttpStatus.CREATED
+        );
+    }
+
 
 
 }

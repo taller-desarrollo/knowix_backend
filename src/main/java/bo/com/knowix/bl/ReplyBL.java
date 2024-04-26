@@ -65,5 +65,26 @@ public class ReplyBL{
         return null;
     }
 
+    // crear un nuevo regitro de Reply:
+    @Transactional
+    public ReplyDTO create(ReplyDTO replyDTO) {
+        ReplyEntity replyEntity = new ReplyEntity();
+        replyEntity.setStatus(replyDTO.isStatus());
+        replyEntity.setDate(replyDTO.getDate());
+        replyEntity.setComent(replyDTO.getComent());
+        Optional<PurchaseEntity> purchaseEntity = purchaseDAO.findById(replyDTO.getPurchaseId());
+        if (purchaseEntity.isPresent()) {
+            replyEntity.setPurchase(purchaseEntity.get());
+        }
+        replyDAO.save(replyEntity);
+        return new ReplyDTO(
+                replyEntity.getReplyId(),
+                replyEntity.isStatus(),
+                replyEntity.getDate(),
+                replyEntity.getComent(),
+                replyEntity.getPurchase().getPurchaseId()
+        );
+    }
+
 
 }
