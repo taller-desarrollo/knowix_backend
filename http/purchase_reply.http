@@ -3,3 +3,6 @@ GET http://localhost:8081/api/v1/reply
 
 ### get item by id:
 GET http://localhost:8081/api/v1/reply/2
+
+### get item by purchase id:
+GET http://localhost:8081/api/v1/reply/purchase/6

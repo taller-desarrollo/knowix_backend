@@ -52,6 +52,15 @@ public class ReplyAPI {
         );
     }
 
+    // utilizando     public ReplyDTO findByPurchaseId(int purchaseId) {:
+    @GetMapping("/purchase/{purchaseId}")
+    public ResponseEntity<ReplyDTO> findByPurchaseId(@PathVariable int purchaseId) {
+        return new ResponseEntity<>(
+                replyBL.findByPurchaseId(purchaseId),
+                HttpStatus.OK
+        );
+    }
+
 
 
 }

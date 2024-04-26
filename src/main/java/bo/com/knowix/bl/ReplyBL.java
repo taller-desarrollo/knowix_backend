@@ -48,5 +48,22 @@ public class ReplyBL{
         );
     }
 
+    @Transactional
+    public ReplyDTO findByPurchaseId(int purchaseId) {
+        List<ReplyEntity> replyEntities = replyDAO.findAll();
+        for (ReplyEntity replyEntity : replyEntities) {
+            if (replyEntity.getPurchase().getPurchaseId() == purchaseId) {
+                return new ReplyDTO(
+                        replyEntity.getReplyId(),
+                        replyEntity.isStatus(),
+                        replyEntity.getDate(),
+                        replyEntity.getComent(),
+                        replyEntity.getPurchase().getPurchaseId()
+                );
+            }
+        }
+        return null;
+    }
+
 
 }
