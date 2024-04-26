@@ -289,6 +289,7 @@ public class VerificationRequestBL {
     }
 
     public VerificationRequestDTO approveVerificationRequest(Long id) {
+        //set the user as verified
         VerificationRequestEntity verificationRequest = verificationRequestDAO.findById(id)
                 .orElseThrow(() -> new RuntimeException("Verification request not found"));
         String kcUserUUID = verificationRequest.getKcUserEntity().getKcUuid();
