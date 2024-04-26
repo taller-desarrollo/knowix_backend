@@ -23,7 +23,7 @@ CREATE TABLE Content (
 -- Table: course_image
 CREATE TABLE course_image (
     course_image_id serial  NOT NULL,
-    image varchar(200)  NOT NULL,
+    image varchar(200),
     Course_course_id serial  NOT NULL,
     CONSTRAINT course_image_pk PRIMARY KEY (course_image_id)
 );

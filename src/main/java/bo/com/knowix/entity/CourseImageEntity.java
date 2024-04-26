@@ -16,7 +16,7 @@ public class CourseImageEntity {
     @Column(name = "course_image_id")
     private Integer courseImageId;
 
-    @Column(name = "image", nullable = false, length = 200)
+    @Column(name = "image", length = 200)
     private String image;
 
     @Column(name = "Course_course_id", nullable = false)
