@@ -148,4 +148,13 @@ security-constraints:
             - PUT
             - DELETE
             - GET
-
+    - auth-roles:
+        - educator, student
+      security-collections:
+        - name: Reply
+          patterns:
+            - /api/v1/reply
+          methods:
+            - GET
+            - PUT
+            - DELETE
