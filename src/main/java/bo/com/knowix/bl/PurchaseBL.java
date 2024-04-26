@@ -54,7 +54,7 @@ public class PurchaseBL {
         entity.setPaymentMethod(paymentMethod);
         entity.setKcUserKcUuid(dto.getKcUserKcUuid());
 
-        System.out.println("Before save: purchaseId is " + entity.getPurchaseId());  // Debug log
+        System.out.println("Before save: purchaseId is " + entity.getPurchaseId());  
         purchaseDAO.save(entity);
         System.out.println("After save: purchaseId is " + entity.getPurchaseId());  // Debug log
 
@@ -102,7 +102,7 @@ public class PurchaseBL {
             entity.getPurchaseId(),
             entity.getDatePurchase(),
             entity.getAmount(),
-            entity.getImageComprobante(), // Aquí se utiliza getImageComprobant()
+            entity.getImageComprobante(), 
             convertCourseToDTO(entity.getCourse()),
             convertPaymentMethodToDTO(entity.getPaymentMethod()),
             entity.getKcUserKcUuid()
@@ -152,7 +152,7 @@ public class PurchaseBL {
         PurchaseEntity entity = new PurchaseEntity();
         entity.setDatePurchase(dto.getDatePurchase());
         entity.setAmount(dto.getAmount());
-        entity.setImageComprobante(dto.getImageComprobante()); // Aquí se utiliza getImageComprobant()
+        entity.setImageComprobante(dto.getImageComprobante()); 
         return entity;
     }
 }

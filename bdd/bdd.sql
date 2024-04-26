@@ -132,7 +132,7 @@ CREATE TABLE purchase (
 );
 
 CREATE TABLE reply (
-    reply_id int  NOT NULL,
+    reply_id serial  NOT NULL,
     status boolean  NOT NULL,
     date timestamp  NOT NULL,
     coment varchar(500)  NOT NULL,

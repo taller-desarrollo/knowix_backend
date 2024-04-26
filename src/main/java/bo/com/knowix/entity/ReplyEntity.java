@@ -45,7 +45,7 @@ public class ReplyEntity {
         this.replyId = replyId;
     }
 
-    public Boolean getStatus() {
+    public Boolean isStatus() {
         return status;
     }
 
