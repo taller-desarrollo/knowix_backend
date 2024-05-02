@@ -82,7 +82,7 @@ jobs:
 
     # TODO: change tag
     - name: Build 🔧 Docker image
-      run: |-
+      run: |
         docker build \
           --tag "knowix-backend" \ 
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
