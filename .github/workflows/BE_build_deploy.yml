@@ -80,13 +80,13 @@ jobs:
       run: |
         mvn clean package
 
-    # TODO: change tag
+    # TODO: change container version
     - name: Build 🔧 Docker image
       run: |
         docker build \
-          --tag "knowix-backend" \ 
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
+          --tag "knowix-backend:latest" \ 
+          # --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          # --build-arg GITHUB_REF="$GITHUB_REF" \
           .
     
     # TODO: configure this
