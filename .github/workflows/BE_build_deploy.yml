@@ -46,8 +46,6 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-        # service_account: '${{ secrets.GCP_CREDENTIALS }}' ?????
-        # token_format: "access_token"
 
     - name: Setup 📑 Cloud SDK
       uses: "google-github-actions/setup-gcloud@v1"
@@ -81,7 +79,7 @@ jobs:
     # --build-arg GITHUB_SHA="$GITHUB_SHA" \
     # --build-arg GITHUB_REF="$GITHUB_REF" \
     - name: Build 🔧 Docker image
-      run: docker build --tag "$IMAGE" .
+      run: docker build --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE" .
 
     - name: Publish to Artifact registry 🧾
       run: |-
