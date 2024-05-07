@@ -59,7 +59,7 @@ jobs:
         gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev --quiet
 
     - name: Setup 📑 Config file
-      run: mv src/main/resources/application-prod.yaml application.yaml
+      run: mv src/main/resources/application-prod.yaml src/main/resources/application.yaml
 
     - name: Setup 📑 Jdk 17
       uses: actions/setup-java@v3.1.1
