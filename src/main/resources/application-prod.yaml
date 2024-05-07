@@ -1,0 +1,160 @@
+server:
+  port: 8081
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  resources:
+    static-locations: file:/bdd/
+  datasource:
+    url: jdbc:postgresql://knowix-backend:5434/bddknowix
+    username: postgres
+    password: abc123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  #Keycloak Config
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://knowix-keycloak/realms/Knowix
+          jwk-set-uri: http://knowix-keycloak/realms/Knowix/protocol/openid-connect/certs
+#Minio
+minio:
+  url: http://knowix-minio
+  access:
+    key: access_KEY
+    secret: secret_key
+
+token:
+  converter:
+    principal-attribute: preferred_username
+    resource-id: knowix_frontend
+
+logging:
+  level:
+    org:
+      keycloak: DEBUG
+
+# Configuración para la API de Exercisedb
+exercisedb:
+  api-key: a64c039307msh0dfa7564941492dp1a0237jsn0fe875c24192
+
+security-constraints:
+  constraints:
+    - auth-roles:
+        - educator
+        - student
+      security-collections:
+        - name: TestStudent-Educator
+          patterns:
+            - /api/v1/test/test-student
+          methods:
+            - GET
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: TestEducator
+          patterns:
+            - /api/v1/test/test-educator
+          methods:
+            - GET
+
+    - auth-roles:
+        - permitAll
+      security-collections:
+        - name: CreateCourse
+          patterns:
+            - /api/v1/language
+          methods:
+            - GET
+            - POST
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: UpdateCourse
+          patterns:
+            - /api/v1/course/*/is-public
+          methods:
+            - PUT
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: VerificationRequestEducator
+          patterns:
+            - /api/v1/verification-request/*
+            - /api/v1/verification-request/*/attachment
+            - /api/v1/verification-request/educator
+          methods:
+            - POST
+            - PUT
+            - DELETE
+            - GET
+
+#    - auth-roles:
+#        - administrator
+#      security-collections:
+#        - name: VerificationRequestAdministrator
+#          patterns:
+#            - /api/v1/verification-request/*/observation
+#            - /api/v1/verification-request/*/approve
+#            - /api/v1/verification-request/*/reject
+#            - /api/v1/verification-request/*/pending
+#          methods:
+#            - GET
+#            - PUT
+#            - POST
+#
+#    - auth-roles:
+#        - administrator
+#      security-collections:
+#        - name: VerificationRequestAdministrator
+#          patterns:
+#            - /api/v1/verification-request
+#          methods:
+#            - GET
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: VerificationRequestEducator
+          patterns:
+            - /api/v1/verification-request
+          methods:
+            - POST
+
+    - auth-roles:
+        - educator
+      security-collections:
+        - name: Purchase
+          patterns:
+            - /api/v1/purchases
+          methods:
+            - POST
+            - PUT
+            - DELETE
+            - GET
+    - auth-roles:
+        - educator, student
+      security-collections:
+        - name: Reply
+          patterns:
+            - /api/v1/reply
+          methods:
+            - GET
+            - PUT
+            - DELETE
