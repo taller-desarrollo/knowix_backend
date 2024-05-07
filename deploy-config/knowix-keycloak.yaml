@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowix-keycloak-service
+  labels:
+    app: knowix-keycloak-service
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: knowix-keycloak-service
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowix-keycloak
+  labels:
+    app: knowix-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowix-keycloak
+  template:
+    metadata:
+      labels:
+        app: knowix-keycloak
+    spec:
+      containers:
+        - name: knowix-keycloak
+          image: us-central1-docker.pkg.dev/knowix-421914/knowix-repo/knowix_keycloak
+          args: ["start-dev"]
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: "admin"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: "admin"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+
+# source
+# https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes/keycloak.yaml

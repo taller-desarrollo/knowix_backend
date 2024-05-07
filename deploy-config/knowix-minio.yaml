@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pv-claim
+  labels:
+    app: minio-storage-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowix-minio
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+  selector:
+    app: knowix-minio
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowix-minio
+spec:
+  selector:
+    matchLabels:
+      app: knowix-minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: knowix-minio
+    spec:
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-pv-claim
+      containers:
+        - name: knowix-minio
+          image: us-central1-docker.pkg.dev/knowix-421914/knowix-repo/knowix_minio
+          args:
+            - server
+            - /storage
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: "access_KEY"
+            - name: MINIO_SECRET_KEY
+              value: "secret_key"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 9000
+              hostPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: "/storage"
