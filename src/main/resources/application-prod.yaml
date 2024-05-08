@@ -6,7 +6,7 @@ spring:
   resources:
     static-locations: file:/bdd/
   datasource:
-    url: jdbc:postgresql://knowix-backend:5434/bddknowix
+    url: jdbc:postgresql://knowix-db:5434/bddknowix
     username: postgres
     password: abc123
     driver-class-name: org.postgresql.Driver
