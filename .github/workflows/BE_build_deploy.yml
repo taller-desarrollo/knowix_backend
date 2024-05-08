@@ -1,14 +1,4 @@
-# This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the "main" branch.
-#
-# To configure this workflow:
-#
-# 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
-#
-# 2. Create and configure a Workload Identity Provider for GitHub (https://github.com/google-github-actions/auth#setting-up-workload-identity-federation)
-#
-# 3. Change the values for the GAR_LOCATION, GKE_ZONE, GKE_CLUSTER, IMAGE, REPOSITORY and DEPLOYMENT_NAME environment variables (below).
-#
-# For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke-kustomize
+# This workflow login to gcp platform, build jar and docker container, then push docker container to artifact registry and finally deploys back with newest image
 
 name: Knowix BE Build and Deploy
 
@@ -50,10 +40,6 @@ jobs:
     - name: Setup 📑 Cloud SDK
       uses: "google-github-actions/setup-gcloud@v1"
 
-    # - name: Setup 📑 Docker configuration
-    #   run: |
-    #     echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
-
     - name: Setup 📑 Docker configuration
       run: |-
         gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev --quiet
@@ -66,13 +52,6 @@ jobs:
       with: 
         distribution: 'temurin'
         java-version: 17
-    
-    # # Get the GKE credentials so we can deploy to the cluster
-    # - name: Set up GKE credentials
-    #   uses: google-github-actions/get-gke-credentials@v0
-    #   with:
-    #     cluster_name: ${{ env.GKE_CLUSTER }}
-    #     location: ${{ env.GKE_ZONE }}
 
     - name: Build 🔧 Generating jar file
       run: |
@@ -87,17 +66,11 @@ jobs:
     - name: Publish to Artifact registry 🧾
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE"
-        
-    # # Set up kustomize
-    # - name: Set up Kustomize
-    #   run: |-
-    #     curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-    #     chmod u+x ./kustomize
-    # # Deploy the Docker image to the GKE cluster
-    # - name: Deploy
-    #   run: |-
-    #     # replacing the image name in the k8s template
-    #     ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
-    #     ./kustomize build . | kubectl apply -f -
-    #     kubectl rollout status deployment/$DEPLOYMENT_NAME
-    #     kubectl get services -o wide
+
+    - name: Deploy 🚀 Remove previous pod
+      run: |-
+        kubectl delete deploy knowix-backend
+
+    - name: Deploy 🚀 Create new Backend deployment
+      run: |-
+        kubectl apply -f ./deploy-config/knowix-backend.yaml
