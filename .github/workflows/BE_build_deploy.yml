@@ -57,7 +57,7 @@ jobs:
       uses: google-github-actions/get-gke-credentials@v2
       with:
         cluster_name:  'knowix-cluster'
-        location: 'us-central1-a'
+        location: 'us-central1'
         
     - name: Build 🔧 Generating jar file
       run: |
