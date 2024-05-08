@@ -54,10 +54,10 @@ jobs:
         java-version: 17
         
     - name: Setup 📑 GKE credentials
-      uses: google-github-actions/get-gke-credentials@v0
+      uses: google-github-actions/get-gke-credentials@v2
       with:
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_LOCATION }}
+        cluster_name: $GKE_CLUSTER
+        location: $GKE_LOCATION
 
     - name: Build 🔧 Generating jar file
       run: |
