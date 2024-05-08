@@ -311,3 +311,38 @@ ALTER TABLE course
 ADD COLUMN course_is_public boolean NOT NULL DEFAULT true;
 ALTER TABLE kc_user
 ALTER COLUMN email TYPE varchar(255);
+
+----------PARA COMENTARIOS: -----------
+-- Crear la tabla Comment
+CREATE TABLE Comment (
+    comment_id serial NOT NULL,
+    content text NOT NULL,
+    creation_date timestamp NOT NULL,
+    status boolean NOT NULL,
+    Course_course_id int NOT NULL,  -- Tipo corregido para coincidir con la tabla de destino
+    kc_user_kc_uuid varchar(50) NOT NULL,
+    Comment_parent_id int NULL,
+    CONSTRAINT Comment_pk PRIMARY KEY (comment_id)
+);
+
+-- Llaves foráneas
+-- Referencia: Comment_Comment (tabla: Comment)
+ALTER TABLE Comment ADD CONSTRAINT Comment_Comment
+    FOREIGN KEY (Comment_parent_id)
+    REFERENCES Comment (comment_id)  -- Referenciar el campo correcto
+    NOT DEFERRABLE
+    INITIALLY IMMEDIATE;
+
+-- Referencia: Comment_Course (tabla: Course)
+ALTER TABLE Comment ADD CONSTRAINT Comment_Course
+    FOREIGN KEY (Course_course_id)
+    REFERENCES Course (course_id)  -- Asegúrate de que `course_id` sea la llave primaria en `Course`
+    NOT DEFERRABLE
+    INITIALLY IMMEDIATE;
+
+-- Referencia: Comment_kc_user (tabla: kc_user)
+ALTER TABLE Comment ADD CONSTRAINT Comment_kc_user
+    FOREIGN KEY (kc_user_kc_uuid)
+    REFERENCES kc_user (kc_uuid)  -- Asegúrate de que `kc_uuid` sea la llave primaria en `kc_user`
+    NOT DEFERRABLE
+    INITIALLY IMMEDIATE;
