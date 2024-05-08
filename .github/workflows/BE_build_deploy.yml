@@ -53,10 +53,11 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         
-    - name: Setup 📑 Kustomize
-      run: |-
-        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-        chmod u+x ./kustomize
+    - name: Setup 📑 GKE credentials
+      uses: google-github-actions/get-gke-credentials@v0
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_LOCATION }}
 
     - name: Build 🔧 Generating jar file
       run: |
@@ -74,8 +75,6 @@ jobs:
 
     - name: Deploy 🚀 
       run: |-
-        ./kustomize edit set image gcr.io/$PROJECT_ID/$IMAGE:latest
-        ./kustomize build . | 
         kubectl delete deployment knowix-backend
         kubectl apply -f ./deploy-config/knowix-backend.yaml
         kubectl get services -o wide
