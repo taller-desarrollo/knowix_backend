@@ -56,8 +56,9 @@ jobs:
     - name: Setup 📑 GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
-        cluster_name: $GKE_CLUSTER
-        location: 'us-central1-c'
+        cluster_name:  'knowix-cluster'
+        location: 'us-central1-a'
+        
     - name: Build 🔧 Generating jar file
       run: |
         mvn clean package
