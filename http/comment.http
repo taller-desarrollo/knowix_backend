@@ -1,12 +1,32 @@
-### OBTENER LISTADO DE COMENTARIOS DE UN CURSO
-GET http://localhost:8081/api/v1/comment/course/31
-
-### PUBLICAR UN COMENTARIO PADRE DE UN CURSO:
-POST http://localhost:8081/api/v1/comment/parent?courseId=30
+### Publicar un comentario padre de un curso
+POST http://localhost:8081/api/v1/comment/parent?courseId=42
 Content-Type: application/json
 
 {
-    "content": "Este es un comentario padre para el curso.",
+    "content": "Este es un comentario padre para el curso 42 v3",
     "status": true,
     "kcUserKcUuid": "05f0b4fa-e28b-409f-96ec-1f3d2f505554"
 }
+
+### Obtener listado de solo los comentarios padres por ID de curso
+GET http://localhost:8081/api/v1/comment/course/42/parents
+
+### Publicar un comentario hijo hacia su comentario padre
+POST http://localhost:8081/api/v1/comment/child?parentCommentId=14
+Content-Type: application/json
+
+{
+    "content": "Este es un comentario hijo hacia un comentario padre 42 v3 -- hijo 3",
+    "status": true,
+    "kcUserKcUuid": "05f0b4fa-e28b-409f-96ec-1f3d2f505554"
+}
+
+### Obtener listado de comentarios hijos con el ID de un comentario padre
+GET http://localhost:8081/api/v1/comment/parent/14/children
+
+
+### Obtener la cantidad de comentarios hijos que tiene un comentario padre
+GET http://localhost:8081/api/v1/comment/parent/14/children/count
+
+### Obtener listado de todos los comentarios de un curso (padres e hijos). no usar este endpoint en front!!
+GET http://localhost:8081/api/v1/comment/course/42
