@@ -34,6 +34,59 @@ public class CommentAPI {
         }
     }
 
+    @PostMapping("/child")
+    public ResponseEntity<?> createChildComment(
+        @RequestParam("parentCommentId") int parentCommentId,
+        @RequestBody CommentDTO commentDTO
+    ) {
+        try {
+            CommentDTO createdComment = commentBL.createChildComment(parentCommentId, commentDTO);
+            return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/course/{courseId}/parents")
+    public ResponseEntity<?> getParentCommentsByCourseId(@PathVariable int courseId) {
+        try {
+            List<CommentDTO> comments = commentBL.getParentCommentsByCourseId(courseId);
+            if (comments.isEmpty()) {
+                return ResponseEntity.ok("No hay comentarios padres para este curso");
+            }
+            return new ResponseEntity<>(comments, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/parent/{parentCommentId}/children")
+    public ResponseEntity<?> getChildComments(@PathVariable int parentCommentId) {
+        try {
+            List<CommentDTO> comments = commentBL.getChildComments(parentCommentId);
+            if (comments.isEmpty()) {
+                return ResponseEntity.ok("No hay comentarios hijos para este comentario padre");
+            }
+            return new ResponseEntity<>(comments, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/parent/{parentCommentId}/children/count")
+    public ResponseEntity<?> countChildComments(@PathVariable int parentCommentId) {
+        try {
+            int count = commentBL.countChildComments(parentCommentId);
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/course/{courseId}")
     public ResponseEntity<?> getCommentsByCourseId(@PathVariable int courseId) {
         try {
