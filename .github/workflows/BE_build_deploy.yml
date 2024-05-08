@@ -13,7 +13,7 @@ env:
   GAR_LOCATION: us-central1
   GKE_CLUSTER: knowix-cluster
   GKE_ZONE: us-central1-c
-  DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
+  DEPLOYMENT_NAME: git-gke-deploy
   REPOSITORY: knowix-repo
   IMAGE: knowix_backend
   
@@ -53,8 +53,10 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         
-    - name: Setup 📑 project for kubernetes
-      run: gcloud config set project $PROJECT_ID
+    - name: Setup 📑 Kustomize
+      run: |-
+        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        chmod u+x ./kustomize
 
     - name: Build 🔧 Generating jar file
       run: |
@@ -70,10 +72,11 @@ jobs:
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE"
 
-    - name: Deploy 🚀 Remove previous pod
+    - name: Deploy 🚀 
       run: |-
-        kubectl delete deploy knowix-backend
-
-    - name: Deploy 🚀 Create new Backend deployment
-      run: |-
+        ./kustomize edit set image gcr.io/$PROJECT_ID/$IMAGE
+        ./kustomize build . | 
+        kubectl delete deployment knowix-backend
         kubectl apply -f ./deploy-config/knowix-backend.yaml
+        kubectl get services -o wide
+        kubectl get deployments
