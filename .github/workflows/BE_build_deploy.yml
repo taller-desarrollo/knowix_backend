@@ -74,7 +74,7 @@ jobs:
 
     - name: Deploy 🚀 
       run: |-
-        ./kustomize edit set image gcr.io/$PROJECT_ID/$IMAGE
+        ./kustomize edit set image gcr.io/$PROJECT_ID/$IMAGE:latest
         ./kustomize build . | 
         kubectl delete deployment knowix-backend
         kubectl apply -f ./deploy-config/knowix-backend.yaml
