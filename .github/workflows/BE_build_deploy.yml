@@ -52,6 +52,9 @@ jobs:
       with: 
         distribution: 'temurin'
         java-version: 17
+        
+    - name: Setup 📑 project for kubernetes
+      run: gcloud config set project $PROJECT_ID
 
     - name: Build 🔧 Generating jar file
       run: |
