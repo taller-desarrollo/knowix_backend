@@ -1,7 +1,7 @@
+### OBTENER LISTADO DE COMENTARIOS DE UN CURSO
 GET http://localhost:8081/api/v1/comment/course/31
 
-
-### post comment:
+### PUBLICAR UN COMENTARIO PADRE DE UN CURSO:
 POST http://localhost:8081/api/v1/comment/parent?courseId=30
 Content-Type: application/json
 
