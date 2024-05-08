@@ -1,0 +1,12 @@
+GET http://localhost:8081/api/v1/comment/course/31
+
+
+### post comment:
+POST http://localhost:8081/api/v1/comment/parent?courseId=30
+Content-Type: application/json
+
+{
+    "content": "Este es un comentario padre para el curso.",
+    "status": true,
+    "kcUserKcUuid": "05f0b4fa-e28b-409f-96ec-1f3d2f505554"
+}
