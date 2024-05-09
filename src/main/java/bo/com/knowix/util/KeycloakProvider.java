@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class KeycloakProvider {
 
-    @Value("${keycloak.url}")
-    private static String SERVER_URL;
+    private static String SERVER_URL = "http://34.42.161.247:8080";
     private static final String REALM_NAME = "Knowix";
     private static final String REALM_MASTER = "master";
     private static final String ADMIN_CLI = "admin-cli";
