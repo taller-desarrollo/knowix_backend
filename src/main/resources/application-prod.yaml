@@ -31,7 +31,7 @@ spring:
           issuer-uri: http://knowix-keycloak:8080/realms/Knowix
           jwk-set-uri: http://knowix-keycloak:8080/realms/Knowix/protocol/openid-connect/certs
 keycloak: 
-  url: http://34.42.161.247:8080/
+  url: http://knowix-keycloak:8080
 #Minio
 minio:
   url: http://knowix-minio
