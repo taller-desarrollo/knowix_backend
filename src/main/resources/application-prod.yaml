@@ -28,8 +28,8 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: http://knowix-keycloak:8080/realms/Knowix
-          jwk-set-uri: http://knowix-keycloak:8080/realms/Knowix/protocol/openid-connect/certs
+          issuer-uri: http://34.68.129.82:8082/realms/Knowix
+          jwk-set-uri: http://34.68.129.82:8082/realms/Knowix/protocol/openid-connect/certs
 keycloak: 
   url: http://knowix-keycloak:8080
 #Minio
