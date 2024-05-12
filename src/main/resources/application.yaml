@@ -179,3 +179,24 @@ security-constraints:
           methods:
             - GET
             - PUT
+
+    - auth-roles:
+        - educator
+        - student
+      security-collections:
+        - name: CreateContentReport
+          patterns:
+            - /api/v1/content-report/content/*
+          methods:
+            - POST
+
+    - auth-roles:
+        - administrator
+      security-collections:
+        - name: ContentReportEditionAndView
+          patterns:
+            - /api/v1/content-report
+            - /api/v1/content-report/*
+          methods:
+            - GET
+            - PUT
