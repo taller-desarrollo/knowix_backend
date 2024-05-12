@@ -6,6 +6,8 @@ import bo.com.knowix.dto.CommentDTO;
 import bo.com.knowix.dto.CommentReportDTO;
 import bo.com.knowix.entity.CommentEntity;
 import bo.com.knowix.entity.CommentReportEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class CommentReportBL {
     private final CommentReportDAO commentReportDAO;
     private final CommentDAO commentDAO;
 
+    private final Logger logger = LoggerFactory.getLogger(CommentReportBL.class);
     @Autowired
     public CommentReportBL(CommentReportDAO commentReportDAO, CommentDAO commentDAO) {
         this.commentReportDAO = commentReportDAO;
@@ -48,6 +51,10 @@ public class CommentReportBL {
     public CommentReportDTO updateCommentReport(int commentReportId, String status) {
         CommentReportEntity commentReportEntity = commentReportDAO.findById(commentReportId).orElseThrow();
         commentReportEntity.setStatus(status);
+        if(status.equals("RESOLVED")) {
+            logger.info("Comment report resolved, deleting comment");
+            commentReportEntity.getComment().setStatus(false);
+        }
         return toDTO(commentReportDAO.save(commentReportEntity));
     }
 

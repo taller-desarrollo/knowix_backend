@@ -5,6 +5,8 @@ import bo.com.knowix.dao.ContentReportDAO;
 import bo.com.knowix.dto.ContentDTO;
 import bo.com.knowix.dto.ContentReportDTO;
 import bo.com.knowix.entity.ContentReportEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class ContentReportBL {
 
     private final ContentDAO contentDAO;
 
+    private final Logger logger = LoggerFactory.getLogger(ContentReportBL.class);
     @Autowired
     public ContentReportBL(ContentReportDAO contentReportDAO, ContentDAO contentDAO) {
         this.contentReportDAO = contentReportDAO;
@@ -45,6 +48,10 @@ public class ContentReportBL {
     public ContentReportDTO updateContentReport(int contentReportId, String status) {
         ContentReportEntity contentReportEntity = contentReportDAO.findById(contentReportId).orElseThrow();
         contentReportEntity.setStatus(status);
+        /*if (status.equals("RESOLVED")) {
+            logger.info("Content report resolved, deleting content");
+            contentReportEntity.getContent().setStatus(false);
+        }*/
         return toDTO(contentReportDAO.save(contentReportEntity));
     }
 
