@@ -2,10 +2,10 @@
 GET http://localhost:8081/api/v1/reply
 
 ### get item by id:
-GET http://localhost:8081/api/v1/reply/2
+GET http://localhost:8081/api/v1/reply/35
 
 ### get item by purchase id:
-GET http://localhost:8081/api/v1/reply/purchase/6
+GET http://localhost:8081/api/v1/reply/purchase/18
 
 ### create item:
 POST http://localhost:8081/api/v1/reply
@@ -15,5 +15,5 @@ Content-Type: application/json
   "status": true,
   "date": "2024-04-24T16:00:00",
   "coment": "Autorizado con Normalidad",
-  "purchaseId": 10
+  "purchaseId": 17
 }

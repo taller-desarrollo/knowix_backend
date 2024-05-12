@@ -1,0 +1,81 @@
+# This workflow login to gcp platform, build jar and docker container, then push docker container to artifact registry and finally deploys back with newest image
+
+name: Knowix BE Build and Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+  GAR_LOCATION: us-central1
+  GKE_CLUSTER: knowix-cluster
+  GKE_ZONE: us-central1-c
+  DEPLOYMENT_NAME: git-gke-deploy
+  REPOSITORY: knowix-repo
+  IMAGE: knowix_backend
+  
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v4
+
+    - id: 'auth'
+      name: Setup 📑 gcp auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: Setup 📑 Cloud SDK
+      uses: "google-github-actions/setup-gcloud@v1"
+
+    - name: Setup 📑 Docker configuration
+      run: |-
+        gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev --quiet
+
+    - name: Setup 📑 Config file
+      run: mv src/main/resources/application-prod.yaml src/main/resources/application.yaml
+
+    - name: Setup 📑 Jdk 17
+      uses: actions/setup-java@v3.1.1
+      with: 
+        distribution: 'temurin'
+        java-version: 17
+        
+    - name: Setup 📑 GKE credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name:  'knowix-cluster'
+        location: 'us-central1'
+        
+    - name: Build 🔧 Generating jar file
+      run: |
+        mvn clean package
+
+    # TODO: change container version
+    # --build-arg GITHUB_SHA="$GITHUB_SHA" \
+    # --build-arg GITHUB_REF="$GITHUB_REF" \
+    - name: Build 🔧 Docker image
+      run: docker build --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE" .
+
+    - name: Publish to Artifact registry 🧾
+      run: |-
+        docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE"
+
+    - name: Deploy 🚀 
+      run: |-
+        kubectl delete deployment knowix-backend
+        kubectl apply -f ./deploy-config/knowix-backend.yaml
+        kubectl get services -o wide
+        kubectl get deployments

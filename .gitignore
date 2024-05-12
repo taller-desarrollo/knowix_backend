@@ -33,3 +33,8 @@ build/
 .vscode/
 
 .env
+
+### FOLDER OF IMAGES: ###
+bdd/comprobant/
+bdd/imagenes/
+bdd/qr/

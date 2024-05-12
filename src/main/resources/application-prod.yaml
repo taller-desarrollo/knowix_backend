@@ -6,7 +6,7 @@ spring:
   resources:
     static-locations: file:/bdd/
   datasource:
-    url: jdbc:postgresql://localhost:5434/bddknowix
+    url: jdbc:postgresql://knowix-db:5434/bddknowix
     username: postgres
     password: abc123
     driver-class-name: org.postgresql.Driver
@@ -28,16 +28,16 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: ${KEYCLOAK_SERVER_URL:http://localhost:8080}/realms/Knowix
-          jwk-set-uri:  ${KEYCLOAK_SERVER_URL:http://localhost:8080}/realms/Knowix/protocol/openid-connect/certs
+          issuer-uri: http://34.68.129.82:8082/realms/Knowix
+          jwk-set-uri: http://knowix-keycloak:8080/realms/Knowix/protocol/openid-connect/certs
 keycloak: 
-  url: http://localhost:8080
+  url: http://knowix-keycloak:8080
 #Minio
 minio:
-  url: ${MINIO_SERVER_URL}
+  url: http://knowix-minio
   access:
-    key: ${MINIO_ACCESS_KEY}
-    secret: ${MINIO_SECRET_KEY}
+    key: access_KEY
+    secret: secret_key
 
 token:
   converter:
@@ -107,28 +107,28 @@ security-constraints:
             - DELETE
             - GET
 
-    - auth-roles:
-        - administrator
-      security-collections:
-        - name: VerificationRequestAdministrator
-          patterns:
-            - /api/v1/verification-request/*/observation
-            - /api/v1/verification-request/*/approve
-            - /api/v1/verification-request/*/reject
-            - /api/v1/verification-request/*/pending
-          methods:
-            - GET
-            - PUT
-            - POST
-
-    - auth-roles:
-        - administrator
-      security-collections:
-        - name: VerificationRequestAdministrator
-          patterns:
-            - /api/v1/verification-request
-          methods:
-            - GET
+#    - auth-roles:
+#        - administrator
+#      security-collections:
+#        - name: VerificationRequestAdministrator
+#          patterns:
+#            - /api/v1/verification-request/*/observation
+#            - /api/v1/verification-request/*/approve
+#            - /api/v1/verification-request/*/reject
+#            - /api/v1/verification-request/*/pending
+#          methods:
+#            - GET
+#            - PUT
+#            - POST
+#
+#    - auth-roles:
+#        - administrator
+#      security-collections:
+#        - name: VerificationRequestAdministrator
+#          patterns:
+#            - /api/v1/verification-request
+#          methods:
+#            - GET
 
     - auth-roles:
         - educator

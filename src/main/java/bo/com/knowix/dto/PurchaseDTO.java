@@ -8,7 +8,7 @@ public class PurchaseDTO {
     private int purchaseId;
     private Timestamp datePurchase;
     private BigDecimal amount;
-    private String imageComprobant; // Corregido para reflejar el nombre correcto de la columna en la base de datos
+    private String imageComprobant; 
     private CourseDTO course;
     private PaymentMethodDTO paymentMethod;
     private String kcUserKcUuid;
