@@ -40,7 +40,6 @@ public class BlockedUserFilter extends OncePerRequestFilter {
             AbstractAuthenticationToken token = keycloakJwtTokenConverter.convert(jwtToken);
             Collection<GrantedAuthority> authorities = token.getAuthorities();
             if (authorities.contains(new SimpleGrantedAuthority("ROLE_administrator"))) {
-                logger.info("El usuario es administrador");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -49,11 +48,7 @@ public class BlockedUserFilter extends OncePerRequestFilter {
                 logger.warn("El usuario está bloqueado");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
-            }else{
-                logger.info("El usuario no está bloqueado");
             }
-        } else {
-            logger.warn("La autenticación no es un token JWT o el usuario no está autenticado");
         }
 
         filterChain.doFilter(request, response);
