@@ -61,6 +61,7 @@ public class ContentReportBL {
         contentDTO.setContentTitle(contentReportEntity.getContent().getContentTitle());
         contentDTO.setStatus(contentReportEntity.getContent().getStatus());
         contentDTO.setSectionId(contentReportEntity.getContent().getSection().getSectionId());
+        contentDTO.setKcUuid(contentReportEntity.getContent().getSection().getCourse().getKcUserKcUuid());
         return new ContentReportDTO(
                 contentReportEntity.getContentReportId(),
                 contentReportEntity.getContentReportReason(),

@@ -91,5 +91,19 @@ public class UserBl {
         return kcUserRepository.findByKcUuid(kcUuid);
     }
 
+    public void blockUser(String kcUuid){
+        logger.info("Blocking user: " + kcUuid);
+        KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(kcUuid);
+        kcUserEntity.setBlocked(true);
+        kcUserRepository.save(kcUserEntity);
+    }
+
+    public void unblockUser(String kcUuid){
+        logger.info("Unblocking user: " + kcUuid);
+        KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(kcUuid);
+        kcUserEntity.setBlocked(false);
+        kcUserRepository.save(kcUserEntity);
+    }
+
 
 }
