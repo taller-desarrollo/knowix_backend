@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,6 +104,10 @@ public class UserBl {
         KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(kcUuid);
         kcUserEntity.setBlocked(false);
         kcUserRepository.save(kcUserEntity);
+    }
+
+    public List<KcUserEntity> getAllUsers(){
+        return kcUserRepository.findAll();
     }
 
 

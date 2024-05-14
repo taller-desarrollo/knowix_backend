@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/comment-report")
 public class CommentReportAPI {
@@ -39,8 +41,12 @@ public class CommentReportAPI {
     }
 
     @PostMapping("/comment/{commentId}")
-    public ResponseEntity<?> createCommentReport(@PathVariable int commentId, @RequestBody String commentReportReason) {
+    public ResponseEntity<?> createCommentReport(
+            @PathVariable int commentId,
+            @RequestBody Map<String, String> body
+    ) {
         try {
+            String commentReportReason = body.get("commentReportReason");
             return ResponseEntity.ok(commentReportBL.createCommentReport(commentId, commentReportReason));
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,8 +55,13 @@ public class CommentReportAPI {
     }
 
     @PutMapping("/{commentReportId}")
-    public ResponseEntity<?> updateCommentReport(@PathVariable int commentReportId, @RequestBody String status) {
+    public ResponseEntity<?> updateCommentReport(
+            @PathVariable int commentReportId,
+            @RequestBody Map<String, String> body
+    ) {
         try {
+            //extract status from the map
+            String status = body.get("status");
             return ResponseEntity.ok(commentReportBL.updateCommentReport(commentReportId, status));
         } catch (Exception e) {
             e.printStackTrace();

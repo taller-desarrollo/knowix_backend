@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/content-report")
 public class ContentReportAPI {
@@ -37,8 +39,14 @@ public class ContentReportAPI {
     }
 
     @PostMapping("/content/{contentId}")
-    public ResponseEntity<?> createContentReport(@PathVariable int contentId, @RequestBody String contentReportReason) {
+    public ResponseEntity<?> createContentReport(
+            @PathVariable int contentId,
+            @RequestBody Map<String, String> body
+    ) {
         try {
+
+
+            String contentReportReason = body.get("contentReportReason");
             return ResponseEntity.ok(contentReportBL.createContentReport(contentId, contentReportReason));
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,8 +55,13 @@ public class ContentReportAPI {
     }
 
     @PutMapping("/{contentReportId}")
-    public ResponseEntity<?> updateContentReport(@PathVariable int contentReportId, @RequestBody String status) {
+    public ResponseEntity<?> updateContentReport(
+            @PathVariable int contentReportId,
+            @RequestBody Map<String, String> body
+            ) {
         try {
+            //extract status from the map
+            String status = body.get("status");
             return ResponseEntity.ok(contentReportBL.updateContentReport(contentReportId, status));
         } catch (Exception e) {
             e.printStackTrace();
