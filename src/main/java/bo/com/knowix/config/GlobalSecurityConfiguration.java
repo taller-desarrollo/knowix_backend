@@ -1,5 +1,7 @@
 package bo.com.knowix.config;
 
+import bo.com.knowix.bl.UserBl;
+import org.apache.catalina.filters.HttpHeaderSecurityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +28,8 @@ public class GlobalSecurityConfiguration {
     private final Logger logger = LoggerFactory.getLogger(GlobalSecurityConfiguration.class);
 
     private final SecurityConstraintsProperties securityConstraintsProperties;
-    public GlobalSecurityConfiguration(TokenConverterProperties properties, SecurityConstraintsProperties securityConstraintsProperties) {
+    private final UserBl userBl;
+    public GlobalSecurityConfiguration(TokenConverterProperties properties, SecurityConstraintsProperties securityConstraintsProperties, UserBl userBL) {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter
                 = new JwtGrantedAuthoritiesConverter();
         this.keycloakJwtTokenConverter
@@ -30,6 +37,7 @@ public class GlobalSecurityConfiguration {
                 jwtGrantedAuthoritiesConverter,
                 properties);
         this.securityConstraintsProperties = securityConstraintsProperties;
+        this.userBl = userBL;
     }
 
     @Bean
@@ -46,7 +54,7 @@ public class GlobalSecurityConfiguration {
             }).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
         }
 
-        http.authorizeHttpRequests( (authorizeHttpRequests) -> {
+        return http.authorizeHttpRequests( (authorizeHttpRequests) -> {
             securityConstraints.forEach( (constraint) -> {
                 try {
                     List<String> authRoles = constraint.getAuthRoles();
@@ -138,17 +146,12 @@ public class GlobalSecurityConfiguration {
                 }
             });
             authorizeHttpRequests.anyRequest().permitAll();
-        });
-
-        
-
-
-        http.csrf().disable();
-        http.oauth2ResourceServer( (oauth2) -> {
-            oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));
-        });
-        http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        return http.build();
+        })
+                .oauth2ResourceServer( (oauth2) -> {oauth2.jwt( (jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter));})
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf().disable()
+                .addFilterAfter(new BlockedUserFilter(userBl, keycloakJwtTokenConverter), BasicAuthenticationFilter.class)
+                .build();
     }
 
 }

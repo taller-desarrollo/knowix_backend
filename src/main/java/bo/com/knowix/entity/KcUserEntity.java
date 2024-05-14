@@ -40,6 +40,9 @@ public class KcUserEntity {
     @Column(name = "is_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean verified;
 
+    @Column(name = "is_blocked", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean blocked;
+
     @ManyToOne
     @JoinColumn(name = "kc_group_kc_group_id", nullable = false)
     private KcGroupEntity kcGroup;
@@ -132,10 +135,17 @@ public class KcUserEntity {
         this.verified = verified;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
     public KcUserEntity() {
     }
 
-    public KcUserEntity(String kcUuid, String firstName, String lastName, String email, boolean status, Timestamp txDate, String txUser, String txHost, int s3ProfilePicture, KcGroupEntity kcGroup, boolean verified) {
+    public KcUserEntity(String kcUuid, String firstName, String lastName, String email, boolean status, Timestamp txDate, String txUser, String txHost, int s3ProfilePicture, KcGroupEntity kcGroup, boolean verified, boolean blocked) {
         this.kcUuid = kcUuid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -147,6 +157,7 @@ public class KcUserEntity {
         this.s3ProfilePicture = s3ProfilePicture;
         this.kcGroup = kcGroup;
         this.verified = verified;
+        this.blocked = blocked;
     }
 
     public String toString() {
@@ -161,6 +172,8 @@ public class KcUserEntity {
                 ", txHost='" + txHost + '\'' +
                 ", s3ProfilePicture=" + s3ProfilePicture +
                 ", kcGroup=" + kcGroup +
+                ", verified=" + verified +
+                ", blocked=" + blocked +
                 '}';
     }
 }
