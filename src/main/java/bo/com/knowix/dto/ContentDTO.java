@@ -9,17 +9,19 @@ public class ContentDTO {
     private Boolean status;
     // private List<AttachmentDTO> attachments;
     private Integer sectionId;
+    private String kcUuid;
 
     // Constructors
 
     public ContentDTO() {}
 
-    public ContentDTO(Integer contentId, String contentTitle, Boolean status, Integer sectionId) {
+    public ContentDTO(Integer contentId, String contentTitle, Boolean status, Integer sectionId, String kcUuid) {
         this.contentId = contentId;
         this.contentTitle = contentTitle;
         this.status = status;
         // this.attachments = attachments;
         this.sectionId = sectionId;
+        this.kcUuid = kcUuid;
     }
 
     // Getters and Setters
@@ -62,5 +64,13 @@ public class ContentDTO {
 
     public void setSectionId(Integer sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public String getKcUuid() {
+        return kcUuid;
+    }
+
+    public void setKcUuid(String kcUuid) {
+        this.kcUuid = kcUuid;
     }
 }

@@ -46,7 +46,7 @@ public class CommentBL {
     }
 
     public List<CommentDTO> getCommentsByCourseId(int courseId) {
-        List<CommentEntity> commentEntities = commentDAO.findByCourseCourseId(courseId);
+        List<CommentEntity> commentEntities = commentDAO.findByCourseCourseIdAndStatusIsTrue(courseId);
         return commentEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
@@ -72,19 +72,19 @@ public class CommentBL {
     }
 
     public List<CommentDTO> getChildComments(int parentCommentId) {
-        List<CommentEntity> commentEntities = commentDAO.findByParentCommentCommentId(parentCommentId);
+        List<CommentEntity> commentEntities = commentDAO.findByParentCommentCommentIdAndStatusIsTrue(parentCommentId);
         return commentEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     public List<CommentDTO> getParentCommentsByCourseId(int courseId) {
-        List<CommentEntity> commentEntities = commentDAO.findByCourseCourseId(courseId).stream()
+        List<CommentEntity> commentEntities = commentDAO.findByCourseCourseIdAndStatusIsTrue(courseId).stream()
                 .filter(comment -> comment.getParentComment() == null)
                 .collect(Collectors.toList());
         return commentEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     public int countChildComments(int parentCommentId) {
-        return commentDAO.findByParentCommentCommentId(parentCommentId).size();
+        return commentDAO.findByParentCommentCommentIdAndStatusIsTrue(parentCommentId).size();
     }
 
     private CommentDTO convertToDTO(CommentEntity entity) {

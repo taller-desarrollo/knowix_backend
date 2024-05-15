@@ -47,5 +47,22 @@ public class UserApi {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers(){
+        return ResponseEntity.ok(userBl.getAllUsers());
+    }
+
+    @PutMapping("/block/{kcuuid}")
+    public ResponseEntity<?> blockUser(@PathVariable String kcuuid){
+        userBl.blockUser(kcuuid);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/unblock/{kcuuid}")
+    public ResponseEntity<?> unblockUser(@PathVariable String kcuuid){
+        userBl.unblockUser(kcuuid);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
