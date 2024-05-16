@@ -44,6 +44,12 @@ public class BlockedUserFilter extends OncePerRequestFilter {
                 return;
             }
               KcUserEntity user = userBl.getUser(sub);
+            //Consider the case when the user is not found or is creating a new account
+            if(user == null){
+                logger.warn("El usuario no existe");
+                filterChain.doFilter(request, response);
+                return;
+            }
             if(user.isBlocked()){
                 logger.warn("El usuario está bloqueado");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
