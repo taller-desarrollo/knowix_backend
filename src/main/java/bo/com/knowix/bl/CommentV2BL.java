@@ -71,9 +71,15 @@ public class CommentV2BL {
     }
 
     @Transactional
-    public CommentDTO createChildComment(int parentCommentId, CommentDTO commentDTO) {
+    public CommentUserDTO createChildComment(int parentCommentId, CommentDTO commentDTO) {
         CommentEntity parentCommentEntity = commentDAO.findById(parentCommentId).orElseThrow();
         CourseEntity courseEntity = parentCommentEntity.getCourse();
+
+        // Recuperar información del usuario
+        KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(commentDTO.getKcUserKcUuid());
+        if (kcUserEntity == null) {
+            throw new RuntimeException("User not found");
+        }
 
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setContent(commentDTO.getContent());
@@ -85,11 +91,20 @@ public class CommentV2BL {
 
         commentDAO.save(commentEntity);
 
-        commentDTO.setCommentId(commentEntity.getCommentId());
-        commentDTO.setParentCommentId(parentCommentId);
-
-        return commentDTO;
+        return new CommentUserDTO(
+            commentEntity.getCommentId(),
+            commentEntity.getContent(),
+            commentEntity.getCreationDate(),
+            commentEntity.isStatus(),
+            courseEntity.getCourseId(),
+            commentEntity.getKcUserKcUuid(),
+            parentCommentId,
+            kcUserEntity.getFirstName(),
+            kcUserEntity.getLastName(),
+            kcUserEntity.getEmail()
+        );
     }
+
 
     public List<CommentUserDTO> getChildComments(int parentCommentId) {
         List<CommentEntity> commentEntities = commentDAO.findByParentCommentCommentIdAndStatusIsTrue(parentCommentId);
