@@ -202,3 +202,13 @@ security-constraints:
           methods:
             - GET
             - PUT
+
+    - auth-roles:
+        - student
+        - educator
+      security-collections:
+        - name: CreateComment
+          patterns:
+            - /api/v1/comment
+          methods:
+            - POST
