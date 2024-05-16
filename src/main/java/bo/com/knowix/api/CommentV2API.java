@@ -47,7 +47,7 @@ public class CommentV2API {
             @RequestBody CommentDTO commentDTO) {
         LOGGER.info("Starting process to create child comment");
         try {
-            CommentDTO createdComment = commentV2BL.createChildComment(parentCommentId, commentDTO);
+            CommentUserDTO createdComment = commentV2BL.createChildComment(parentCommentId, commentDTO);
             LOGGER.info("Child comment created successfully");
             return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -58,6 +58,7 @@ public class CommentV2API {
             LOGGER.info("Finished process to create child comment");
         }
     }
+
 
     @GetMapping("/course/{courseId}/parents")
     public ResponseEntity<?> getParentCommentsByCourseId(@PathVariable int courseId) {
