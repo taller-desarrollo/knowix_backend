@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.data.domain.Page;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/course")
@@ -58,43 +59,44 @@ public class CourseAPI {
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) List<Integer> categoryIds,
-            @RequestParam(defaultValue = "asc") String sort
-    ) {
+            @RequestParam(defaultValue = "asc") String sort) {
         LOGGER.info("Starting process to fetch all courses");
         try {
             Pageable pageable;
-            if(sort.equals("desc")){
+            if (sort.equals("desc")) {
                 pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").descending());
-            }else{
+            } else {
                 pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").ascending());
             }
 
             Page<CourseEntity> coursesPage;
-            if(categoryIds != null && !categoryIds.isEmpty()){
-                if(searchTerm != null && !searchTerm.isEmpty()){
-                    if(minPrice != null && maxPrice != null){
-                        coursesPage = courseBL.findCoursesBySearchTermAndPriceRangeAndCategoryId(searchTerm, minPrice, maxPrice, categoryIds, pageable);
-                    }else{
+            if (categoryIds != null && !categoryIds.isEmpty()) {
+                if (searchTerm != null && !searchTerm.isEmpty()) {
+                    if (minPrice != null && maxPrice != null) {
+                        coursesPage = courseBL.findCoursesBySearchTermAndPriceRangeAndCategoryId(searchTerm, minPrice,
+                                maxPrice, categoryIds, pageable);
+                    } else {
                         coursesPage = courseBL.findCoursesBySearchTermAndCategoryId(searchTerm, categoryIds, pageable);
                     }
-                }else{
-                    if(minPrice != null && maxPrice != null){
-                        coursesPage = courseBL.findCoursesByPriceRangeAndCategoryId(minPrice, maxPrice, categoryIds, pageable);
-                    }else{
+                } else {
+                    if (minPrice != null && maxPrice != null) {
+                        coursesPage = courseBL.findCoursesByPriceRangeAndCategoryId(minPrice, maxPrice, categoryIds,
+                                pageable);
+                    } else {
                         coursesPage = courseBL.findCoursesByCategoryId(categoryIds, pageable);
                     }
                 }
-            }else
-            if(searchTerm != null && !searchTerm.isEmpty()){
-                if(minPrice != null && maxPrice != null){
-                    coursesPage = courseBL.findCoursesBySearchTermAndPriceRange(searchTerm, minPrice, maxPrice, pageable);
-                }else{
+            } else if (searchTerm != null && !searchTerm.isEmpty()) {
+                if (minPrice != null && maxPrice != null) {
+                    coursesPage = courseBL.findCoursesBySearchTermAndPriceRange(searchTerm, minPrice, maxPrice,
+                            pageable);
+                } else {
                     coursesPage = courseBL.findCoursesBySearchTerm(searchTerm, pageable);
                 }
-            }else{
-                if(minPrice != null && maxPrice != null){
+            } else {
+                if (minPrice != null && maxPrice != null) {
                     coursesPage = courseBL.findCoursesByPriceRange(minPrice, maxPrice, pageable);
-                }else{
+                } else {
                     coursesPage = courseBL.findAllCourses(pageable);
                 }
             }
@@ -127,8 +129,10 @@ public class CourseAPI {
     public ResponseEntity<?> updateCourse(@PathVariable("id") Integer courseId, @RequestBody CourseDTO courseDTO) {
         LOGGER.info("Starting process to update course by ID: " + courseId);
         try {
-            // Aquí se asume que la lógica de negocio en BL podría lanzar una excepción RuntimeException 
-            // para casos específicos, como no encontrar el curso o el usuario no autorizado.
+            // Aquí se asume que la lógica de negocio en BL podría lanzar una excepción
+            // RuntimeException
+            // para casos específicos, como no encontrar el curso o el usuario no
+            // autorizado.
             CourseEntity updatedCourse = courseBL.updateCourse(courseId, courseDTO, courseDTO.getKcUserKcUuid());
             return ResponseEntity.ok(updatedCourse);
         } catch (RuntimeException e) {
@@ -141,7 +145,8 @@ public class CourseAPI {
             } else {
                 LOGGER.warning("Error occurred while updating course by ID: " + courseId + " - " + e.getMessage());
                 // Aquí decidimos devolver un error genérico de servidor.
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("An unexpected error occurred: " + e.getMessage());
             }
         } finally {
             LOGGER.info("Finished process to update course by ID: " + courseId);
@@ -149,13 +154,15 @@ public class CourseAPI {
     }
 
     @PutMapping("/{id}/is-public")
-    public ResponseEntity<CourseEntity> updateCourseIsPublic(@PathVariable("id") Integer courseId, @RequestHeader("X-UUID") String kcuuid) {
+    public ResponseEntity<CourseEntity> updateCourseIsPublic(@PathVariable("id") Integer courseId,
+            @RequestHeader("X-UUID") String kcuuid) {
         LOGGER.info("Starting process to update course is public by ID: " + courseId);
         try {
             CourseEntity updatedCourse = courseBL.updateCourseIsPublic(courseId, kcuuid);
             return ResponseEntity.ok(updatedCourse);
         } catch (Exception e) {
-            LOGGER.warning("Error occurred while updating course is public by ID: " + courseId + " - " + e.getMessage());
+            LOGGER.warning(
+                    "Error occurred while updating course is public by ID: " + courseId + " - " + e.getMessage());
             return ResponseEntity.badRequest().build();
         } finally {
             LOGGER.info("Finished process to update course is public by ID: " + courseId);
@@ -163,13 +170,14 @@ public class CourseAPI {
     }
 
     @PostMapping("/{id}/section")
-    public ResponseEntity<SectionEntity> createSection(@PathVariable("id") Integer courseId, @RequestBody SectionDTO sectionDTO) {
+    public ResponseEntity<SectionEntity> createSection(@PathVariable("id") Integer courseId,
+            @RequestBody SectionDTO sectionDTO) {
         LOGGER.info("Starting process to create a section for course with ID: " + courseId);
-        
+
         try {
             sectionDTO.setCourseId(courseId);
             SectionEntity newSection = courseBL.createSection(sectionDTO);
-            //TODO fix recursion of data
+            // TODO fix recursion of data
             newSection.setCourse(null);
 
             return ResponseEntity.ok(newSection);
@@ -183,12 +191,13 @@ public class CourseAPI {
 
     // @GetMapping("/{id}/section")
     // public ResponseEntity<List<SectionEntity>> getSectionsByCourseId() {
-        
+
     // }
 
     @PostMapping("/section/{id}/content")
-    public ResponseEntity<ContentEntity> createContent(@PathVariable("id") Integer sectionId, @RequestBody CreateContentRequestDTO createContentRequestDTO) {
-        //TODO unify loggers, use the other logger everywhere
+    public ResponseEntity<ContentEntity> createContent(@PathVariable("id") Integer sectionId,
+            @RequestBody CreateContentRequestDTO createContentRequestDTO) {
+        // TODO unify loggers, use the other logger everywhere
         LOGGER.info("Starting process to create content for section with sectionId " + sectionId);
 
         try {
@@ -206,9 +215,12 @@ public class CourseAPI {
     }
 
     private CourseDTOResponse convertToDTO(CourseEntity courseEntity) {
-        // Asume que ya tienes métodos o lógica para obtener los nombres de la categoría y el idioma
-        String categoryName = courseEntity.getCategory() != null ? courseEntity.getCategory().getCategoryName() : "Unknown Category";
-        String languageName = courseEntity.getLanguage() != null ? courseEntity.getLanguage().getLanguageName() : "Unknown Language";
+        // Asume que ya tienes métodos o lógica para obtener los nombres de la categoría
+        // y el idioma
+        String categoryName = courseEntity.getCategory() != null ? courseEntity.getCategory().getCategoryName()
+                : "Unknown Category";
+        String languageName = courseEntity.getLanguage() != null ? courseEntity.getLanguage().getLanguageName()
+                : "Unknown Language";
 
         return new CourseDTOResponse(
                 courseEntity.getCourseId(),
@@ -219,8 +231,7 @@ public class CourseAPI {
                 courseEntity.getStatus(),
                 categoryName, // Nombre de la categoría
                 languageName, // Nombre del idioma
-                courseEntity.getKcUserKcUuid()
-        );
+                courseEntity.getKcUserKcUuid());
     }
 
     @GetMapping("/user/{kcUserKcUuid}")
@@ -228,31 +239,34 @@ public class CourseAPI {
             @PathVariable("kcUserKcUuid") String kcUserKcUuid,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "asc") String sort
-    ) {
+            @RequestParam(defaultValue = "asc") String sort) {
         LOGGER.info("Starting process to fetch courses by user ID: " + kcUserKcUuid);
         try {
             Pageable pageable;
-            if(sort.equals("desc")){
+            if (sort.equals("desc")) {
                 pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").descending());
-            }else{
+            } else {
                 pageable = PageRequest.of(page, size, Sort.by("courseStandardPrice").ascending());
             }
 
             Page<CourseEntity> courses = courseBL.findCoursesByUserId(kcUserKcUuid, pageable);
             return ResponseEntity.ok(courses);
-            /*List<CourseDTOResponse> courseDTOResponses = courses.stream()
-                                                .map(this::convertToDTO)
-                                                .collect(Collectors.toList());
-
-            if(courseDTOResponses.isEmpty()) {
-                LOGGER.info("No courses found for user ID: " + kcUserKcUuid);
-                return ResponseEntity.noContent().build();
-            }
-            LOGGER.info(courseDTOResponses.size() + " courses found for user ID: " + kcUserKcUuid);
-            return ResponseEntity.ok(courseDTOResponses);*/
+            /*
+             * List<CourseDTOResponse> courseDTOResponses = courses.stream()
+             * .map(this::convertToDTO)
+             * .collect(Collectors.toList());
+             * 
+             * if(courseDTOResponses.isEmpty()) {
+             * LOGGER.info("No courses found for user ID: " + kcUserKcUuid);
+             * return ResponseEntity.noContent().build();
+             * }
+             * LOGGER.info(courseDTOResponses.size() + " courses found for user ID: " +
+             * kcUserKcUuid);
+             * return ResponseEntity.ok(courseDTOResponses);
+             */
         } catch (Exception e) {
-            LOGGER.warning("Error occurred while fetching courses by user ID: " + kcUserKcUuid + " - " + e.getMessage());
+            LOGGER.warning(
+                    "Error occurred while fetching courses by user ID: " + kcUserKcUuid + " - " + e.getMessage());
             return ResponseEntity.badRequest().build();
         } finally {
             LOGGER.info("Finished process to fetch courses by user ID: " + kcUserKcUuid);
@@ -261,7 +275,8 @@ public class CourseAPI {
 
     @PostMapping("/search")
     public Page<CourseEntity> searchCoursesByName(@RequestBody SearchCourseRequest searchCourseRequest) {
-        return courseBL.findCoursesByName(searchCourseRequest.getName(), searchCourseRequest.getPage(), searchCourseRequest.getSize());
+        return courseBL.findCoursesByName(searchCourseRequest.getName(), searchCourseRequest.getPage(),
+                searchCourseRequest.getSize());
     }
 
     private static class SearchCourseRequest {
@@ -269,12 +284,43 @@ public class CourseAPI {
         private int page;
         private int size;
 
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public int getPage() { return page; }
-        public void setPage(int page) { this.page = page; }
-        public int getSize() { return size; }
-        public void setSize(int size) { this.size = size; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getPage() {
+            return page;
+        }
+
+        public void setPage(int page) {
+            this.page = page;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
     }
 
+    @GetMapping("/{id}/creator")
+    public ResponseEntity<String> getCourseCreator(@PathVariable("id") Integer courseId) {
+        LOGGER.info("Starting process to fetch creator of course by ID: " + courseId);
+        try {
+            String userId = courseBL.findUserIdByCourseId(courseId);
+            return ResponseEntity.ok(userId);
+        } catch (Exception e) {
+            LOGGER.warning(
+                    "Error occurred while fetching creator of course by ID: " + courseId + " - " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finished process to fetch creator of course by ID: " + courseId);
+        }
+    }
 }

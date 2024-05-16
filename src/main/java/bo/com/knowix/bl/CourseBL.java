@@ -237,4 +237,10 @@ public class CourseBL {
     //     });
     // }
 
+    //obtener id de usuario que creo un curso en base al id de curso:
+    public String findUserIdByCourseId(Integer courseId) {
+        CourseEntity courseEntity = courseDAO.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+        return courseEntity.getKcUserKcUuid();
+    }
 }

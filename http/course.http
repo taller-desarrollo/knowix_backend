@@ -88,3 +88,6 @@ Content-Type: application/json
 
 ### Obtener imagen de curso:
 GET http://localhost:8081/api/v1/courseimage/course/6
+
+### Obtener id del creador del curso:
+GET http://localhost:8081/api/v1/course/1/creator
