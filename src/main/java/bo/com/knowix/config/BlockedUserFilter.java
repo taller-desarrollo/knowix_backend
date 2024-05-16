@@ -47,6 +47,7 @@ public class BlockedUserFilter extends OncePerRequestFilter {
             //Consider the case when the user is not found or is creating a new account
             if(user == null){
                 logger.warn("El usuario no existe");
+                filterChain.doFilter(request, response);
                 return;
             }
             if(user.isBlocked()){
