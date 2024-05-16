@@ -29,7 +29,7 @@ public class CommentV2API {
             @RequestBody CommentDTO commentDTO) {
         LOGGER.info("Starting process to create parent comment");
         try {
-            CommentDTO createdComment = commentV2BL.createParentComment(courseId, commentDTO);
+            CommentUserDTO createdComment = commentV2BL.createParentComment(courseId, commentDTO);
             LOGGER.info("Parent comment created successfully");
             return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
         } catch (Exception e) {

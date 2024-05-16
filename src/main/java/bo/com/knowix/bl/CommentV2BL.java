@@ -32,8 +32,14 @@ public class CommentV2BL {
     }
 
     @Transactional
-    public CommentDTO createParentComment(int courseId, CommentDTO commentDTO) {
+    public CommentUserDTO createParentComment(int courseId, CommentDTO commentDTO) {
         CourseEntity courseEntity = courseDAO.findById(courseId).orElseThrow();
+
+        // Recuperar información del usuario
+        KcUserEntity kcUserEntity = kcUserRepository.findByKcUuid(commentDTO.getKcUserKcUuid());
+        if (kcUserEntity == null) {
+            throw new RuntimeException("User not found");
+        }
 
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setContent(commentDTO.getContent());
@@ -45,9 +51,18 @@ public class CommentV2BL {
 
         commentDAO.save(commentEntity);
 
-        commentDTO.setCommentId(commentEntity.getCommentId());
-
-        return commentDTO;
+        return new CommentUserDTO(
+            commentEntity.getCommentId(),
+            commentEntity.getContent(),
+            commentEntity.getCreationDate(),
+            commentEntity.isStatus(),
+            courseId,
+            commentEntity.getKcUserKcUuid(),
+            null,
+            kcUserEntity.getFirstName(),
+            kcUserEntity.getLastName(),
+            kcUserEntity.getEmail()
+        );
     }
 
     public List<CommentUserDTO> getCommentsByCourseId(int courseId) {
