@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Obtener listado de solo los comentarios padres por ID de curso
-GET http://localhost:8081/api/v1/comment/course/42/parents
+GET http://localhost:8081/api/v1/comment/course/1/parents
 
 ### Publicar un comentario hijo hacia su comentario padre
 POST http://localhost:8081/api/v1/comment/child?parentCommentId=14
