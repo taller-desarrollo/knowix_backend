@@ -108,8 +108,20 @@ public class ReplyBL{
             throw new RuntimeException("User not found");
         }
         else {
+            String title = "";
+            if (replyDTO.getComent().equals("Aprobado con Normalidad") == false) {
+                title = "Tu compra ha sido aceptada";
+            }
+            else {
+                title = "Tu compra ha sido rechazada con motivo: " + replyDTO.getComent();
+            }
             LOGGER.info("User found, sending email to: " + kcUser.getEmail());
-            emailService.sendEmail(kcUser.getEmail(), "Tu compra del curso a sido " + replyDTO.getComent(), purchaseEntity.get().getCourse().toString());
+            emailService.sendEmail(kcUser.getEmail(), "Tu compra del curso a sido respondida", 
+                title + "\n" +
+                "Nombre del curso: " + purchaseEntity.get().getCourse().getCourseName() + "\n" +
+                "Descripción del curso: " + purchaseEntity.get().getCourse().getCourseDescription() + "\n" +
+                "Requerimientos del curso: " + purchaseEntity.get().getCourse().getCourseRequirements() + "\n" +
+                "Precio del curso: " + purchaseEntity.get().getCourse().getCourseStandardPrice());
         }
                 
         return new ReplyDTO(
