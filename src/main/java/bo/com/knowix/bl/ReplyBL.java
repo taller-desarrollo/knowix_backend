@@ -109,7 +109,7 @@ public class ReplyBL{
         }
         else {
             String title = "";
-            if (replyDTO.getComent().equals("Aprobado con Normalidad") == false) {
+            if (replyDTO.getComent().equals("Aprobado con Normalidad") == true) {
                 title = "Tu compra ha sido aceptada";
             }
             else {
