@@ -346,3 +346,41 @@ ALTER TABLE Comment ADD CONSTRAINT Comment_kc_user
     REFERENCES kc_user (kc_uuid)  -- Asegúrate de que `kc_uuid` sea la llave primaria en `kc_user`
     NOT DEFERRABLE
     INITIALLY IMMEDIATE;
+
+-- manejo de cupones:
+-- Table: cupon
+CREATE TABLE cupon (
+    cupon_id serial  NOT NULL,
+    discount_type varchar(200)  NOT NULL,
+    discount_amount decimal(10,5)  NOT NULL,
+    cupon_code varchar(500)  NOT NULL,
+    start_date timestamp  NOT NULL,
+    end_date timestamp  NOT NULL,
+    min_amount_purchase decimal(10,5)  NOT NULL,
+    description_promotion varchar(200)  NOT NULL,
+    CONSTRAINT cupon_pk PRIMARY KEY (cupon_id)
+);
+
+-- Table: purchase_cupon
+CREATE TABLE purchase_cupon (
+    purchase_cupon_id serial  NOT NULL,
+    purchase_purchase_id int  NOT NULL,
+    cupon_cupon_id serial  NOT NULL,
+    CONSTRAINT purchase_cupon_pk PRIMARY KEY (purchase_cupon_id)
+);
+
+-- Reference: purchase_cupon_cupon (table: purchase_cupon)
+ALTER TABLE purchase_cupon ADD CONSTRAINT purchase_cupon_cupon
+    FOREIGN KEY (cupon_cupon_id)
+    REFERENCES cupon (cupon_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
+
+-- Reference: purchase_cupon_purchase (table: purchase_cupon)
+ALTER TABLE purchase_cupon ADD CONSTRAINT purchase_cupon_purchase
+    FOREIGN KEY (purchase_purchase_id)
+    REFERENCES purchase (purchase_id)  
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE
+;
