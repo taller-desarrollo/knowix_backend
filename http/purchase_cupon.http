@@ -1,0 +1,17 @@
+##crear una compra con cupon:
+POST http://localhost:8081/api/purchase-cupons
+Content-Type: application/json
+
+{
+    "purchasePurchaseId": 1,
+    "cuponCuponId": 101
+}
+
+###obetener todas las compras con cupon por id de compra:
+GET http://localhost:8081/api/purchase-cupons/purchase/1
+
+###obetener todas las compras con cupon:
+GET http://localhost:8081/api/purchase-cupons
+
+###obetener todas las compras con cupon por id de cupon:
+GET http://localhost:8081/api/purchase-cupons/cupon/101

@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.com.knowix.dao.PurchaseCuponDAO;
-import bo.com.knowix.dto.CuponDTO;
 import bo.com.knowix.dto.PurchaseCuponDTO;
-import bo.com.knowix.dto.PurchaseDTO;
 import bo.com.knowix.entity.PurchaseCuponEntity;
 import jakarta.transaction.Transactional;
 
@@ -19,11 +17,11 @@ public class PurchaseCuponBL {
     private final PurchaseCuponDAO purchaseCuponDAO;
 
     @Autowired
-    public PurchaseCuponBL(PurchaseCuponDAO purchaseCuponDAO, PurchaseDTO purchaseDTO, CuponDTO cuponDTO) {
+    public PurchaseCuponBL(PurchaseCuponDAO purchaseCuponDAO) {
         this.purchaseCuponDAO = purchaseCuponDAO;
     }
 
-    //crear un purchaseCupon
+    // Crear un purchaseCupon
     @Transactional
     public PurchaseCuponDTO createPurchaseCupon(PurchaseCuponDTO dto) {
         PurchaseCuponEntity entity = new PurchaseCuponEntity();
@@ -34,9 +32,9 @@ public class PurchaseCuponBL {
         return dto;
     }
 
-    //obtener todos los purchaseCupons por purchasePurchaseId
+    // Obtener todos los purchaseCupons por purchasePurchaseId
     public List<PurchaseCuponDTO> findPurchaseCuponsByPurchasePurchaseId(Integer purchasePurchaseId) {
-        return purchaseCuponDAO.findById(purchasePurchaseId).stream()
+        return purchaseCuponDAO.findByPurchasePurchaseId(purchasePurchaseId).stream()
                 .map(entity -> new PurchaseCuponDTO(
                         entity.getPurchaseCuponId(),
                         entity.getPurchasePurchaseId(),
@@ -44,7 +42,17 @@ public class PurchaseCuponBL {
                 .collect(Collectors.toList());
     }
 
-    //obtener todos los purchaseCupons
+    // Obtener todos los purchaseCupons por cuponCuponId
+    public List<PurchaseCuponDTO> findPurchaseCuponsByCuponCuponId(Integer cuponCuponId) {
+        return purchaseCuponDAO.findByCuponCuponId(cuponCuponId).stream()
+                .map(entity -> new PurchaseCuponDTO(
+                        entity.getPurchaseCuponId(),
+                        entity.getPurchasePurchaseId(),
+                        entity.getCuponCuponId()))
+                .collect(Collectors.toList());
+    }
+
+    // Obtener todos los purchaseCupons
     public List<PurchaseCuponDTO> findAllPurchaseCupons() {
         return purchaseCuponDAO.findAll().stream()
                 .map(entity -> new PurchaseCuponDTO(
