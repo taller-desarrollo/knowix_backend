@@ -30,18 +30,21 @@ public interface ReplyDAO extends JpaRepository<ReplyEntity, Integer> {
             @Param("kcUserKcUuid") String kcUserKcUuid
     );
 
-    /*@Query(
-            "SELECT c.courseName, COUNT(r.replyId), SUM(p.amount) FROM ReplyEntity r, PurchaseEntity p, CourseEntity c " +
-                    "WHERE r.purchase.purchaseId = p.purchaseId AND p.course.courseId = c.courseId " +
-                    "AND c.kcUserKcUuid = :kcUserKcUuid AND r.status = true AND p.datePurchase " +
-                    "BETWEEN :startDate AND :endDate GROUP BY c.courseName ORDER BY COUNT(r.replyId) DESC"
+    @Query(
+            "SELECT TO_CHAR(r.date, 'Month'), COUNT(r.replyId), SUM(p.amount)" +
+                    "FROM ReplyEntity r " +
+                    "JOIN r.purchase p " +
+                    "JOIN p.course c " +
+                    "WHERE c.kcUserKcUuid = :kcUserKcUuid AND r.status = true " +
+                    "AND TO_CHAR(r.date, 'YYYY') = :year " +
+                    "GROUP BY TO_CHAR(r.date, 'Month') " +
+                    //Order by month like January, February, March, etc
+                    "ORDER BY TO_DATE(TO_CHAR(r.date, 'Month'), 'Month')"
     )
-    List<Object[]> findByStatusIsTrueAndDateBetween(
-           Timestamp startDate,
-           Timestamp endDate,
-           String kcUserKcUuid
-    );*/
-
+    List<Object[]> findSellsByMonths(
+            @Param("year") Integer year,
+            @Param("kcUserKcUuid") String kcUserKcUuid
+    );
 
     ReplyEntity findByPurchaseAndStatusIsTrue(PurchaseEntity purchaseEntity);
 }

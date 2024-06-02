@@ -51,4 +51,22 @@ public class StatisticsAPI {
         }
     }
 
+    // Sells by Months
+    @GetMapping("/sells-by-months")
+    public ResponseEntity<?> getSellsByMonths(
+            @RequestParam("year") Integer year,
+            @RequestHeader("X-UUID") String kcUserKcUuid
+    ){
+        logger.info("Starting process to get sells by months");
+        try {
+            List<BarCharData> data = statisticsBl.getSellsByMonths(year, kcUserKcUuid);
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            logger.error("Error occurred while getting sells by months: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } finally {
+            logger.info("Finished process to get sells by months");
+        }
+    }
+
 }
