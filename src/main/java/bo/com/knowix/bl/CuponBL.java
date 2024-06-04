@@ -55,6 +55,19 @@ public class CuponBL {
             throw new RuntimeException("Error al buscar el cupón por ID: " + e.getMessage(), e);
         }
     }
+    
+    public CuponDTO getCuponByCode(String cuponCode) {
+        try {
+            Optional<CuponEntity> cuponEntityOptional = cuponDAO.findByCuponCode(cuponCode);
+            if (cuponEntityOptional.isPresent()) {
+                return convertToDTO(cuponEntityOptional.get());
+            } else {
+                throw new RuntimeException("Cupón no encontrado para el código: " + cuponCode);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar el cupón por código: " + e.getMessage(), e);
+        }
+    }
 
     // Convertir de DTO a Entity
     private CuponEntity convertToEntity(CuponDTO cuponDTO) {

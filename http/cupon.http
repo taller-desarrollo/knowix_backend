@@ -16,5 +16,5 @@ Content-Type: application/json
 GET http://localhost:8081/api/cupones/listar
 
 ### Buscar cupón por ID:
-GET http://localhost:8081/api/cupones/buscar/4
+GET http://localhost:8081/api/cupones/buscar/14
 
