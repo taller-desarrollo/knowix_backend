@@ -11,7 +11,7 @@ import bo.com.knowix.bl.PurchaseCuponBL;
 import bo.com.knowix.dto.PurchaseCuponDTO;
 
 @RestController
-@RequestMapping("/api/purchase-cupons")
+@RequestMapping("/api/purchase-cupon")
 public class PurchaseCuponAPI {
 
     private final PurchaseCuponBL purchaseCuponBL;
