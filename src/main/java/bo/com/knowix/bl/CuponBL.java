@@ -83,4 +83,9 @@ public class CuponBL {
         cuponDTO.setDescriptionPromotion(cuponEntity.getDescriptionPromotion());
         return cuponDTO;
     }
+
+    public void findPurchaseById(int cuponId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findPurchaseById'");
+    }
 }
