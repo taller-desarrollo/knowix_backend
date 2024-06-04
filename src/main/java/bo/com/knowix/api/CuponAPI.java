@@ -58,4 +58,19 @@ public class CuponAPI {
                     .body("Error al buscar el cupón por ID: " + e.getMessage());
         }
     }
+
+    @PostMapping("/buscar-por-codigo")
+    public ResponseEntity<?> getCuponByCode(@RequestBody String cuponCode) {
+        try {
+            CuponDTO cuponDTO = cuponBL.getCuponByCode(cuponCode);
+            if (cuponDTO == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Cupón no encontrado para el código: " + cuponCode);
+            }
+            return ResponseEntity.ok(cuponDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al buscar el cupón por código: " + e.getMessage());
+        }
+    }
 }
