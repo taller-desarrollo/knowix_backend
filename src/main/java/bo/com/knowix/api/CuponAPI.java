@@ -2,6 +2,7 @@ package bo.com.knowix.api;
 
 import bo.com.knowix.bl.CuponBL;
 import bo.com.knowix.dto.CuponDTO;
+import bo.com.knowix.dto.CuponCodeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,12 +61,12 @@ public class CuponAPI {
     }
 
     @PostMapping("/buscar-por-codigo")
-    public ResponseEntity<?> getCuponByCode(@RequestBody String cuponCode) {
+    public ResponseEntity<?> getCuponByCode(@RequestBody CuponCodeRequest cuponCodeRequest) {
         try {
-            CuponDTO cuponDTO = cuponBL.getCuponByCode(cuponCode);
+            CuponDTO cuponDTO = cuponBL.getCuponByCode(cuponCodeRequest.getCuponCode());
             if (cuponDTO == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Cupón no encontrado para el código: " + cuponCode);
+                        .body("Cupón no encontrado para el código: " + cuponCodeRequest.getCuponCode());
             }
             return ResponseEntity.ok(cuponDTO);
         } catch (Exception e) {

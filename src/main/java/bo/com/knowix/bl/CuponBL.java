@@ -55,21 +55,22 @@ public class CuponBL {
             throw new RuntimeException("Error al buscar el cupón por ID: " + e.getMessage(), e);
         }
     }
-    
+
+    // Buscar un cupón por código
     public CuponDTO getCuponByCode(String cuponCode) {
         try {
-            Optional<CuponEntity> cuponEntityOptional = cuponDAO.findByCuponCode(cuponCode);
-            if (cuponEntityOptional.isPresent()) {
-                return convertToDTO(cuponEntityOptional.get());
-            } else {
-                throw new RuntimeException("Cupón no encontrado para el código: " + cuponCode);
+            List<CuponDTO> cupones = listCupones();
+            for (CuponDTO cupon : cupones) {
+                if (cupon.getCuponCode().equals(cuponCode)) {
+                    return cupon;
+                }
             }
+            throw new RuntimeException("Cupón no encontrado para el código: " + cuponCode);
         } catch (Exception e) {
             throw new RuntimeException("Error al buscar el cupón por código: " + e.getMessage(), e);
         }
     }
 
-    // Convertir de DTO a Entity
     private CuponEntity convertToEntity(CuponDTO cuponDTO) {
         CuponEntity cuponEntity = new CuponEntity();
         cuponEntity.setCuponId(cuponDTO.getCuponId());
@@ -96,7 +97,7 @@ public class CuponBL {
         cuponDTO.setDescriptionPromotion(cuponEntity.getDescriptionPromotion());
         return cuponDTO;
     }
-
+    
     public void findPurchaseById(int cuponId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findPurchaseById'");
