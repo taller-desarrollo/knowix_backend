@@ -1,5 +1,6 @@
 package bo.com.knowix.bl;
 
+import bo.com.knowix.api.ContentReportAPI;
 import bo.com.knowix.dao.CommentDAO;
 import bo.com.knowix.dao.CourseDAO;
 import bo.com.knowix.dao.repository.KcUserRepository;
@@ -8,6 +9,8 @@ import bo.com.knowix.dto.CommentUserDTO;
 import bo.com.knowix.entity.CommentEntity;
 import bo.com.knowix.entity.CourseEntity;
 import bo.com.knowix.entity.KcUserEntity;
+import bo.com.knowix.service.EmailService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,11 +28,17 @@ public class CommentV2BL {
     private final CourseDAO courseDAO;
     private final KcUserRepository kcUserRepository;
 
+    private static final Logger LOGGER = Logger.getLogger(ContentReportAPI.class.getName());
+
     @Autowired
-    public CommentV2BL(CommentDAO commentDAO, CourseDAO courseDAO, KcUserRepository kcUserRepository) {
+    private EmailService emailService;
+
+    @Autowired
+    public CommentV2BL(CommentDAO commentDAO, CourseDAO courseDAO, KcUserRepository kcUserRepository, EmailService emailService) {
         this.commentDAO = commentDAO;
         this.courseDAO = courseDAO;
         this.kcUserRepository = kcUserRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -90,6 +100,21 @@ public class CommentV2BL {
         commentEntity.setParentComment(parentCommentEntity);
 
         commentDAO.save(commentEntity);
+
+        LOGGER.info("Finding user by id: " + parentCommentEntity.getKcUserKcUuid());
+        KcUserEntity kcUser = kcUserRepository.findByKcUuid(parentCommentEntity.getKcUserKcUuid());
+        KcUserEntity kcUserComment = kcUserRepository.findByKcUuid(commentDTO.getKcUserKcUuid());
+        if(kcUser == null) {
+            LOGGER.info("User not found");
+            throw new RuntimeException("User not found");
+        }
+        else {
+            String title = "Tu comentario ha sido respondido";
+            LOGGER.info("User found, sending email to: " + kcUser.getEmail());
+            emailService.sendEmail(kcUser.getEmail(), title, 
+                "Usuario: " + kcUserComment.getFirstName() + " " + kcUserComment.getLastName() + "\n" +
+                "Respuesta: " + commentDTO.getContent());
+        }
 
         return new CommentUserDTO(
             commentEntity.getCommentId(),
