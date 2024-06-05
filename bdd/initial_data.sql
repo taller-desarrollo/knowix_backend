@@ -51,4 +51,4 @@ INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_
 
 
 INSERT INTO kc_user (kc_uuid, first_name, last_name, email, status, tx_date, tx_user, tx_host, s3_profile_picture, kc_group_kc_group_id) VALUES
-('9bebffb8-b0de-443e-a774-f2e04b49ada7', 'Fernanda', 'Gutierrez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
+('1b48c7e4-8d17-4fd8-8034-ea91922f0128', 'Fernanda', 'Gutierrez', 12345, TRUE, CURRENT_TIMESTAMP, 'admin', 'localhost', 67890, 1);
