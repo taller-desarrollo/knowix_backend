@@ -53,7 +53,7 @@ public class PurchaseAPI {
             purchaseDTO.setImageComprobante(filePath);
 
             PurchaseDTO created = purchaseBL.createPurchase(courseId, paymentMethodId, purchaseDTO);
-            LOGGER.info("Purchase created successfully");
+            LOGGER.info("Purchase created successfully with ID: " + created.getPurchaseId());
             return new ResponseEntity<>(created, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
