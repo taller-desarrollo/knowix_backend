@@ -23,5 +23,5 @@ POST http://localhost:8081/api/cupones/buscar-por-codigo
 Content-Type: application/json
 
 {
-  "cuponCode": "TUMARIDOMOISES"
+  "cuponCode": "BELCAST"
 }

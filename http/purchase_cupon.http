@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###obetener todas las compras con cupon por id de compra:
-GET http://localhost:8081/api/purchase-cupon/purchase/1
+GET http://localhost:8081/api/purchase-cupon/purchase/5
 
 ###obetener todas las compras con cupon:
 GET http://localhost:8081/api/purchase-cupon
